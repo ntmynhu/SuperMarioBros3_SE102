@@ -108,11 +108,11 @@ class CMario : public CGameObject
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
 
-	int level; 
-	int untouchable; 
+	int level;
+	int untouchable;
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
-	int coin; 
+	int coin;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -128,7 +128,7 @@ public:
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
-		ay = MARIO_GRAVITY; 
+		ay = MARIO_GRAVITY;
 
 		level = MARIO_LEVEL_BIG;
 		untouchable = 0;
@@ -141,11 +141,11 @@ public:
 	void SetState(int state);
 
 	int IsCollidable()
-	{ 
-		return (state != MARIO_STATE_DIE); 
+	{
+		return (state != MARIO_STATE_DIE);
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
+	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
@@ -154,4 +154,17 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	bool IsSitting() { return isSitting; }
+	bool IsOnPlatform() { return isOnPlatform; }
+	void GetPhysics(float& vx, float& vy, float& ax, float& ay, float& nx) { vx = this->vx; vy = this->vy; ax = this->ax; ay = this->ay; nx = this->nx; }
+	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }
+
+	void SetMaxVx(float maxVx) { this->maxVx = maxVx; }
+	void SetOnPlatform(bool isOnPlatform) { this->isOnPlatform = isOnPlatform; }
+	void SetAx(float ax) { this->ax = ax; }
+	void SetVx(float vx) { this->vx = vx; }
+	void SetVy(float vy) { this->vy = vy; }
+	void SetNx(int nx) { this->nx = nx; }
+	void SetPosition(float x, float y) { this->x = x; this->y = y; }
 };
