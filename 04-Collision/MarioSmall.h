@@ -1,12 +1,6 @@
 #pragma once
 #include "GameObject.h"
-
-#include "Animation.h"
-#include "Animations.h"
-
 #include "MarioForm.h"
-
-#include "debug.h"
 
 // SMALL MARIO
 #define ID_ANI_MARIO_SMALL_IDLE_RIGHT 1100
@@ -39,13 +33,15 @@
 #define MARIO_SMALL_BBOX_WIDTH  13
 #define MARIO_SMALL_BBOX_HEIGHT 12
 
-class CMarioSmall : public MarioForm
+class CMario;
+
+class CMarioSmall : public CMarioForm
 {
 public:
-	void Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjects) override;
-	int GetAniId(CMario* mario) override;
-	void SetState(int state, CMario* mario) override;
-	void GetBoundingBox(float& left, float& top, float& right, float& bottom, CMario* mario) override;
-	int GetLevel() const override;
-	void OnTakeDamage(CMario* mario) override;
+	void Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjects);
+	int GetAniId(CMario* mario);
+	void SetState(int state, CMario* mario);
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom, CMario* mario);
+	int GetLevel() const;
+	void OnTakeDamage(CMario* mario);
 };

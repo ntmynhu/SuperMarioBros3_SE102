@@ -1,11 +1,12 @@
 #include "MarioBig.h"
+#include "Mario.h"
 
-void MarioBig::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjects)
+void CMarioBig::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjects)
 {
 	// No additional updates needed
 }
 
-int MarioBig::GetAniId(CMario* mario)
+int CMarioBig::GetAniId(CMario* mario)
 {
 	float vx, vy, ax, ay, nx;
 	mario->GetPhysics(vx, vy, ax, ay, nx);
@@ -66,7 +67,7 @@ int MarioBig::GetAniId(CMario* mario)
 	return aniId;
 }
 
-void MarioBig::SetState(int state, CMario* mario)
+void CMarioBig::SetState(int state, CMario* mario)
 {
 	float vx, vy, ax, ay, nx;
 	mario->GetPhysics(vx, vy, ax, ay, nx);
@@ -148,7 +149,7 @@ void MarioBig::SetState(int state, CMario* mario)
 	}
 }
 
-void MarioBig::GetBoundingBox(float& left, float& top, float& right, float& bottom, CMario* mario)
+void CMarioBig::GetBoundingBox(float& left, float& top, float& right, float& bottom, CMario* mario)
 {
 	float x, y;
 	mario->GetPosition(x, y);
@@ -169,13 +170,13 @@ void MarioBig::GetBoundingBox(float& left, float& top, float& right, float& bott
 	}
 }
 
-int MarioBig::GetLevel() const
+int CMarioBig::GetLevel() const
 {
 	return MARIO_LEVEL_BIG;
 }
 
-void MarioBig::OnTakeDamage(CMario* mario)
+void CMarioBig::OnTakeDamage(CMario* mario)
 {
-	mario->SetLevel(MARIO_LEVEL_SMALL);
+	mario->ChangeForm(MARIO_LEVEL_SMALL);
 	mario->StartUntouchable();
 }

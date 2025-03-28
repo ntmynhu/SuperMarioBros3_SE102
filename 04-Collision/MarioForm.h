@@ -1,8 +1,9 @@
 #pragma once
 #include "GameObject.h"
-#include "Mario.h"
 
-class MarioForm
+class CMario;
+
+class CMarioForm
 {
 public:
 	virtual void Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT> *coObjects) = 0;

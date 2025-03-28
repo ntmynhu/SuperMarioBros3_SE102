@@ -1,4 +1,5 @@
 #pragma once
+
 #include "MarioForm.h"
 
 #define ID_ANI_MARIO_IDLE_RIGHT 400
@@ -22,16 +23,18 @@
 #define ID_ANI_MARIO_BRACE_RIGHT 1000
 #define ID_ANI_MARIO_BRACE_LEFT 1001
 
-class MarioBig : public MarioForm
+class CMario;
+
+class CMarioBig : public CMarioForm
 {
 private:
 	bool isSitting = false;
 public:
-	void Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjects) override;
-	int GetAniId(CMario* mario) override;
-	void SetState(int state, CMario* mario) override;
-	void GetBoundingBox(float& left, float& top, float& right, float& bottom, CMario* mario) override;
-	int GetLevel() const override;
-	void OnTakeDamage(CMario* mario) override;
+	void Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjects);
+	int GetAniId(CMario* mario);
+	void SetState(int state, CMario* mario);
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom, CMario* mario);
+	int GetLevel() const;
+	void OnTakeDamage(CMario* mario);
 };
 

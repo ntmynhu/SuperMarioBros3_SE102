@@ -1,4 +1,5 @@
 #include "MarioSmall.h"
+#include "Mario.h"
 
 void CMarioSmall::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjects)
 {
