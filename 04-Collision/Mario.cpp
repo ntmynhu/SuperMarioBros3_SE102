@@ -99,7 +99,8 @@ void CMario::Render()
 
 	//RenderBoundingBox();
 	
-	DebugOutTitle(L"Coins: %d", coin);
+	//DebugOutTitle(L"Coins: %d", coin);
+	DebugOutTitle(L"Mario State: %d", currentForm->GetLevel());
 }
 
 void CMario::SetState(int state)
