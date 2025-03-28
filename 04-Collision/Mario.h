@@ -79,7 +79,7 @@ class CMario : public CGameObject
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
-		currentForm = new CMarioSmall();
+		currentForm = new CMarioBig();
 
 		maxVx = 0.0f;
 		ax = 0.0f;

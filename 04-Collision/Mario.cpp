@@ -120,7 +120,6 @@ void CMario::SetState(int state)
 
 void CMario::ChangeForm(int newLevel)
 {
-	delete currentForm;
 	switch (newLevel) {
 	case MARIO_LEVEL_SMALL:
 		y += (currentForm->GetLevel() > MARIO_LEVEL_SMALL) ? (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2 : 0;
