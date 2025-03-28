@@ -75,6 +75,9 @@
     <ClInclude Include="MarioForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MarioBig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug.cpp">
@@ -129,6 +132,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MarioForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MarioBig.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
