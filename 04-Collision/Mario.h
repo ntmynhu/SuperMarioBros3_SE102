@@ -37,6 +37,9 @@
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
 
+#define MARIO_STATE_TURBO			700
+
+
 
 #pragma region ANIMATION_ID
 
@@ -116,6 +119,7 @@ public:
 	void SetMaxVx(float maxVx) { this->maxVx = maxVx; }
 	void SetOnPlatform(bool isOnPlatform) { this->isOnPlatform = isOnPlatform; }
 	void SetAx(float ax) { this->ax = ax; }
+	void SetAy(float ay) { this->ay = ay; }
 	void SetVx(float vx) { this->vx = vx; }
 	void SetVy(float vy) { this->vy = vy; }
 	void SetNx(int nx) { this->nx = nx; }
