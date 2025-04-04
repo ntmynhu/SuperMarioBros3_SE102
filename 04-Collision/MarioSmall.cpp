@@ -115,7 +115,7 @@ int CMarioSmall::GetAniId(CMario* mario)
 		}
 		else if (vx > 0)
 		{
-			if (ax < 0)
+			if (ax < 0 && (mario->GetState() == MARIO_STATE_WALKING_LEFT || mario->GetState() == MARIO_STATE_RUNNING_LEFT))
 				aniId = ID_ANI_MARIO_SMALL_BRACE_RIGHT;
 			else if (ax == MARIO_ACCEL_RUN_X)
 				aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
@@ -124,7 +124,7 @@ int CMarioSmall::GetAniId(CMario* mario)
 		}
 		else // vx < 0
 		{
-			if (ax > 0)
+			if (ax > 0 && (mario->GetState() == MARIO_STATE_WALKING_RIGHT || mario->GetState() == MARIO_STATE_RUNNING_RIGHT))
 				aniId = ID_ANI_MARIO_SMALL_BRACE_LEFT;
 			else if (ax == -MARIO_ACCEL_RUN_X)
 				aniId = ID_ANI_MARIO_SMALL_RUNNING_LEFT;
@@ -132,7 +132,11 @@ int CMarioSmall::GetAniId(CMario* mario)
 				aniId = ID_ANI_MARIO_SMALL_WALKING_LEFT;
 		}
 
-	if (aniId == -1) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
+	if (aniId == -1)
+	{
+		if (nx > 0) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
+		else aniId = ID_ANI_MARIO_SMALL_IDLE_LEFT;
+	}
 
 	return aniId;
 }
