@@ -52,8 +52,10 @@ void CMarioSmall::SetState(int state, CMario* mario)
 		break;
 
 	case MARIO_STATE_IDLE:
-		mario->SetVx(0);
-		mario->SetAx(0);
+		if (nx > 0)
+			mario->SetAx(-MARIO_ACCEL_WALK_X);
+		else
+			mario->SetAx(MARIO_ACCEL_WALK_X);
 		break;
 	}
 }

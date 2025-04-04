@@ -15,6 +15,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vx += ax * dt;
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
+	
+	if (nx == 1 && ax < 0 && vx < 0) vx = 0;
+
+	if (nx == -1 && ax > 0 && vx > 0) vx = 0;
+
+	DebugOutTitle(L"Vx: %d", vx);
 
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
@@ -100,7 +106,7 @@ void CMario::Render()
 	//RenderBoundingBox();
 	
 	//DebugOutTitle(L"Coins: %d", coin);
-	DebugOutTitle(L"Mario State: %d", currentForm->GetLevel());
+	//DebugOutTitle(L"Mario State: %d", currentForm->GetLevel());
 }
 
 void CMario::SetState(int state)
