@@ -33,7 +33,7 @@ class CMario;
 
 class CMarioBig : public CMarioForm
 {
-private:
+protected:
 	bool isSitting = false;
 public:
 	void Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjects);
