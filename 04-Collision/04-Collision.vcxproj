@@ -143,6 +143,7 @@
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Koopa.h" />
     <ClInclude Include="Mario.h" />
+    <ClInclude Include="Parakoopa.h" />
     <ClInclude Include="MarioBig.h" />
     <ClInclude Include="MarioForm.h" />
     <ClInclude Include="MarioRacoon.h" />
@@ -170,6 +171,7 @@
     <ClCompile Include="Koopa.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
+    <ClCompile Include="Parakoopa.cpp" />
     <ClCompile Include="MarioBig.cpp" />
     <ClCompile Include="MarioForm.cpp" />
     <ClCompile Include="MarioRacoon.cpp" />
