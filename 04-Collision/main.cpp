@@ -34,6 +34,7 @@
 #include "Mario.h"
 #include "Brick.h"
 #include "Goomba.h"
+#include "Paragoomba.h"
 #include "Coin.h"
 #include "Platform.h"
 
@@ -541,7 +542,7 @@ void Reload()
 	}
 
 	// Second cloud platform 
-	CPlatform* p = new CPlatform(90.0f, GROUND_Y - 34.0f,
+	CPlatform* p = new CPlatform(90.0f, GROUND_Y - 64.0f,
 		16, 15, 16, ID_SPRITE_CLOUD_BEGIN, ID_SPRITE_CLOUD_MIDDLE, ID_SPRITE_CLOUD_END);
 	objects.push_back(p);
 
@@ -550,8 +551,16 @@ void Reload()
 
 	for (int j = 0; j < 4; j++)
 	{
-		CGoomba* goomba = new CGoomba(GOOMBA_X + j * 60, GROUND_Y - 120.0f);
-		objects.push_back(goomba);
+		if (j % 2 != 0) {
+			CGoomba* goomba = new CGoomba(GOOMBA_X + j * 60, GROUND_Y - 150.0f);
+			objects.push_back(goomba);
+		}
+		else
+		{
+			CParagoomba* paragoomba = new CParagoomba(GOOMBA_X + j * 60, GROUND_Y);
+			objects.push_back(paragoomba);
+		}
+		
 	}
 
 	// COINS 
