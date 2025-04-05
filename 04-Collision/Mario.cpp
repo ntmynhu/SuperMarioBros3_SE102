@@ -20,7 +20,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	if (nx == -1 && ax > 0 && vx > 0) vx = 0;
 
-	DebugOutTitle(L"Vx: %d", vx);
+	//DebugOutTitle(L"Vx: %d", vx);
 
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 

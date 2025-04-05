@@ -22,6 +22,8 @@
 #define ID_ANI_MARIO_RACOON_BRACE_RIGHT 2600
 #define ID_ANI_MARIO_RACOON_BRACE_LEFT 2601
 
+#define FLY_DURATION 3000
+#define TAIL_FLOATING_DURATION 1000
 
 class CMarioRacoon : public CMarioBig
 {
@@ -29,7 +31,9 @@ private:
 	bool isFlying = false;
 	bool isTailAttacking = false;
 	DWORD flyStartTime = 0;
-	const float FLY_DURATION = 3000;
+
+	ULONGLONG floatingStartTime = -1;
+	bool isFloating = false;
 public:
     void Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjects);
     int GetAniId(CMario* mario);
@@ -43,5 +47,7 @@ public:
     void TailAttack() { isTailAttacking = true; }
     bool IsFlying() const { return isFlying; }
     bool IsTailAttacking() const { return isTailAttacking; }
+
+    void StartFloating() { isFloating = true; floatingStartTime = GetTickCount64(); }
 };
 
