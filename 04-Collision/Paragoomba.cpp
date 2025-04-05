@@ -1,12 +1,12 @@
 #include "Paragoomba.h"
 #include "Mario.h"
 #include "debug.h"
-void CParagoomba::TakeDamage() {
+void CParagoomba::TakeJumpDamage() {
 	if (state == PARA_GOOMBA_STATE_HASWING) {
 		SetState(GOOMBA_STATE_WALKING);
 		return;
 	}
-	CGoomba::TakeDamage();
+	CGoomba::TakeJumpDamage();
 }
 
 void CParagoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
