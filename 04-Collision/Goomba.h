@@ -9,7 +9,7 @@
 #define GOOMBA_BBOX_HEIGHT 14
 #define GOOMBA_BBOX_HEIGHT_DIE 7
 
-#define GOOMBA_DIE_TIMEOUT 500
+#define GOOMBA_DIE_TIMEOUT 200
 
 #define GOOMBA_STATE_WALKING 100
 #define GOOMBA_STATE_DIE 200
@@ -33,5 +33,8 @@ protected:
 public: 	
 	CGoomba(float x, float y);
 	virtual void SetState(int state);
-	virtual void TakeDamage();
+	virtual bool IsDamagable() { return state != GOOMBA_STATE_DIE; }
+	virtual void OnCollisionByMario(LPCOLLISIONEVENT e);
+	virtual void TakeJumpDamage();
+	virtual void TakeKoopaDamage();
 };

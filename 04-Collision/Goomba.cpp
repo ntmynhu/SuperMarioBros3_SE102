@@ -1,4 +1,5 @@
 #include "Goomba.h"
+#include "Mario.h"
 #include "Enemy.h"
 #include "debug.h"
 CGoomba::CGoomba(float x, float y) :CEnemy(x, y)
@@ -27,8 +28,11 @@ void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& botto
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CMario*>(e->obj)) return;
 	if (!e->obj->IsBlocking()) return;
-	if (dynamic_cast<CGoomba*>(e->obj)) return;
+	
+	if (dynamic_cast<CEnemy*>(e->obj)) return;
+	
 
 	if (e->ny != 0)
 	{
@@ -46,7 +50,13 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	
 }
 
-void CGoomba::TakeDamage() {
+void CGoomba::OnCollisionByMario(LPCOLLISIONEVENT e)
+{
+	if (e->ny < 0) {
+		TakeJumpDamage();
+	}
+}
+void CGoomba::TakeJumpDamage() {
 	if (GetState() != GOOMBA_STATE_DIE)
 	{
 		SetState(GOOMBA_STATE_DIE);
@@ -54,6 +64,13 @@ void CGoomba::TakeDamage() {
 
 }
 
+void CGoomba::TakeKoopaDamage() {
+	if (GetState() != GOOMBA_STATE_DIE)
+	{
+		SetState(GOOMBA_STATE_DIE);
+	}
+
+}
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

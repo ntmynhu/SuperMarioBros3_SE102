@@ -4,7 +4,7 @@
 #include "Mario.h"
 #include "Game.h"
 
-#include "Goomba.h"
+#include "Enemy.h"
 #include "Coin.h"
 
 #include "Collision.h"
@@ -54,35 +54,32 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		vx = 0;
 	}
 
-	if (dynamic_cast<CGoomba*>(e->obj))
-		OnCollisionWithGoomba(e);
+	if (dynamic_cast<CEnemy*>(e->obj))
+		OnCollisionWithEnemy(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
 }
 
-void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
+void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 {
-	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-
-	// jump on top >> kill Goomba and deflect a bit 
+	CEnemy* enemy = dynamic_cast<CEnemy*>(e->obj);
+	DebugOut(L"Collided! Enemy state %d\n", enemy->GetState());
 	if (e->ny < 0)
-	{
-		if (goomba->GetState() != GOOMBA_STATE_DIE)
-		{
-			goomba->TakeDamage();
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
-		}
+	{	
+		vy = -MARIO_JUMP_DEFLECT_SPEED;
 	}
 	else // hit by Goomba
 	{
 		if (untouchable == 0)
 		{
-			if (goomba->GetState() != GOOMBA_STATE_DIE)
+			if (enemy->IsDamagable())
 			{
 				currentForm->OnTakeDamage(this);
 			}
 		}
 	}
+	// jump on top >> kill Goomba and deflect a bit 
+	enemy->OnCollisionByMario(e);
 }
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
