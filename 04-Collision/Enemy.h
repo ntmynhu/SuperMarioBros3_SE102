@@ -16,5 +16,10 @@ protected:
 	virtual void OnNoCollision(DWORD dt);
 public:
 	CEnemy(float x, float y);
+	virtual void OnCollisionByMario(LPCOLLISIONEVENT e) {};
+	virtual void TakeJumpDamage() {};
+	virtual void TakeAttackDamage() {};
+	virtual void TakeKoopaDamage() {};
+	virtual bool IsDamagable() { return true; };
 };
 
