@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "00-Setup", "00-Setup\00-Set
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "04-Collision", "04-Collision\04-Collision.vcxproj", "{0CEDCE73-9775-46A9-9D9D-B8424E7D599D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SuperMarioBros3", "SuperMarioBros3\SuperMarioBros3.vcxproj", "{30B52332-21EE-43B1-91BF-B2494C04C34F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{0CEDCE73-9775-46A9-9D9D-B8424E7D599D}.Release|x64.Build.0 = Release|x64
 		{0CEDCE73-9775-46A9-9D9D-B8424E7D599D}.Release|x86.ActiveCfg = Release|Win32
 		{0CEDCE73-9775-46A9-9D9D-B8424E7D599D}.Release|x86.Build.0 = Release|Win32
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Debug|x64.ActiveCfg = Debug|x64
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Debug|x64.Build.0 = Debug|x64
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Debug|x86.ActiveCfg = Debug|Win32
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Debug|x86.Build.0 = Debug|Win32
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Release|x64.ActiveCfg = Release|x64
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Release|x64.Build.0 = Release|x64
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Release|x86.ActiveCfg = Release|Win32
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
