@@ -30,5 +30,5 @@ public:
 		walk_start = -1; 
 	};
 	bool HasWing() { return (state == PARA_GOOMBA_STATE_HASWING); }
-	virtual void TakeDamage();
+	virtual void TakeJumpDamage();
 };

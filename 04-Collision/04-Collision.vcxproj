@@ -133,6 +133,7 @@
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Collision.h" />
+    <ClInclude Include="FullPlatform.h" />
     <ClInclude Include="Paragoomba.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="Enemy.h" />
@@ -142,11 +143,17 @@
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Koopa.h" />
     <ClInclude Include="Mario.h" />
+    <ClInclude Include="Parakoopa.h" />
+    <ClInclude Include="MarioBig.h" />
+    <ClInclude Include="MarioForm.h" />
+    <ClInclude Include="MarioRacoon.h" />
+    <ClInclude Include="MarioSmall.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="SampleKeyEventHandler.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Textures.h" />
+    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
@@ -154,6 +161,7 @@
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="FullPlatform.cpp" />
     <ClCompile Include="Paragoomba.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -163,11 +171,17 @@
     <ClCompile Include="Koopa.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
+    <ClCompile Include="Parakoopa.cpp" />
+    <ClCompile Include="MarioBig.cpp" />
+    <ClCompile Include="MarioForm.cpp" />
+    <ClCompile Include="MarioRacoon.cpp" />
+    <ClCompile Include="MarioSmall.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
