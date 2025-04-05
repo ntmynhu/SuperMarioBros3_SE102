@@ -32,11 +32,13 @@
 #include "Animations.h"
 
 #include "Mario.h"
-#include "Brick.h"
 #include "Goomba.h"
 #include "Paragoomba.h"
+#include "Koopa.h"
 #include "Coin.h"
 #include "Platform.h"
+#include "Wall.h"
+#include "FullPlatform.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -308,19 +310,56 @@ void LoadAssetsGoomba()
 	animations->Add(ID_ANI_GOOMBA_DIE, ani);
 
 }
-void LoadAssetsBrick()
+
+void LoadAssetsKoopa()
 {
 	CTextures* textures = CTextures::GetInstance();
 	CSprites* sprites = CSprites::GetInstance();
 	CAnimations* animations = CAnimations::GetInstance();
 
-	LPTEXTURE texMisc = textures->Get(ID_TEX_MISC);
-	sprites->Add(ID_SPRITE_BRICK + 1, 372, 153, 372 + 15, 153 + 15, texMisc);
+	LPTEXTURE texEnemy = textures->Get(ID_TEX_ENEMY);
+
+	sprites->Add(ID_SPRITE_KOOPA_WALK + 1, 6, 130, 22, 156, texEnemy);
+	sprites->Add(ID_SPRITE_KOOPA_WALK + 2, 28, 129, 44, 156, texEnemy);
+
+	sprites->Add(ID_SPRITE_KOOPA_WALK_RIGHT + 1, 72, 130, 88, 156, texEnemy);
+	sprites->Add(ID_SPRITE_KOOPA_WALK_RIGHT + 2, 50, 129, 66, 156, texEnemy);
+
+	sprites->Add(ID_SPRITE_KOOPA_DEFEND + 1, 94, 140, 110, 156, texEnemy);
+	sprites->Add(ID_SPRITE_KOOPA_DEFEND + 2, 138, 140, 154, 156, texEnemy);
+	sprites->Add(ID_SPRITE_KOOPA_DEFEND + 3, 158, 140, 174, 156, texEnemy);
+	sprites->Add(ID_SPRITE_KOOPA_DEFEND + 4, 179, 140, 195, 156, texEnemy);
+
+	sprites->Add(ID_SPRITE_KOOPA_RECOVER + 1, 115, 140, 133, 156, texEnemy);
 
 	LPANIMATION ani = new CAnimation(100);
-	ani->Add(ID_SPRITE_BRICK + 1);
-	animations->Add(ID_ANI_BRICK, ani);
+	ani->Add(ID_SPRITE_KOOPA_WALK + 1);
+	ani->Add(ID_SPRITE_KOOPA_WALK + 2);
+	animations->Add(ID_ANI_KOOPA_WALKING, ani);
+
+	ani = new CAnimation(100);
+	ani->Add(ID_SPRITE_KOOPA_WALK_RIGHT + 1);
+	ani->Add(ID_SPRITE_KOOPA_WALK_RIGHT + 2);
+	animations->Add(ID_ANI_KOOPA_WALKING_RIGHT, ani);
+
+	ani = new CAnimation(100);
+	ani->Add(ID_SPRITE_KOOPA_DEFEND + 1);
+	animations->Add(ID_ANI_KOOPA_DEFEND, ani);
+
+	ani = new CAnimation(100);
+	ani->Add(ID_SPRITE_KOOPA_DEFEND + 1);
+	ani->Add(ID_SPRITE_KOOPA_DEFEND + 2);
+	ani->Add(ID_SPRITE_KOOPA_DEFEND + 3);
+	ani->Add(ID_SPRITE_KOOPA_DEFEND + 4);
+	animations->Add(ID_ANI_KOOPA_SLIDE, ani);
+
+	ani = new CAnimation(KOOPA_RECOVER_TIMEOUT/2);
+	ani->Add(ID_SPRITE_KOOPA_DEFEND + 1);
+	ani->Add(ID_SPRITE_KOOPA_RECOVER + 1);
+	animations->Add(ID_ANI_KOOPA_RECOVER, ani);
+
 }
+
 void LoadAssetsCoin()
 {
 	CTextures* textures = CTextures::GetInstance();
@@ -350,6 +389,7 @@ void LoadAssetsOther()
 	sprites->Add(ID_SPRITE_CLOUD_MIDDLE, 408, 117, 408 + 15, 117 + 15, texMisc);
 	sprites->Add(ID_SPRITE_CLOUD_END, 426, 117, 426 + 15, 117 + 15, texMisc);
 
+	sprites->Add(ID_SPRITE_BRICK, 372, 153, 372 + 15, 153 + 15, texMisc);
 }
 
 /*
@@ -369,7 +409,7 @@ void LoadResources()
 
 	LoadAssetsMario();
 	LoadAssetsGoomba();
-	LoadAssetsBrick();
+	LoadAssetsKoopa();
 	LoadAssetsCoin();
 	LoadAssetsOther();
 }
@@ -402,50 +442,39 @@ void Reload()
 {
 	ClearScene();
 
+	float brickW = 16.0f;
 	// Main ground
-	for (int i = 0; i < NUM_BRICKS; i++)
-	{
-		CBrick* b = new CBrick(i * BRICK_WIDTH * 1.0f, BRICK_Y);
-		objects.push_back(b);
-	}
+	CFullPlatform* p1 = new CFullPlatform(0.0f, BRICK_Y,
+		brickW, brickW, NUM_BRICKS, ID_SPRITE_BRICK, ID_SPRITE_BRICK, ID_SPRITE_BRICK);
+	objects.push_back(p1);
 
-	// Short, low platform
-	for (int i = 1; i < 3; i++)
-	{
-		CBrick* b = new CBrick(i * BRICK_WIDTH * 1.0f, BRICK_Y - 44.0f);
-		objects.push_back(b);
-	}
+	// Small ground
+	CFullPlatform* p2 = new CFullPlatform(0.0f, BRICK_Y - 44.0f,
+		brickW, brickW, 3, ID_SPRITE_BRICK, ID_SPRITE_BRICK, ID_SPRITE_BRICK);
+	objects.push_back(p2);
 
-	// Vertical column 1
-	for (int i = 0; i < 10; i++)
-	{
-		CBrick* b = new CBrick(0, BRICK_Y - i * BRICK_WIDTH);
-		objects.push_back(b);
-	}
+	//Vertical column 1
+	CWall* c1 = new CWall(0.0f, BRICK_Y - 10 * brickW,
+		brickW, brickW, 10, ID_SPRITE_BRICK, ID_SPRITE_BRICK, ID_SPRITE_BRICK);
+	objects.push_back(c1);
 
-	// Vertical column 2
-	for (int i = 1; i < 3; i++)
-	{
-		CBrick* b = new CBrick(BRICK_X + 300.0f, BRICK_Y - i * BRICK_WIDTH);
-		objects.push_back(b);
-	}
+	//Vertical column 2
+	CWall* c2 = new CWall(300.0f, BRICK_Y - 3 * brickW,
+		brickW, brickW, 3, ID_SPRITE_BRICK, ID_SPRITE_BRICK, ID_SPRITE_BRICK);
+	objects.push_back(c2);
 
-	// Vertical column 3
-	for (int i = 1; i < 4; i++)
-	{
-		CBrick* b = new CBrick(BRICK_X + 400.0f, BRICK_Y - i * BRICK_WIDTH);
-		objects.push_back(b);
-	}
+	//Vertical column 3
+	CWall* c3 = new CWall(400.0f, BRICK_Y - 4 * brickW,
+		brickW, brickW, 4, ID_SPRITE_BRICK, ID_SPRITE_BRICK, ID_SPRITE_BRICK);
+	objects.push_back(c3);
 
-	// Vertical column 4
-	for (int i = 1; i < 5; i++)
-	{
-		CBrick* b = new CBrick(BRICK_X + 500.0f, BRICK_Y - i * BRICK_WIDTH);
-		objects.push_back(b);
-	}
+	//Vertical column 4
+	CWall* c4 = new CWall(500.0f, BRICK_Y - 5 * brickW,
+		brickW, brickW, 5, ID_SPRITE_BRICK, ID_SPRITE_BRICK, ID_SPRITE_BRICK);
+	objects.push_back(c4);
 
 	// Second cloud platform 
-	CPlatform* p = new CPlatform(90.0f, GROUND_Y - 64.0f,
+	CPlatform* p = new CPlatform(90.0f, GROUND_Y - 34.0f,
 		16, 15, 16, ID_SPRITE_CLOUD_BEGIN, ID_SPRITE_CLOUD_MIDDLE, ID_SPRITE_CLOUD_END);
 	objects.push_back(p);
 
@@ -454,16 +483,20 @@ void Reload()
 
 	for (int j = 0; j < 4; j++)
 	{
-		if (j % 2 != 0) {
+		if (j % 4 == 0) {
 			CGoomba* goomba = new CGoomba(GOOMBA_X + j * 60, GROUND_Y - 150.0f);
 			objects.push_back(goomba);
 		}
-		else
+		else if (j % 4 == 1)
 		{
 			CParagoomba* paragoomba = new CParagoomba(GOOMBA_X + j * 60, GROUND_Y);
 			objects.push_back(paragoomba);
 		}
-		
+		else if (j % 4 == 2)
+		{
+			CKoopa* koopa = new CKoopa(GOOMBA_X + j * 60, GROUND_Y - 150.0f);
+			objects.push_back(koopa);
+		}
 	}
 
 	// COINS 
