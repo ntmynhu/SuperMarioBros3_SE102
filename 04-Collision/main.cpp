@@ -35,6 +35,7 @@
 #include "Goomba.h"
 #include "Paragoomba.h"
 #include "Koopa.h"
+#include "Parakoopa.h"
 #include "Coin.h"
 #include "Platform.h"
 #include "Wall.h"
@@ -319,18 +320,18 @@ void LoadAssetsKoopa()
 
 	LPTEXTURE texEnemy = textures->Get(ID_TEX_ENEMY);
 
-	sprites->Add(ID_SPRITE_KOOPA_WALK + 1, 6, 130, 22, 156, texEnemy);
-	sprites->Add(ID_SPRITE_KOOPA_WALK + 2, 28, 129, 44, 156, texEnemy);
+	sprites->Add(ID_SPRITE_KOOPA_WALK + 1, 6, 129, 22, 155, texEnemy);
+	sprites->Add(ID_SPRITE_KOOPA_WALK + 2, 28, 129, 44, 155, texEnemy);
 
-	sprites->Add(ID_SPRITE_KOOPA_WALK_RIGHT + 1, 72, 130, 88, 156, texEnemy);
-	sprites->Add(ID_SPRITE_KOOPA_WALK_RIGHT + 2, 50, 129, 66, 156, texEnemy);
+	sprites->Add(ID_SPRITE_KOOPA_WALK_RIGHT + 1, 72, 129, 88, 155, texEnemy);
+	sprites->Add(ID_SPRITE_KOOPA_WALK_RIGHT + 2, 50, 129, 66, 155, texEnemy);
 
-	sprites->Add(ID_SPRITE_KOOPA_DEFEND + 1, 94, 140, 110, 156, texEnemy);
-	sprites->Add(ID_SPRITE_KOOPA_DEFEND + 2, 138, 140, 154, 156, texEnemy);
-	sprites->Add(ID_SPRITE_KOOPA_DEFEND + 3, 158, 140, 174, 156, texEnemy);
-	sprites->Add(ID_SPRITE_KOOPA_DEFEND + 4, 179, 140, 195, 156, texEnemy);
+	sprites->Add(ID_SPRITE_KOOPA_DEFEND + 1, 94, 140, 110, 155, texEnemy);
+	sprites->Add(ID_SPRITE_KOOPA_DEFEND + 2, 138, 140, 154, 155, texEnemy);
+	sprites->Add(ID_SPRITE_KOOPA_DEFEND + 3, 158, 140, 174, 155, texEnemy);
+	sprites->Add(ID_SPRITE_KOOPA_DEFEND + 4, 179, 140, 195, 155, texEnemy);
 
-	sprites->Add(ID_SPRITE_KOOPA_RECOVER + 1, 115, 140, 133, 156, texEnemy);
+	sprites->Add(ID_SPRITE_KOOPA_RECOVER + 1, 115, 140, 133, 155, texEnemy);
 
 	LPANIMATION ani = new CAnimation(100);
 	ani->Add(ID_SPRITE_KOOPA_WALK + 1);
@@ -478,13 +479,21 @@ void Reload()
 		16, 15, 16, ID_SPRITE_CLOUD_BEGIN, ID_SPRITE_CLOUD_MIDDLE, ID_SPRITE_CLOUD_END);
 	objects.push_back(p);
 
+	CPlatform* cp1 = new CPlatform(154.0f, GROUND_Y - 90.0f,
+		16, 15, 12, ID_SPRITE_CLOUD_BEGIN, ID_SPRITE_CLOUD_MIDDLE, ID_SPRITE_CLOUD_END);
+	objects.push_back(cp1);
+
+	CPlatform* cp2 = new CPlatform(218.0f, GROUND_Y - 120.0f,
+		16, 15, 8, ID_SPRITE_CLOUD_BEGIN, ID_SPRITE_CLOUD_MIDDLE, ID_SPRITE_CLOUD_END);
+	objects.push_back(cp2);
+
 	mario = new CMario(MARIO_START_X, MARIO_START_Y);
 	objects.push_back(mario);
 
 	for (int j = 0; j < 4; j++)
 	{
 		if (j % 4 == 0) {
-			CGoomba* goomba = new CGoomba(GOOMBA_X + j * 60, GROUND_Y - 150.0f);
+			CGoomba* goomba = new CGoomba(GOOMBA_X + j * 60, GROUND_Y - 80.0f);
 			objects.push_back(goomba);
 		}
 		else if (j % 4 == 1)
@@ -492,17 +501,22 @@ void Reload()
 			CParagoomba* paragoomba = new CParagoomba(GOOMBA_X + j * 60, GROUND_Y);
 			objects.push_back(paragoomba);
 		}
-		else if (j % 4 == 2)
+		else if (j % 4 == 3)
 		{
-			CKoopa* koopa = new CKoopa(GOOMBA_X + j * 60, GROUND_Y - 150.0f);
+			CKoopa* koopa = new CKoopa(GOOMBA_X + j * 60 - 60, GROUND_Y - 80.0f);
 			objects.push_back(koopa);
+		}
+		else
+		{
+			CParakoopa* parakoopa = new CParakoopa(GOOMBA_X + j * 60, GROUND_Y - 200.0f);
+			objects.push_back(parakoopa);
 		}
 	}
 
 	// COINS 
 	for (int i = 0; i < 10; i++)
 	{
-		CCoin* c = new CCoin(COIN_X + i * (COIN_WIDTH * 2), GROUND_Y - 96.0f);
+		CCoin* c = new CCoin(COIN_X + i * (COIN_WIDTH * 2), GROUND_Y - 60.0f);
 		objects.push_back(c);
 	}
 }

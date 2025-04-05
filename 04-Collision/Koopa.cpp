@@ -124,7 +124,7 @@ void CKoopa::OnCollisionByMario(LPCOLLISIONEVENT e)
 
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	DebugOutTitle(L"Left lim %f, Right lim %f, x %f", left_lim, right_lim, x);
+	
 	if (this->isOnPlatform && state == KOOPA_STATE_WALKING) {
 		if (this->x <= left_lim) {
 			this->x = left_lim;
@@ -171,6 +171,7 @@ void CKoopa::Render()
 		if (vx > 0) {
 			aniId = ID_ANI_KOOPA_WALKING_RIGHT;
 		}
+		break;
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
@@ -192,7 +193,7 @@ void CKoopa::SetState(int state)
 		vx = -KOOPA_SHAKE_SPEED;
 		break;
 	case KOOPA_STATE_WALKING:
-		y -= (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_DEFEND) / 2;
+		y -= (float)(KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_DEFEND) / 2;
 		vx = -KOOPA_WALKING_SPEED;
 		break;
 	}
