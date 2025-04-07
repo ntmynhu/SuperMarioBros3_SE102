@@ -43,7 +43,7 @@ void CMario::OnNoCollision(DWORD dt)
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	/*if (e->ny != 0 && e->obj->IsBlocking())
+	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
 		if (e->ny < 0) isOnPlatform = true;
@@ -53,11 +53,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		{
 			vx = 0;
 		}
-
-	if (dynamic_cast<CEnemy*>(e->obj))
-		OnCollisionWithEnemy(e);
-	else if (dynamic_cast<CCoin*>(e->obj))
-		OnCollisionWithCoin(e);*/
+		if (dynamic_cast<CCoin*>(e->obj))
+		OnCollisionWithCoin(e);
 }
 
 void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
