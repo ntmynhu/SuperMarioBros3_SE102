@@ -59,13 +59,24 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 		isFloating = false;
 	}
 
-	// reset untouchable timer if untouchable time has passed
+	if ((mario->GetState() == MARIO_STATE_B || mario->GetState() == MARIO_STATE_TURBO_B) && !isTailAttacking)
+	{
+		StartTailAttacking();
+	}
+
 	if (GetTickCount64() - floatingStartTime > 200 && isFloating)
 	{
 		floatingStartTime = 0;
 		isFloating = false;
 		mario->SetAy(MARIO_GRAVITY);
 	}
+
+	if (GetTickCount64() - tailAttackingStartTime > TAIL_FLOATING_DURATION && isTailAttacking)
+	{
+		tailAttackingStartTime = 0;
+		isTailAttacking = false;
+	}
+
 
 	DebugOutTitle(L"Vy: %d, IsFloating: %d, State %d", vy > 0, isFloating, mario->GetState());
 }
@@ -126,6 +137,11 @@ int CMarioRacoon::GetAniId(CMario* mario)
 					aniId = ID_ANI_MARIO_RACOON_WALKING_LEFT;
 			}
 
+	if (isTailAttacking)
+	{
+		aniId = (nx > 0) ? ID_ANI_MARIO_RACOON_TAIL_ATTACK_RIGHT : ID_ANI_MARIO_RACOON_TAIL_ATTACK_LEFT;
+	}
+
 	if (aniId == -1)
 	{
 		if (nx > 0) aniId = ID_ANI_MARIO_RACOON_IDLE_RIGHT;
@@ -177,6 +193,7 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 		break;
 
 	case MARIO_STATE_B:
+
 		break;
 
 	case MARIO_STATE_TURBO_A:
