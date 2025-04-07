@@ -111,6 +111,19 @@ void CMarioBig::SetState(int state, CMario* mario)
 				mario->SetVy(-MARIO_JUMP_SPEED_Y);
 		}
 		break;
+	case MARIO_STATE_B:
+		break;
+
+	case MARIO_STATE_TURBO_A:
+		if (mario->IsOnPlatform())
+		{
+			mario->SetVy(-MARIO_JUMP_SPEED_Y / 1.25);
+		}
+		break;
+
+	case MARIO_STATE_TURBO_B:
+
+		break;
 
 	case MARIO_STATE_RELEASE_JUMP:
 		if (vy < 0)

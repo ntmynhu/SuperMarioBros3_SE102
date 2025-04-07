@@ -25,7 +25,7 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 			mario->SetAy(SLOW_FALL_GRAVITY);
 			StartFloating();
 		}
-		else if (mario->GetState() == MARIO_STATE_TURBO)
+		else if (mario->GetState() == MARIO_STATE_TURBO_A)
 		{
 			const float SLOW_FALL_GRAVITY = MARIO_GRAVITY * 0.9f;
 			const float MAX_SLOW_FALL_SPEED = 0.15f;
@@ -174,6 +174,20 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 			else
 				mario->SetVy(-MARIO_JUMP_SPEED_Y);
 		}
+		break;
+
+	case MARIO_STATE_B:
+		break;
+
+	case MARIO_STATE_TURBO_A:
+		if (mario->IsOnPlatform())
+		{
+			mario->SetVy(-MARIO_JUMP_SPEED_Y/1.25);
+		}
+		break;
+
+	case MARIO_STATE_TURBO_B:
+		
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:

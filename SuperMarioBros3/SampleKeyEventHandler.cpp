@@ -19,11 +19,20 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_S:
 		mario->SetState(MARIO_STATE_JUMP);
 		break;
+	case DIK_A:
+		mario->SetState(MARIO_STATE_B);
+		break;
+	case DIK_X:
+		mario->SetState(MARIO_STATE_TURBO_A);
+		break;
 	case DIK_1:
-		mario->SetLevel(MARIO_LEVEL_SMALL);
+		mario->ChangeForm(MARIO_LEVEL_SMALL);
 		break;
 	case DIK_2:
-		mario->SetLevel(MARIO_LEVEL_BIG);
+		mario->ChangeForm(MARIO_LEVEL_BIG);
+		break;
+	case DIK_3:
+		mario->ChangeForm(MARIO_LEVEL_RACOON);
 		break;
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
@@ -68,6 +77,14 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 			mario->SetState(MARIO_STATE_RUNNING_LEFT);
 		else
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
+	}
+	else if (game->IsKeyDown(DIK_X))
+	{
+		mario->SetState(MARIO_STATE_TURBO_A);
+	}
+	else if (game->IsKeyDown(DIK_Z))
+	{
+		mario->SetState(MARIO_STATE_TURBO_B);
 	}
 	else
 		mario->SetState(MARIO_STATE_IDLE);

@@ -39,9 +39,9 @@
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
 
-#define MARIO_STATE_TURBO			700
-
-
+#define MARIO_STATE_B			700
+#define MARIO_STATE_TURBO_A		800
+#define MARIO_STATE_TURBO_B		900
 
 #pragma region ANIMATION_ID
 

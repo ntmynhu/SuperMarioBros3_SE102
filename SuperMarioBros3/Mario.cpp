@@ -8,6 +8,7 @@
 #include "Coin.h"
 
 #include "Collision.h"
+#include "Portal.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -48,13 +49,21 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		vy = 0;
 		if (e->ny < 0) isOnPlatform = true;
 	}
-	else
-		if (e->nx != 0 && e->obj->IsBlocking())
-		{
-			vx = 0;
-		}
-		if (dynamic_cast<CCoin*>(e->obj))
+	else if (e->nx != 0 && e->obj->IsBlocking())
+	{
+		vx = 0;
+	}
+
+	if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
+	else if (dynamic_cast<CPortal*>(e->obj))
+		OnCollisionWithPortal(e);
+}
+
+void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
+{
+	CPortal* p = (CPortal*)e->obj;
+	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
 }
 
 void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
@@ -122,14 +131,20 @@ void CMario::SetState(int state)
 void CMario::ChangeForm(int newLevel)
 {
 	switch (newLevel) {
-	case MARIO_LEVEL_SMALL:
-		y += (currentForm->GetLevel() > MARIO_LEVEL_SMALL) ? (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2 : 0;
-		currentForm = new CMarioSmall();
-		break;
-	case MARIO_LEVEL_BIG:
-		currentForm = new CMarioBig();
-		break;
+		case MARIO_LEVEL_SMALL:
+			y += (currentForm->GetLevel() > MARIO_LEVEL_SMALL) ? (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2 : 0;
+			currentForm = new CMarioSmall();
+			break;
+		case MARIO_LEVEL_BIG:
+			currentForm = new CMarioBig();
+			break;
+		case MARIO_LEVEL_RACOON:
+			currentForm = new CMarioRacoon();
+			break;
 	}
+
+	DebugOut(L"[INFO] Mario changed to level %d\n", newLevel);
+	DebugOut(L"[INFO] CurrentForm %d\n", currentForm->GetLevel());
 }
 
 void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
