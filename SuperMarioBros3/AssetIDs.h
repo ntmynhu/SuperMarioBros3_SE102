@@ -29,7 +29,7 @@
 #define OBJECT_TYPE_WALL 33
 
 //From 40: Block
-#define OBJECT_TYPE_BRICK 34
+#define OBJECT_TYPE_BRICK 40
 
 #define OBJECT_TYPE_PORTAL	50
 

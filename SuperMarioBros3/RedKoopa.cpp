@@ -7,7 +7,11 @@
 #include "Platform.h"
 #include "debug.h"
 
-
+void CRedKoopa::OnNoCollision(DWORD dt) {
+	left_lim = 0.0f;
+	right_lim = 0.0f;
+	CKoopa::OnNoCollision(dt);
+}
 void CRedKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (dynamic_cast<CMario*>(e->obj)) return;
@@ -46,23 +50,32 @@ void CRedKoopa::OnCollisionWithGround(LPCOLLISIONEVENT e)
 	CGameObject* ground = dynamic_cast<CGameObject*>(e->obj);
 	float t, l, r, b;
 	ground->GetBoundingBox(l, t, r, b);
-	left_lim = l - KOOPA_BBOX_WIDTH / 4;
-	right_lim = r + KOOPA_BBOX_WIDTH / 4;
+	if (l < left_lim || left_lim == right_lim) {
+		DebugOut(L"L: %f, Left_lim: %f\n", l, left_lim);
+		left_lim = l;
+	}
+	if (r > right_lim || left_lim == right_lim) {
+		DebugOut(L"R: %f, Right_lim: %f\n", r, right_lim);
+		right_lim = r;
+	}
+	
 }
 
 
 void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-
-	if (this->isOnPlatform && state == KOOPA_STATE_WALKING) {
-		if (this->x <= left_lim) {
-			this->x = left_lim;
-			this->vx = -this->vx;
-		}
-		else if (this->x >= right_lim)
-		{
-			this->x = right_lim;
-			this->vx = -this->vx;
+	DebugOutTitle(L"left_lim %f right_lim %f", left_lim, right_lim);
+	if (left_lim != right_lim) {
+		if (this->isOnPlatform && state == KOOPA_STATE_WALKING) {
+			if (this->x <= left_lim) {
+				this->x = left_lim;
+				this->vx = -this->vx;
+			}
+			else if (this->x >= right_lim)
+			{
+				this->x = right_lim;
+				this->vx = -this->vx;
+			}
 		}
 	}
 
