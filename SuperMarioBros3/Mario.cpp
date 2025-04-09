@@ -78,7 +78,18 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 	}
 	else // hit by Goomba
 	{
-		if (untouchable == 0)
+		bool isTailAttack = false;
+		CMarioRacoon* racoon = dynamic_cast<CMarioRacoon*>(currentForm);
+		if (racoon)
+		{
+			if (racoon->IsTailAttacking())
+			{
+				enemy->TakeTailAttackDamage();
+				isTailAttack = true;
+			}
+		}
+
+		if (untouchable == 0 && !isTailAttack)
 		{
 			if (enemy->IsDamagable())
 			{
@@ -86,6 +97,7 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 			}
 		}
 	}
+
 	// jump on top >> kill Goomba and deflect a bit 
 	enemy->OnCollisionByMario(e);
 }

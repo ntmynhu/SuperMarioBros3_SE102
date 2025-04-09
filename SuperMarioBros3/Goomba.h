@@ -38,5 +38,6 @@ public:
 	virtual bool IsDamagable() { return state != GOOMBA_STATE_DIE; }
 	virtual void OnCollisionByMario(LPCOLLISIONEVENT e);
 	virtual void TakeJumpDamage();
+	virtual void TakeTailAttackDamage();
 	virtual void TakeKoopaDamage();
 };

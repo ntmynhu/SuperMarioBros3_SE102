@@ -19,6 +19,7 @@ public:
 	virtual void OnCollisionByMario(LPCOLLISIONEVENT e) {};
 	virtual void TakeJumpDamage() {};
 	virtual void TakeAttackDamage() {};
+	virtual void TakeTailAttackDamage() {};
 	virtual void TakeKoopaDamage() {};
 	virtual bool IsDamagable() { return true; };
 };

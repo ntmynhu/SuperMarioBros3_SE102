@@ -50,5 +50,6 @@ public:
 	virtual bool IsDamagable() { return state != KOOPA_STATE_DEFEND && state != KOOPA_STATE_RECOVER; }
 	virtual void OnCollisionByMario(LPCOLLISIONEVENT e);
 	virtual void TakeJumpDamage();
+	virtual void TakeTailAttackDamage();
 };
 

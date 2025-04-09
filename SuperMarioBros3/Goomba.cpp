@@ -64,6 +64,14 @@ void CGoomba::TakeJumpDamage() {
 
 }
 
+void CGoomba::TakeTailAttackDamage()
+{
+	if (GetState() != GOOMBA_STATE_DIE)
+	{
+		SetState(GOOMBA_STATE_DIE);
+	}
+}
+
 void CGoomba::TakeKoopaDamage() {
 	if (GetState() != GOOMBA_STATE_DIE)
 	{

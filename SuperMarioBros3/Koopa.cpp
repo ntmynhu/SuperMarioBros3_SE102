@@ -66,6 +66,14 @@ void CKoopa::TakeJumpDamage() {
 	}
 }
 
+void CKoopa::TakeTailAttackDamage()
+{
+	if (GetState() != KOOPA_STATE_DEFEND)
+	{
+		SetState(KOOPA_STATE_DEFEND);
+	}
+}
+
 void CKoopa::OnCollisionByMario(LPCOLLISIONEVENT e)
 {
 	//Mario collide from top
