@@ -13,7 +13,7 @@ CKoopa::CKoopa(float x, float y) :CEnemy(x, y)
 
 void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == KOOPA_STATE_DEFEND || state == KOOPA_STATE_DEFEND_SLIDING || state == KOOPA_STATE_RECOVER)
+	if (state == KOOPA_STATE_DEFEND || state == KOOPA_STATE_DEFEND_SLIDING || state == KOOPA_STATE_RECOVER || state == KOOPA_STATE_DIE)
 	{
 		left = x - KOOPA_BBOX_WIDTH_DEFEND / 2;
 		top = y - KOOPA_BBOX_HEIGHT_DEFEND / 2;
@@ -56,7 +56,31 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 void CKoopa::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 {
 	CEnemy* enemy = dynamic_cast<CEnemy*>(e->obj);
-	enemy->TakeKoopaDamage();
+
+	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+	if (koopa) {
+		if (koopa->GetState() == KOOPA_STATE_DEFEND_SLIDING)
+			this->TakeKoopaDamage(koopa->x);
+	}
+
+	enemy->TakeKoopaDamage(x);
+	
+}
+
+void CKoopa::TakeKoopaDamage(float xKoopa)
+{
+	if (GetState() != KOOPA_STATE_DIE)
+	{
+		isUpsideDown = true;
+		if (xKoopa > x) {
+			vx = -ENEMY_DIE_UPSIDE_DOWN_VX;
+		}
+		else {
+			vx = ENEMY_DIE_UPSIDE_DOWN_VX;
+		}
+		vy = -ENEMY_DIE_UPSIDE_DOWN_VY;
+		SetState(KOOPA_STATE_DIE);
+	}
 }
 
 void CKoopa::TakeJumpDamage() {
@@ -108,7 +132,13 @@ void CKoopa::OnCollisionByMario(LPCOLLISIONEVENT e)
 
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if ((state == KOOPA_STATE_DEFEND) && (GetTickCount64() - die_start > KOOPA_DEFEND_TIMEOUT))
+	if ((state == KOOPA_STATE_DIE) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
+	{
+		isDeleted = true;
+		return;
+	}
+
+	if ((state == KOOPA_STATE_DEFEND) && (GetTickCount64() - defend_start > KOOPA_DEFEND_TIMEOUT))
 	{
 		SetState(KOOPA_STATE_RECOVER);
 		return;
@@ -130,19 +160,27 @@ void CKoopa::Render()
 	int aniId = ID_ANI_KOOPA_WALKING;
 	switch (state) {
 	case (KOOPA_STATE_DEFEND):
-		aniId = ID_ANI_KOOPA_DEFEND;
+		if (isUpsideDown)
+			aniId = ID_ANI_KOOPA_DEFEND_UD;
+		else aniId = ID_ANI_KOOPA_DEFEND;
 		break;
 	case (KOOPA_STATE_DEFEND_SLIDING):
-		aniId = ID_ANI_KOOPA_SLIDE;
+		if (isUpsideDown)
+			aniId = ID_ANI_KOOPA_SLIDE_UD;
+		else aniId = ID_ANI_KOOPA_SLIDE;
 		break;
 	case (KOOPA_STATE_RECOVER):
-		aniId = ID_ANI_KOOPA_RECOVER;
+		if (isUpsideDown)
+			aniId = ID_ANI_KOOPA_RECOVER_UD;
+		else aniId = ID_ANI_KOOPA_RECOVER;
 		break;
 	case (KOOPA_STATE_WALKING):
 		if (vx > 0) {
 			aniId = ID_ANI_KOOPA_WALKING_RIGHT;
 		}
 		break;
+	case (KOOPA_STATE_DIE):
+		aniId = ID_ANI_KOOPA_DEFEND_UD;
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
@@ -155,7 +193,7 @@ void CKoopa::SetState(int state)
 	switch (state)
 	{
 	case KOOPA_STATE_DEFEND:
-		die_start = GetTickCount64();
+		defend_start = GetTickCount64();
 		vx = 0;
 		vy = 0;
 		break;
@@ -164,8 +202,12 @@ void CKoopa::SetState(int state)
 		vx = -KOOPA_SHAKE_SPEED;
 		break;
 	case KOOPA_STATE_WALKING:
+		isUpsideDown = false;
 		y -= (float)(KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_DEFEND) / 2;
 		vx = -KOOPA_WALKING_SPEED;
+		break;
+	case KOOPA_STATE_DIE:
+		die_start = GetTickCount64();
 		break;
 	}
 }
