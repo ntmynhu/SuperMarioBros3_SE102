@@ -72,7 +72,7 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 {
 	CEnemy* enemy = dynamic_cast<CEnemy*>(e->obj);
 	DebugOut(L"Collided! Enemy state %d\n", enemy->GetState());
-	if (e->ny < 0)
+	if (e->ny < 0 && enemy->GetState() != ENEMY_STATE_DIE)
 	{
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 	}

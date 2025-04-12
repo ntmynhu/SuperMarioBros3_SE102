@@ -3,6 +3,8 @@
 
 #define ENEMY_DIE_UPSIDE_DOWN_VY 0.2f
 #define ENEMY_DIE_UPSIDE_DOWN_VX 0.2f
+
+#define ENEMY_STATE_DIE 1000
 class CEnemy :
 	public CGameObject
 {

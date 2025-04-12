@@ -13,7 +13,7 @@ CKoopa::CKoopa(float x, float y) :CEnemy(x, y)
 
 void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == KOOPA_STATE_DEFEND || state == KOOPA_STATE_DEFEND_SLIDING || state == KOOPA_STATE_RECOVER || state == KOOPA_STATE_DIE)
+	if (state == KOOPA_STATE_DEFEND || state == KOOPA_STATE_DEFEND_SLIDING || state == KOOPA_STATE_RECOVER || state == ENEMY_STATE_DIE)
 	{
 		left = x - KOOPA_BBOX_WIDTH_DEFEND / 2;
 		top = y - KOOPA_BBOX_HEIGHT_DEFEND / 2;
@@ -69,7 +69,7 @@ void CKoopa::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 
 void CKoopa::TakeKoopaDamage(float xKoopa)
 {
-	if (GetState() != KOOPA_STATE_DIE)
+	if (GetState() != ENEMY_STATE_DIE)
 	{
 		isUpsideDown = true;
 		if (xKoopa > x) {
@@ -79,7 +79,7 @@ void CKoopa::TakeKoopaDamage(float xKoopa)
 			vx = ENEMY_DIE_UPSIDE_DOWN_VX;
 		}
 		vy = -ENEMY_DIE_UPSIDE_DOWN_VY;
-		SetState(KOOPA_STATE_DIE);
+		SetState(ENEMY_STATE_DIE);
 	}
 }
 
@@ -92,6 +92,10 @@ void CKoopa::TakeJumpDamage() {
 
 void CKoopa::OnCollisionByMario(LPCOLLISIONEVENT e)
 {
+	CMario* mario = dynamic_cast<CMario*>(e->src_obj);
+
+	float mario_x, mario_y;
+	mario->GetPosition(mario_x, mario_y);
 	//Mario collide from top
 	if (state != KOOPA_STATE_DEFEND && state != KOOPA_STATE_RECOVER)
 	{
@@ -102,6 +106,9 @@ void CKoopa::OnCollisionByMario(LPCOLLISIONEVENT e)
 	else {
 		//Mario collide from right
 		if (e->nx > 0) {
+			if (mario->GetState() == MARIO_STATE_B) {
+
+			}
 			SetState(KOOPA_STATE_DEFEND_SLIDING);
 			vx = -KOOPA_SLIDING_SPEED;
 		}
@@ -111,10 +118,6 @@ void CKoopa::OnCollisionByMario(LPCOLLISIONEVENT e)
 		}
 		else if (e->ny < 0) {
 			SetState(KOOPA_STATE_DEFEND_SLIDING);
-			CMario* mario = dynamic_cast<CMario*>(e->src_obj);
-
-			float mario_x, mario_y;
-			mario->GetPosition(mario_x, mario_y);
 			//Mario collide from right
 			if (x <= mario_x) {
 				vx = -KOOPA_SLIDING_SPEED;
@@ -132,7 +135,7 @@ void CKoopa::OnCollisionByMario(LPCOLLISIONEVENT e)
 
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if ((state == KOOPA_STATE_DIE) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
+	if ((state == ENEMY_STATE_DIE) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
 	{
 		isDeleted = true;
 		return;
@@ -179,7 +182,7 @@ void CKoopa::Render()
 			aniId = ID_ANI_KOOPA_WALKING_RIGHT;
 		}
 		break;
-	case (KOOPA_STATE_DIE):
+	case (ENEMY_STATE_DIE):
 		aniId = ID_ANI_KOOPA_DEFEND_UD;
 	}
 
@@ -206,7 +209,7 @@ void CKoopa::SetState(int state)
 		y -= (float)(KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_DEFEND) / 2;
 		vx = -KOOPA_WALKING_SPEED;
 		break;
-	case KOOPA_STATE_DIE:
+	case ENEMY_STATE_DIE:
 		die_start = GetTickCount64();
 		break;
 	}

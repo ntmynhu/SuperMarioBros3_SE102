@@ -10,7 +10,7 @@ CGoomba::CGoomba(float x, float y) :CEnemy(x, y)
 
 void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == GOOMBA_STATE_DIE && !isUpsideDown)
+	if (state == ENEMY_STATE_DIE && !isUpsideDown)
 	{
 		left = x - GOOMBA_BBOX_WIDTH / 2;
 		top = y - GOOMBA_BBOX_HEIGHT_DIE / 2;
@@ -57,15 +57,15 @@ void CGoomba::OnCollisionByMario(LPCOLLISIONEVENT e)
 	}
 }
 void CGoomba::TakeJumpDamage() {
-	if (GetState() != GOOMBA_STATE_DIE)
+	if (GetState() != ENEMY_STATE_DIE)
 	{
-		SetState(GOOMBA_STATE_DIE);
+		SetState(ENEMY_STATE_DIE);
 	}
 
 }
 
 void CGoomba::TakeKoopaDamage(float xKoopa) {
-	if (GetState() != GOOMBA_STATE_DIE)
+	if (GetState() != ENEMY_STATE_DIE)
 	{
 		isUpsideDown = true;
 		if (xKoopa > x) {
@@ -75,7 +75,7 @@ void CGoomba::TakeKoopaDamage(float xKoopa) {
 			vx = ENEMY_DIE_UPSIDE_DOWN_VX;
 		}
 		vy = -ENEMY_DIE_UPSIDE_DOWN_VY;
-		SetState(GOOMBA_STATE_DIE);
+		SetState(ENEMY_STATE_DIE);
 	}
 
 }
@@ -84,7 +84,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 
 
-	if (state == GOOMBA_STATE_DIE) {
+	if (state == ENEMY_STATE_DIE) {
 		if (isUpsideDown) {
 			if ((GetTickCount64() - die_start > GOOMBA_DIE_UD_TIMEOUT))
 			{
@@ -108,7 +108,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CGoomba::Render()
 {
 	int aniId = ID_ANI_GOOMBA_WALKING;
-	if (state == GOOMBA_STATE_DIE)
+	if (state == ENEMY_STATE_DIE)
 	{
 		if (isUpsideDown)
 			aniId = ID_ANI_GOOMBA_DIE_UPSIDE_DOWN;
@@ -123,7 +123,7 @@ void CGoomba::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case GOOMBA_STATE_DIE:
+	case ENEMY_STATE_DIE:
 		die_start = GetTickCount64();
 		if (!isUpsideDown) {
 			y += (GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE) / 2;

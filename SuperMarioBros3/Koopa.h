@@ -19,7 +19,7 @@
 #define KOOPA_STATE_DEFEND 200
 #define KOOPA_STATE_DEFEND_SLIDING 300
 #define KOOPA_STATE_RECOVER 400
-#define KOOPA_STATE_DIE 500
+#define KOOPA_STATE_BE_HOLD 500
 
 #define ID_ANI_KOOPA_WALKING 6000
 #define ID_ANI_KOOPA_WALKING_RIGHT 6001
@@ -41,7 +41,7 @@ protected:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 
-	virtual int IsCollidable() { return state!=KOOPA_STATE_DIE; };
+	virtual int IsCollidable() { return state!=ENEMY_STATE_DIE; };
 	virtual int IsBlocking() { return 0; }
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
@@ -50,7 +50,7 @@ protected:
 public:
 	CKoopa(float x, float y);
 	virtual void SetState(int state);
-	virtual bool IsDamagable() { return state != KOOPA_STATE_DEFEND && state != KOOPA_STATE_RECOVER; }
+	virtual bool IsDamagable() { return state != KOOPA_STATE_DEFEND && state != KOOPA_STATE_RECOVER && state != ENEMY_STATE_DIE; }
 	virtual void OnCollisionByMario(LPCOLLISIONEVENT e);
 	virtual void TakeJumpDamage();
 	virtual void TakeKoopaDamage(float xKoopa);

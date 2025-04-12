@@ -107,7 +107,7 @@ void CRedKoopa::Render()
 			aniId = ID_ANI_RED_KOOPA_WALKING_RIGHT;
 		}
 		break;
-	case (KOOPA_STATE_DIE):
+	case (ENEMY_STATE_DIE):
 		aniId = ID_ANI_RED_KOOPA_DEFEND_UD;
 	}
 
