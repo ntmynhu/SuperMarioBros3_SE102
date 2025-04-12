@@ -167,6 +167,8 @@
     <ClCompile Include="MarioSmall.cpp" />
     <ClCompile Include="Paragoomba.cpp" />
     <ClCompile Include="Parakoopa.cpp" />
+    <ClCompile Include="PiranhaPlant.cpp" />
+    <ClCompile Include="Plant.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Portal.cpp" />
@@ -176,6 +178,7 @@
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Tunnel.cpp" />
+    <ClCompile Include="TunnelPlant.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
@@ -202,6 +205,8 @@
     <ClInclude Include="MarioSmall.h" />
     <ClInclude Include="Paragoomba.h" />
     <ClInclude Include="Parakoopa.h" />
+    <ClInclude Include="PiranhaPlant.h" />
+    <ClInclude Include="Plant.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Portal.h" />
@@ -213,6 +218,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Tunnel.h" />
+    <ClInclude Include="TunnelPlant.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>

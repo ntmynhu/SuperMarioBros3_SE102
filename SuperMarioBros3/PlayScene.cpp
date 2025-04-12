@@ -204,17 +204,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float cell_height = (float)atof(tokens[4].c_str());
 		int length = atoi(tokens[5].c_str());
 		int sprite_begin = atoi(tokens[6].c_str());
-		int sprite_middle = atoi(tokens[8].c_str());
-		int sprite_end = atoi(tokens[10].c_str());
-		int sprite_begin_b = atoi(tokens[7].c_str());
-		int sprite_middle_b = atoi(tokens[9].c_str());
-		int sprite_end_b = atoi(tokens[11].c_str());
+		int sprite_middle = atoi(tokens[7].c_str());
+		int sprite_end = atoi(tokens[8].c_str());
 
 		obj = new CTunnel(
 			x, y,
 			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end,
-			sprite_begin_b, sprite_middle_b, sprite_end_b
+			sprite_begin, sprite_middle, sprite_end
 		);
 
 		break;
