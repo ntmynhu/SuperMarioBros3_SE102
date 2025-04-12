@@ -1,5 +1,10 @@
 #pragma once
 #include "GameObject.h"
+
+#define ENEMY_DIE_UPSIDE_DOWN_VY 0.2f
+#define ENEMY_DIE_UPSIDE_DOWN_VX 0.2f
+
+#define ENEMY_STATE_DIE 1000
 class CEnemy :
 	public CGameObject
 {
@@ -19,7 +24,7 @@ public:
 	virtual void OnCollisionByMario(LPCOLLISIONEVENT e) {};
 	virtual void TakeJumpDamage() {};
 	virtual void TakeAttackDamage() {};
-	virtual void TakeKoopaDamage() {};
+	virtual void TakeKoopaDamage(float xKoopa) {};
 	virtual bool IsDamagable() { return true; };
 };
 

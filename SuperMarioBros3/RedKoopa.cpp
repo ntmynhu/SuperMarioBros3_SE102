@@ -88,19 +88,27 @@ void CRedKoopa::Render()
 	int aniId = ID_ANI_RED_KOOPA_WALKING;
 	switch (state) {
 	case (KOOPA_STATE_DEFEND):
-		aniId = ID_ANI_RED_KOOPA_DEFEND;
+		if (isUpsideDown)
+			aniId = ID_ANI_RED_KOOPA_DEFEND_UD;
+		else aniId = ID_ANI_RED_KOOPA_DEFEND;
 		break;
 	case (KOOPA_STATE_DEFEND_SLIDING):
-		aniId = ID_ANI_RED_KOOPA_SLIDE;
+		if (isUpsideDown)
+			aniId = ID_ANI_RED_KOOPA_SLIDE_UD;
+		else aniId = ID_ANI_RED_KOOPA_SLIDE;
 		break;
 	case (KOOPA_STATE_RECOVER):
-		aniId = ID_ANI_RED_KOOPA_RECOVER;
+		if (isUpsideDown)
+			aniId = ID_ANI_RED_KOOPA_RECOVER_UD;
+		else aniId = ID_ANI_RED_KOOPA_RECOVER;
 		break;
 	case (KOOPA_STATE_WALKING):
 		if (vx > 0) {
 			aniId = ID_ANI_RED_KOOPA_WALKING_RIGHT;
 		}
 		break;
+	case (ENEMY_STATE_DIE):
+		aniId = ID_ANI_RED_KOOPA_DEFEND_UD;
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);

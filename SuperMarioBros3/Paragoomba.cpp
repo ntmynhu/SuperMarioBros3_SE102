@@ -26,7 +26,7 @@ void CParagoomba::Render()
 {
 	int aniId = ID_ANI_PARA_GOOMBA_WING;
 	switch (state) {
-	case (GOOMBA_STATE_DIE):
+	case (ENEMY_STATE_DIE):
 		if (isUpsideDown) aniId = ID_ANI_PARA_GOOMBA_DIE_UPSIDE_DOWN;
 		else aniId = ID_ANI_PARA_GOOMBA_DIE;
 		break;
