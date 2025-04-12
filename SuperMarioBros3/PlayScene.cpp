@@ -14,11 +14,12 @@
 #include "Koopa.h"
 #include "Parakoopa.h"
 #include "RedKoopa.h"
-#include "Paragoomba.h"
+#include "PiranhaPlant.h"
 #include "Platform.h"
 #include "FullPlatform.h"
 #include "Wall.h"
 #include "Tunnel.h"
+#include "TunnelPlant.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -213,6 +214,34 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			sprite_begin, sprite_middle, sprite_end
 		);
 
+		break;
+	}
+
+	case OBJECT_TYPE_PLANT_TUNNEL:
+	{
+
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int sprite_begin = atoi(tokens[6].c_str());
+		int sprite_middle = atoi(tokens[7].c_str());
+		int sprite_end = atoi(tokens[8].c_str());
+		int plantId = atoi(tokens[9].c_str());
+
+		CPlant* plantObj = NULL;
+		switch (plantId) {
+		case OBJECT_TYPE_PIRANHA:
+			plantObj = new CPiranhaPlant(x, y - cell_height / 2 + PIRANHA_BBOX_HEIGHT / 2 + HIDE_OFFSET);
+			
+		}
+
+		obj = new CTunnelPlant(
+			x, y,
+			cell_width, cell_height, length,
+			sprite_begin, sprite_middle, sprite_end, plantObj
+		);
+
+		objects.push_back(plantObj);
 		break;
 	}
 
