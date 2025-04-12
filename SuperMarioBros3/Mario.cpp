@@ -31,7 +31,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	currentForm->Update(dt, this, coObjects);
-
+	HoldingUpdate(dt);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -82,7 +82,7 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 		{
 			if (enemy->IsDamagable())
 			{
-				currentForm->OnTakeDamage(this);
+				TakeDamage();
 			}
 		}
 	}
@@ -96,6 +96,25 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 	coin++;
 }
 
+void CMario::HoldingUpdate(DWORD dt) {
+	if (holdingObj != NULL) {
+		if (holdingObj->GetState() != ENEMY_STATE_DIE) {
+			if (isReadyToHold) {
+				if (nx >= 0)
+					holdingObj->SetPosition(this->x + currentForm->GetHoldOffset(), this->y - 3);
+				else
+					holdingObj->SetPosition(this->x - currentForm->GetHoldOffset(), this->y - 3);
+			}
+			else {
+				holdingObj->HandleMarioRelease(nx);
+				holdingObj = NULL;
+			}
+		}
+		else {
+			holdingObj = NULL;
+		}
+	}
+}
 void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
@@ -124,8 +143,15 @@ void CMario::SetState(int state)
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		vx = 0;
 		ax = 0;
+		isReadyToHold = false;
 	}
-
+	else if (state == MARIO_STATE_B)
+	{
+		isReadyToHold = true;
+	}
+	else if (state == MARIO_STATE_B_RELEASE) {
+		isReadyToHold = false;
+	}
 	currentForm->SetState(state, this);
 	CGameObject::SetState(state);
 }
