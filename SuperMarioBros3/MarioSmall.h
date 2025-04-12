@@ -33,6 +33,8 @@
 #define MARIO_SMALL_BBOX_WIDTH  13
 #define MARIO_SMALL_BBOX_HEIGHT 12
 
+#define MARIO_SMALL_HOLD_OFFSET 10
+
 class CMario;
 
 class CMarioSmall : public CMarioForm
@@ -43,5 +45,7 @@ public:
 	void SetState(int state, CMario* mario);
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom, CMario* mario);
 	int GetLevel() const;
+
+	float GetHoldOffset() { return MARIO_SMALL_HOLD_OFFSET; }
 	void OnTakeDamage(CMario* mario);
 };
