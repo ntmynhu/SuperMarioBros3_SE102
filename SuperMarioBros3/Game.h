@@ -12,12 +12,14 @@ using namespace std;
 
 #include "Texture.h"
 #include "KeyEventHandler.h"
+#include "GameObject.h"
 #include "Scene.h"
 
 #define MAX_FRAME_RATE 100
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
 
+#define CAM_MARGIN 100.0f
 
 
 /*
@@ -107,6 +109,8 @@ public:
 	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
 	void GetCamPos(float& x, float& y) { x = cam_x; y = cam_y; }
 
+	bool IsInCam(CGameObject* obj);
+	bool IsInCam(float t, float l, float r, float b);
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
 	void Load(LPCWSTR gameFile);
 	void SwitchScene();

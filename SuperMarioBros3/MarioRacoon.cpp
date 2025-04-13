@@ -78,7 +78,7 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 	}
 
 
-	DebugOutTitle(L"Vy: %d, IsFloating: %d, State %d", vy > 0, isFloating, mario->GetState());
+	//DebugOutTitle(L"Vy: %d, IsFloating: %d, State %d", vy > 0, isFloating, mario->GetState());
 }
 
 int CMarioRacoon::GetAniId(CMario* mario)

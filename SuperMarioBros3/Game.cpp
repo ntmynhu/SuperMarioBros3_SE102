@@ -543,6 +543,38 @@ void CGame::_ParseSection_TEXTURES(string line)
 	CTextures::GetInstance()->Add(texID, path.c_str());
 }
 
+bool CGame::IsInCam(CGameObject* obj) {
+	float objTop, objLeft, objRight, objBottom = 0.0f;
+	obj->GetBoundingBox(objLeft, objTop, objRight, objBottom);
+
+	float camX, camY;
+	this->GetCamPos(camX, camY);
+	float camTop = camY - CAM_MARGIN;
+	float camLeft = camX - CAM_MARGIN;
+	float camRight = camX + backBufferWidth + CAM_MARGIN;
+	float camBottom = camY + backBufferHeight + CAM_MARGIN;
+
+	// Check if object bounding box intersects with camera bounding box
+	return !(objRight < camLeft ||
+		objLeft > camRight ||
+		objBottom < camTop ||
+		objTop > camBottom);
+}
+
+bool CGame::IsInCam(float t, float l, float r, float b) {
+	float camX, camY;
+	this->GetCamPos(camX, camY);
+	float camTop = camY - CAM_MARGIN;
+	float camLeft = camX - CAM_MARGIN;
+	float camRight = camX + backBufferWidth + CAM_MARGIN;
+	float camBottom = camY + backBufferHeight + CAM_MARGIN;
+
+	// Check if object bounding box intersects with camera bounding box
+	return !(r < camLeft ||
+		l > camRight ||
+		b < camTop ||
+		t > camBottom);
+}
 
 CGame::~CGame()
 {
