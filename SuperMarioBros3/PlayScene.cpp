@@ -29,6 +29,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	CScene(id, filePath)
 {
 	player = NULL;
+	limit_obj = NULL;
 	key_handler = new CSampleKeyHandler(this);
 }
 
@@ -42,6 +43,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define ASSETS_SECTION_ANIMATIONS 2
 
 #define MAX_SCENE_LINE 1024
+
+#define MAX_Y_OFFSET 30
 
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
@@ -127,6 +130,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
+	case OBJECT_TYPE_LIMIT_OBJ:
+		if (limit_obj != NULL)
+		{
+			DebugOut(L"[ERROR] LIMIT object was created before!\n");
+			return;
+		}
+		obj = new CLimitObject(x, y);
+		limit_obj = (CLimitObject*)obj;
+
+		DebugOut(L"[INFO] Limit object has been created!\n");
+		break;
+
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_PARAGOOMBA: obj = new CParagoomba(x, y); break;
 	case OBJECT_TYPE_KOOPA: obj = new CKoopa(x, y); break;
@@ -340,34 +355,60 @@ void CPlayScene::Load()
 void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
-	// TO-DO: This is a "dirty" way, need a more organized way 
+	// TO-DO: Set a max camY
+	CGame* game = CGame::GetInstance();
 
 	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
+	for (size_t i = 0; i < objects.size(); i++)
 	{
 		coObjects.push_back(objects[i]);
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		objects[i]->Update(dt, &coObjects);
+		if (game->IsInCam(objects[i])) {
+			objects[i]->Update(dt, &coObjects);
+		}
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
 
-	// Update camera to follow mario
+	
 	float cx, cy;
-	player->GetPosition(cx, cy);
+	game->GetCamPos(cx, cy); //Get current cam pos
 
-	CGame *game = CGame::GetInstance();
-	cx -= game->GetBackBufferWidth() / 2;
-	cy -= game->GetBackBufferHeight() / 2;
+	// Update camera to follow mario
+	float mx, my;
+	player->GetPosition(mx, my);
+	
+	DebugOutTitle(L"Mario x %f y %f", mx, my);
 
-	if (cx < 0) cx = 0;
+	mx -= game->GetBackBufferWidth() / 2;
+	my -= game->GetBackBufferHeight() / 4;
 
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	if (limit_obj != NULL) {
+		float lim_x, lim_y;
+		limit_obj->GetPosition(lim_x, lim_y);
 
+		//Cam lim is in the right bottom
+		lim_x -= game->GetBackBufferWidth();
+		lim_y -= game->GetBackBufferHeight();
+
+		if (mx > lim_x) mx = lim_x;
+		if (my > lim_y) my = lim_y;
+	}
+	//Prevent camera from moving out of world range
+	if (mx < 0) mx = 0;
+	if (my < 0) my = 0;
+
+	cx = mx;
+	//Only update y if y offset is large enough
+	cy = my;
+
+	CGame::GetInstance()->SetCamPos(cx, cy);
+	
+	
 	PurgeDeletedObjects();
 }
 
