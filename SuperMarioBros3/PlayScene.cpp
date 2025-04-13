@@ -15,9 +15,14 @@
 #include "Parakoopa.h"
 #include "RedKoopa.h"
 #include "PiranhaPlant.h"
+#include "VenusFireTrap.h"
+#include "RedVenusFireTrap.h"
+#include "FireBall.h"
 #include "Platform.h"
 #include "FullPlatform.h"
 #include "Wall.h"
+#include "NoCollidePlatform.h"
+#include "NoCollideWall.h"
 #include "Tunnel.h"
 #include "TunnelPlant.h"
 
@@ -213,6 +218,44 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
+	case OBJECT_TYPE_NO_COLLIDE_PLATFORM:
+	{
+
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int sprite_begin = atoi(tokens[6].c_str());
+		int sprite_middle = atoi(tokens[7].c_str());
+		int sprite_end = atoi(tokens[8].c_str());
+
+		obj = new CNoCollidePlatform(
+			x, y,
+			cell_width, cell_height, length,
+			sprite_begin, sprite_middle, sprite_end
+		);
+
+		break;
+	}
+
+	case OBJECT_TYPE_NO_COLLIDE_WALL:
+	{
+
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int sprite_begin = atoi(tokens[6].c_str());
+		int sprite_middle = atoi(tokens[7].c_str());
+		int sprite_end = atoi(tokens[8].c_str());
+
+		obj = new CNoCollideWall(
+			x, y,
+			cell_width, cell_height, length,
+			sprite_begin, sprite_middle, sprite_end
+		);
+
+		break;
+	}
+
 	case OBJECT_TYPE_TUNNEL:
 	{
 
@@ -244,10 +287,21 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int plantId = atoi(tokens[9].c_str());
 
 		CPlant* plantObj = NULL;
+		CFireBall* fireball = NULL;
 		switch (plantId) {
 		case OBJECT_TYPE_PIRANHA:
 			plantObj = new CPiranhaPlant(x, y - cell_height / 2 + PIRANHA_BBOX_HEIGHT / 2 + HIDE_OFFSET);
-			
+			break;
+		case OBJECT_TYPE_VENUS:
+			fireball = new CFireBall(x, y - cell_height / 2 + VENUS_BBOX_HEIGHT / 2 + HIDE_OFFSET);
+			objects.push_back(fireball);
+			plantObj = new CVenusFireTrap(x, y - cell_height / 2 + VENUS_BBOX_HEIGHT / 2 + HIDE_OFFSET, fireball);
+			break;
+		case OBJECT_TYPE_RED_VENUS:
+			fireball = new CFireBall(x, y - cell_height / 2 + RED_VENUS_BBOX_HEIGHT / 2 + HIDE_OFFSET);
+			objects.push_back(fireball);
+			plantObj = new CRedVenusFireTrap(x, y - cell_height / 2 + RED_VENUS_BBOX_HEIGHT / 2 + HIDE_OFFSET, fireball);
+			break;
 		}
 
 		obj = new CTunnelPlant(
@@ -382,7 +436,7 @@ void CPlayScene::Update(DWORD dt)
 	float mx, my;
 	player->GetPosition(mx, my);
 	
-	DebugOutTitle(L"Mario x %f y %f", mx, my);
+	// DebugOutTitle(L"Mario x %f y %f", mx, my);
 
 	mx -= game->GetBackBufferWidth() / 2;
 	my -= game->GetBackBufferHeight() / 4;
@@ -444,6 +498,7 @@ void CPlayScene::Unload()
 
 	objects.clear();
 	player = NULL;
+	limit_obj = NULL;
 
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }
