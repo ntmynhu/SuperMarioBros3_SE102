@@ -16,7 +16,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		}
 		if (GetTickCount64() - up_start >= VENUS_FIRE_TIME_OUT) {
 			if (fireDegree > 0 && isFire == false) {
-				if (fireball && fireball->GetState()==FIRE_BALL_STATE_IDLE) {
+				if (fireball) {
 					fireball->SetPosition(x, y - flowerOffsetY);
 					fireball->SetDir(fireDegree);
 					fireball->SetState(FIRE_BALL_STATE_FLY);
@@ -62,6 +62,10 @@ float CVenusFireTrap::GetFireDegree() {
 		float dx = mx - x;
 		float dy = flowerY - my;
 
+		isLeft = (dx < 0);
+		isUp = (dy > 0);
+		if (abs(dx) > VENUS_FIRE_RANGE) return 0;
+
 		degree = atan2(dy, dx) * (180.0f / 3.14159265f);
 
 		// Normalize to [0, 360)
@@ -81,8 +85,7 @@ float CVenusFireTrap::GetFireDegree() {
 		}
 		degree = angles[selected_degree];
 
-		isLeft = (dx < 0);
-		isUp = (dy > 0);
+		
 
 	}
 
@@ -129,7 +132,7 @@ void CVenusFireTrap::Render() {
 
 void CVenusFireTrap::SetState(int state) {
 	CPlant::SetState(state);
-	if (state == PLANT_STATE_MOVING) {
+	if (state == PLANT_STATE_HIDE) {
 		isFire = false;
 	}
 }

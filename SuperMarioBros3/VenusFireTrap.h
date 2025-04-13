@@ -18,6 +18,7 @@
 #define ID_ANI_VENUS_UP_RIGHT 7106
 #define ID_ANI_VENUS_DOWN_RIGHT 7107
 
+#define VENUS_FIRE_RANGE 150
 
 class CVenusFireTrap :
     public CPlant
