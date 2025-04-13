@@ -6,6 +6,7 @@
 
 #include "Enemy.h"
 #include "Plant.h"
+#include "FireBall.h"
 #include "Coin.h"
 
 #include "Collision.h"
@@ -61,6 +62,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithEnemy(e);
 	else if (dynamic_cast<CPlant*>(e->obj))
 		OnCollisionWithPlant(e);
+	else if (dynamic_cast<CFireBall*>(e->obj))
+		OnCollisionWithFireBall(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
 }
@@ -75,6 +78,14 @@ void CMario::OnCollisionWithPlant(LPCOLLISIONEVENT e)
 {
 	CPlant* plant = dynamic_cast<CPlant*>(e->obj);
 	if(plant->GetState() != PLANT_STATE_DIE && untouchable == 0)
+		TakeDamage();
+}
+
+
+void CMario::OnCollisionWithFireBall(LPCOLLISIONEVENT e)
+{
+	CFireBall* fireball = dynamic_cast<CFireBall*>(e->obj);
+	if (fireball->GetState() != FIRE_BALL_STATE_IDLE && untouchable == 0)
 		TakeDamage();
 }
 
