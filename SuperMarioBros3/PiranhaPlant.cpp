@@ -1,7 +1,7 @@
 #include "PiranhaPlant.h"
 #include "debug.h"
 void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-	if (state == PLANT_STATE_DOWN && isAbleToUp != 0) {
+	if (state == PLANT_STATE_HIDE && isAbleToUp != 0) {
 		if (GetTickCount64() - down_start >= PIRANHA_DOWN_TIME_OUT) {
 			this->vy = -PLANT_VY;
 			SetState(PLANT_STATE_MOVING);
@@ -20,7 +20,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		}
 		else if (y >= maxY) {
 			y = maxY;
-			SetState(PLANT_STATE_DOWN);
+			SetState(PLANT_STATE_HIDE);
 		}
 	}
 
@@ -38,5 +38,5 @@ void CPiranhaPlant::GetBoundingBox(float& left, float& top, float& right, float&
 void CPiranhaPlant::Render() {
 	int aniId = ID_ANI_PIRANHA;
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }

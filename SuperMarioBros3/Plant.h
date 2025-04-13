@@ -11,7 +11,7 @@
 #define PLANT_STATE_DIE 1000
 #define PLANT_STATE_UP 100
 #define PLANT_STATE_MOVING 200
-#define PLANT_STATE_DOWN 300
+#define PLANT_STATE_HIDE 300
 
 #define HIDE_OFFSET 8
 #define PLANT_NOT_UP_RANGE 30
@@ -68,7 +68,7 @@ public:
 		down_start = -1;
 		die_start = -1;
 		isAbleToUp = 0;
-		SetState(PLANT_STATE_DOWN);
+		SetState(PLANT_STATE_HIDE);
 	};
 	virtual void SetState(int state);
 	virtual void SetIsAbleToUp(bool isAbleToUp) {

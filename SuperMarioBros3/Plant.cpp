@@ -27,7 +27,7 @@ void CPlant::SetState(int state) {
 		up_start = GetTickCount64();
 		vy = 0;
 		break;
-	case PLANT_STATE_DOWN:
+	case PLANT_STATE_HIDE:
 		down_start = GetTickCount64();
 		vy = 0;
 		break;
