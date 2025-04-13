@@ -12,8 +12,10 @@ brick.txt
 # type: 0 = Mario , 10 = Coin, 2 = Goomba, 3 = Paragoomba
 # See OBJECT_TYPE constants in AssetIDs.h
 
+#Limit
+1	800	188
+
 #Portal 
-50	200	160	216	180	1
 50	200	160	216	180	1
 
 #Platform
@@ -43,20 +45,14 @@ brick.txt
 20	100	120
 20	120	120
 20	140	120
-20	160	120
-20	180	120
 
 20	100	100
 20	120	100
 20	140	100
-20	160	100
-20	180	100
 
 20	100	80
 20	120	80
 20	140	80
-20	160	80
-20	180	80
 
 
 
