@@ -19,7 +19,7 @@ using namespace std;
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
 
-#define CAM_MARGIN 100.0f
+#define CAM_MARGIN 50.0f
 
 
 /*

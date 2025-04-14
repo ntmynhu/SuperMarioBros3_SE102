@@ -2,7 +2,7 @@
 #include "Enemy.h"
 
 #define KOOPA_GRAVITY 0.002f
-#define KOOPA_WALKING_SPEED 0.05f
+#define KOOPA_WALKING_SPEED 0.04f
 #define KOOPA_SLIDING_SPEED 0.2f
 #define KOOPA_SHAKE_SPEED 0.1f
 
