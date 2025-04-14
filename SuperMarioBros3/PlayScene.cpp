@@ -415,13 +415,22 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		coObjects.push_back(objects[i]);
+		if(objects[i] -> IsActive())
+			coObjects.push_back(objects[i]);
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		if (game->IsInCam(objects[i])) {
+		if (game->IsInCam(objects[i]) && objects[i] -> IsActive()) {
 			objects[i]->Update(dt, &coObjects);
+		}
+		else {
+			objects[i]->Deactivate();
+			float x, y;
+			objects[i]->GetInitPosition(x, y);
+			if (!game->IsInCam(y, x, x, y)) {
+				objects[i]->ResetPos();
+			}
 		}
 	}
 
@@ -469,7 +478,8 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();
+		if (objects[i] -> IsActive())
+			objects[i]->Render();
 }
 
 /*

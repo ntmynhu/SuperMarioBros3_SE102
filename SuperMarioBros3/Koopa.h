@@ -46,7 +46,7 @@ protected:
 	virtual void HandleMarioRelease(float nx);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	virtual void OnCollisionWithEnemy(LPCOLLISIONEVENT e);
-
+	virtual void ResetPos();
 public:
 	CKoopa(float x, float y);
 	virtual void SetState(int state);

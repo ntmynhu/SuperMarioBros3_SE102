@@ -17,6 +17,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		if (GetTickCount64() - up_start >= VENUS_FIRE_TIME_OUT) {
 			if (fireDegree > 0 && isFire == false) {
 				if (fireball) {
+					fireball->Activate();
 					fireball->SetPosition(x, y - flowerOffsetY);
 					fireball->SetDir(fireDegree);
 					fireball->SetState(FIRE_BALL_STATE_FLY);

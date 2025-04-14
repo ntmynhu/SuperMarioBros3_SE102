@@ -4,9 +4,6 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (state == FIRE_BALL_STATE_FLY) {
 		x += vx * dt * xDir;
 		y += vy * dt * yDir;
-
-		if (!CGame::GetInstance()->IsInCam(this))
-			ResetPos();
 	}
 	
 	CGameObject::Update(dt, coObjects);

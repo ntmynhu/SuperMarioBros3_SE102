@@ -45,7 +45,16 @@ void CParagoomba::Render()
 	//RenderBoundingBox();
 }
 
-
+void CParagoomba::ResetPos() {
+	if (state != ENEMY_STATE_DIE) {
+		CEnemy::ResetPos();
+		SetState(PARA_GOOMBA_STATE_HASWING);
+		ay = GOOMBA_GRAVITY;
+		jumpCount = 0;
+		isFlying = false;
+		walk_start = -1;
+	}
+}
 void CParagoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (HasWing()) {
@@ -63,16 +72,17 @@ void CParagoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else
 			{
 				vy = -PARA_GOOMBA_FLY_SPEED_Y;
-				ay = GOOMBA_GRAVITY * 0.5;
+				ay = GOOMBA_GRAVITY * 0.3;
 				jumpCount = 4;
 				isFlying = false; //After one fly, no longer fly
 				walk_start = GetTickCount64(); //Start walking
 			}
 
 		}
-		else if (!isFlying && isOnPlatform) {
+		else if (ay != GOOMBA_GRAVITY && isOnPlatform) { //Check direction once when first touch the platform after flying
 			jumpCount = 0;
 			ay = GOOMBA_GRAVITY;
+			vx = abs(vx) * CheckXDirection();
 		}
 
 
