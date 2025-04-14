@@ -25,6 +25,7 @@ protected:
 
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
+	void _ParseSection_BACKGROUND(string line);
 
 	void LoadAssets(LPCWSTR assetFile);
 	
