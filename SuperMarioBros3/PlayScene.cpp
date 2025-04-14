@@ -14,11 +14,17 @@
 #include "Koopa.h"
 #include "Parakoopa.h"
 #include "RedKoopa.h"
-#include "Paragoomba.h"
+#include "PiranhaPlant.h"
+#include "VenusFireTrap.h"
+#include "RedVenusFireTrap.h"
+#include "FireBall.h"
 #include "Platform.h"
 #include "FullPlatform.h"
 #include "Wall.h"
+#include "NoCollidePlatform.h"
+#include "NoCollideWall.h"
 #include "Tunnel.h"
+#include "TunnelPlant.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -28,6 +34,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	CScene(id, filePath)
 {
 	player = NULL;
+	limit_obj = NULL;
 	key_handler = new CSampleKeyHandler(this);
 }
 
@@ -41,6 +48,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define ASSETS_SECTION_ANIMATIONS 2
 
 #define MAX_SCENE_LINE 1024
+
+#define MAX_Y_OFFSET 30
 
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
@@ -126,6 +135,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
+	case OBJECT_TYPE_LIMIT_OBJ:
+		if (limit_obj != NULL)
+		{
+			DebugOut(L"[ERROR] LIMIT object was created before!\n");
+			return;
+		}
+		obj = new CLimitObject(x, y);
+		limit_obj = (CLimitObject*)obj;
+
+		DebugOut(L"[INFO] Limit object has been created!\n");
+		break;
+
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_PARAGOOMBA: obj = new CParagoomba(x, y); break;
 	case OBJECT_TYPE_KOOPA: obj = new CKoopa(x, y); break;
@@ -197,6 +218,44 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
+	case OBJECT_TYPE_NO_COLLIDE_PLATFORM:
+	{
+
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int sprite_begin = atoi(tokens[6].c_str());
+		int sprite_middle = atoi(tokens[7].c_str());
+		int sprite_end = atoi(tokens[8].c_str());
+
+		obj = new CNoCollidePlatform(
+			x, y,
+			cell_width, cell_height, length,
+			sprite_begin, sprite_middle, sprite_end
+		);
+
+		break;
+	}
+
+	case OBJECT_TYPE_NO_COLLIDE_WALL:
+	{
+
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int sprite_begin = atoi(tokens[6].c_str());
+		int sprite_middle = atoi(tokens[7].c_str());
+		int sprite_end = atoi(tokens[8].c_str());
+
+		obj = new CNoCollideWall(
+			x, y,
+			cell_width, cell_height, length,
+			sprite_begin, sprite_middle, sprite_end
+		);
+
+		break;
+	}
+
 	case OBJECT_TYPE_TUNNEL:
 	{
 
@@ -204,19 +263,54 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float cell_height = (float)atof(tokens[4].c_str());
 		int length = atoi(tokens[5].c_str());
 		int sprite_begin = atoi(tokens[6].c_str());
-		int sprite_middle = atoi(tokens[8].c_str());
-		int sprite_end = atoi(tokens[10].c_str());
-		int sprite_begin_b = atoi(tokens[7].c_str());
-		int sprite_middle_b = atoi(tokens[9].c_str());
-		int sprite_end_b = atoi(tokens[11].c_str());
+		int sprite_middle = atoi(tokens[7].c_str());
+		int sprite_end = atoi(tokens[8].c_str());
 
 		obj = new CTunnel(
 			x, y,
 			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end,
-			sprite_begin_b, sprite_middle_b, sprite_end_b
+			sprite_begin, sprite_middle, sprite_end
 		);
 
+		break;
+	}
+
+	case OBJECT_TYPE_PLANT_TUNNEL:
+	{
+
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int sprite_begin = atoi(tokens[6].c_str());
+		int sprite_middle = atoi(tokens[7].c_str());
+		int sprite_end = atoi(tokens[8].c_str());
+		int plantId = atoi(tokens[9].c_str());
+
+		CPlant* plantObj = NULL;
+		CFireBall* fireball = NULL;
+		switch (plantId) {
+		case OBJECT_TYPE_PIRANHA:
+			plantObj = new CPiranhaPlant(x, y - cell_height / 2 + PIRANHA_BBOX_HEIGHT / 2 + HIDE_OFFSET);
+			break;
+		case OBJECT_TYPE_VENUS:
+			fireball = new CFireBall(x, y - cell_height / 2 + VENUS_BBOX_HEIGHT / 2 + HIDE_OFFSET);
+			objects.push_back(fireball);
+			plantObj = new CVenusFireTrap(x, y - cell_height / 2 + VENUS_BBOX_HEIGHT / 2 + HIDE_OFFSET, fireball);
+			break;
+		case OBJECT_TYPE_RED_VENUS:
+			fireball = new CFireBall(x, y - cell_height / 2 + RED_VENUS_BBOX_HEIGHT / 2 + HIDE_OFFSET);
+			objects.push_back(fireball);
+			plantObj = new CRedVenusFireTrap(x, y - cell_height / 2 + RED_VENUS_BBOX_HEIGHT / 2 + HIDE_OFFSET, fireball);
+			break;
+		}
+
+		obj = new CTunnelPlant(
+			x, y,
+			cell_width, cell_height, length,
+			sprite_begin, sprite_middle, sprite_end, plantObj
+		);
+
+		objects.push_back(plantObj);
 		break;
 	}
 
@@ -315,41 +409,77 @@ void CPlayScene::Load()
 void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
-	// TO-DO: This is a "dirty" way, need a more organized way 
+	// TO-DO: Set a max camY
+	CGame* game = CGame::GetInstance();
 
 	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
+	for (size_t i = 0; i < objects.size(); i++)
 	{
-		coObjects.push_back(objects[i]);
+		if(objects[i] -> IsActive())
+			coObjects.push_back(objects[i]);
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		objects[i]->Update(dt, &coObjects);
+		if (game->IsInCam(objects[i]) && objects[i] -> IsActive()) {
+			objects[i]->Update(dt, &coObjects);
+		}
+		else {
+			objects[i]->Deactivate();
+			float x, y;
+			objects[i]->GetInitPosition(x, y);
+			if (!game->IsInCam(y, x, x, y)) {
+				objects[i]->ResetPos();
+			}
+		}
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
 
-	// Update camera to follow mario
+	
 	float cx, cy;
-	player->GetPosition(cx, cy);
+	game->GetCamPos(cx, cy); //Get current cam pos
 
-	CGame *game = CGame::GetInstance();
-	cx -= game->GetBackBufferWidth() / 2;
-	cy -= game->GetBackBufferHeight() / 2;
+	// Update camera to follow mario
+	float mx, my;
+	player->GetPosition(mx, my);
+	
+	// DebugOutTitle(L"Mario x %f y %f", mx, my);
 
-	if (cx < 0) cx = 0;
+	mx -= game->GetBackBufferWidth() / 2;
+	my -= game->GetBackBufferHeight() / 4;
 
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	if (limit_obj != NULL) {
+		float lim_x, lim_y;
+		limit_obj->GetPosition(lim_x, lim_y);
 
+		//Cam lim is in the right bottom
+		lim_x -= game->GetBackBufferWidth();
+		lim_y -= game->GetBackBufferHeight();
+
+		if (mx > lim_x) mx = lim_x;
+		if (my > lim_y) my = lim_y;
+	}
+	//Prevent camera from moving out of world range
+	if (mx < 0) mx = 0;
+	if (my < 0) my = 0;
+
+	cx = mx;
+	//Only update y if y offset is large enough
+	cy = my;
+
+	CGame::GetInstance()->SetCamPos(cx, cy);
+	
+	
 	PurgeDeletedObjects();
 }
 
 void CPlayScene::Render()
 {
 	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();
+		if (objects[i] -> IsActive())
+			objects[i]->Render();
 }
 
 /*
@@ -378,6 +508,7 @@ void CPlayScene::Unload()
 
 	objects.clear();
 	player = NULL;
+	limit_obj = NULL;
 
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }

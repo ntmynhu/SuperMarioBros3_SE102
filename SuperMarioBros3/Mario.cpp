@@ -5,6 +5,8 @@
 #include "Game.h"
 
 #include "Enemy.h"
+#include "Plant.h"
+#include "FireBall.h"
 #include "Coin.h"
 
 #include "Collision.h"
@@ -31,7 +33,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	currentForm->Update(dt, this, coObjects);
-
+	HoldingUpdate(dt);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -58,6 +60,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CEnemy*>(e->obj))
 		OnCollisionWithEnemy(e);
+	else if (dynamic_cast<CPlant*>(e->obj))
+		OnCollisionWithPlant(e);
+	else if (dynamic_cast<CFireBall*>(e->obj))
+		OnCollisionWithFireBall(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
 }
@@ -68,11 +74,26 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
 }
 
+void CMario::OnCollisionWithPlant(LPCOLLISIONEVENT e)
+{
+	CPlant* plant = dynamic_cast<CPlant*>(e->obj);
+	if(plant->GetState() != PLANT_STATE_DIE && untouchable == 0)
+		TakeDamage();
+}
+
+
+void CMario::OnCollisionWithFireBall(LPCOLLISIONEVENT e)
+{
+	CFireBall* fireball = dynamic_cast<CFireBall*>(e->obj);
+	if (fireball->GetState() != FIRE_BALL_STATE_IDLE && untouchable == 0)
+		TakeDamage();
+}
+
 void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 {
 	CEnemy* enemy = dynamic_cast<CEnemy*>(e->obj);
 	DebugOut(L"Collided! Enemy state %d\n", enemy->GetState());
-	if (e->ny < 0)
+	if (e->ny < 0 && enemy->GetState() != ENEMY_STATE_DIE)
 	{
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 	}
@@ -93,7 +114,7 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 		{
 			if (enemy->IsDamagable())
 			{
-				currentForm->OnTakeDamage(this);
+				TakeDamage();
 			}
 		}
 	}
@@ -108,6 +129,25 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 	coin++;
 }
 
+void CMario::HoldingUpdate(DWORD dt) {
+	if (holdingObj != NULL) {
+		if (holdingObj->GetState() != ENEMY_STATE_DIE) {
+			if (isReadyToHold) {
+				if (nx >= 0)
+					holdingObj->SetPosition(this->x + currentForm->GetHoldOffset(), this->y - 3);
+				else
+					holdingObj->SetPosition(this->x - currentForm->GetHoldOffset(), this->y - 3);
+			}
+			else {
+				holdingObj->HandleMarioRelease(nx);
+				holdingObj = NULL;
+			}
+		}
+		else {
+			holdingObj = NULL;
+		}
+	}
+}
 void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
@@ -136,8 +176,15 @@ void CMario::SetState(int state)
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		vx = 0;
 		ax = 0;
+		isReadyToHold = false;
 	}
-
+	else if (state == MARIO_STATE_B)
+	{
+		isReadyToHold = true;
+	}
+	else if (state == MARIO_STATE_B_RELEASE) {
+		isReadyToHold = false;
+	}
 	currentForm->SetState(state, this);
 	CGameObject::SetState(state);
 }

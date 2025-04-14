@@ -29,6 +29,8 @@
 #define MARIO_BIG_SITTING_BBOX_WIDTH  14
 #define MARIO_BIG_SITTING_BBOX_HEIGHT 16
 
+#define MARIO_BIG_HOLD_OFFSET 12
+
 class CMario;
 
 class CMarioBig : public CMarioForm
@@ -41,6 +43,8 @@ public:
 	void SetState(int state, CMario* mario);
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom, CMario* mario);
 	int GetLevel() const;
+
+	float GetHoldOffset() { return MARIO_BIG_HOLD_OFFSET; }
 	void OnTakeDamage(CMario* mario);
 };
 

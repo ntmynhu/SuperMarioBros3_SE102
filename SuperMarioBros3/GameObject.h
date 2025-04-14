@@ -18,6 +18,8 @@ class CGameObject
 {
 protected:
 
+	float init_x, init_y;
+
 	float x; 
 	float y;
 
@@ -28,24 +30,32 @@ protected:
 
 	int state;
 
+	bool isActive = true;
 	bool isDeleted; 
 
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
+	void GetInitPosition(float& x, float& y) { x = this->init_x; y = this->init_y; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
+
+	
 
 	int GetState() { return this->state; }
 	virtual void Delete() { isDeleted = true;  }
 	bool IsDeleted() { return isDeleted; }
+	virtual void Deactivate() { isActive = false; }
+	virtual void Activate() { isActive = true; }
+
+	bool IsActive() { return isActive; }
 
 	void RenderBoundingBox();
 
 	CGameObject();
-	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; }
+	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; this->init_x = x; this->init_y = y; }
 
-
+	virtual void ResetPos() { Activate(); };
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
 	virtual void Render() = 0;

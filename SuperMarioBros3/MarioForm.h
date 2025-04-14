@@ -11,6 +11,7 @@ public:
 	virtual void SetState(int state, CMario* mario) = 0;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom, CMario* mario) = 0;
 	virtual int GetLevel() const = 0;
+	virtual float GetHoldOffset() = 0;
 	virtual void OnTakeDamage(CMario* mario) = 0;
 };
 

@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "Brick.h"
 #include "Mario.h"
+#include "LimitObject.h"
 #include "Goomba.h"
 //#include "Koopas.h"
 
@@ -13,7 +14,9 @@ class CPlayScene: public CScene
 {
 protected: 
 	// A play scene has to have player, right? 
-	LPGAMEOBJECT player;					
+	LPGAMEOBJECT player;	
+	// An object that set the limit right bottom of the scene, no obj has x > lim_x, y > lim_y
+	LPGAMEOBJECT limit_obj;
 
 	vector<LPGAMEOBJECT> objects;
 

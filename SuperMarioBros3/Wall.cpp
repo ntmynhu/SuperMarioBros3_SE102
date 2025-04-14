@@ -31,21 +31,23 @@ void CWall::RenderBoundingBox()
 void CWall::Render()
 {
 	if (this->length <= 0) return;
-	float yy = y;
-	CSprites* s = CSprites::GetInstance();
+	if (spriteIdBegin >= 0 && spriteIdMiddle >= 0 && spriteIdEnd >= 0) {
+		float yy = y;
+		CSprites* s = CSprites::GetInstance();
 
-	s->Get(this->spriteIdBegin)->Draw(x, yy);
-	yy += this->cellHeight;
-	for (int i = 1; i < this->length - 1; i++)
-	{
-		s->Get(this->spriteIdMiddle)->Draw(x, yy);
+
+		s->Get(this->spriteIdBegin)->Draw(x, yy);
 		yy += this->cellHeight;
+		for (int i = 1; i < this->length - 1; i++)
+		{
+			s->Get(this->spriteIdMiddle)->Draw(x, yy);
+			yy += this->cellHeight;
+		}
+		if (length > 1)
+			s->Get(this->spriteIdEnd)->Draw(x, yy);
 	}
-	if (length > 1)
-		s->Get(this->spriteIdEnd)->Draw(x, yy);
 
-
-	RenderBoundingBox();
+	//RenderBoundingBox();
 
 }
 

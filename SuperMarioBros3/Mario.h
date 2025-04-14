@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Enemy.h"
 
 #include "Animation.h"
 #include "Animations.h"
@@ -40,8 +41,10 @@
 #define MARIO_STATE_SIT_RELEASE		601
 
 #define MARIO_STATE_B			700
+#define MARIO_STATE_B_RELEASE	701
 #define MARIO_STATE_TURBO_A		800
 #define MARIO_STATE_TURBO_B		900
+
 
 #pragma region ANIMATION_ID
 
@@ -73,11 +76,15 @@ class CMario : public CGameObject
 	int untouchable;
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
+	bool isReadyToHold;
+	CEnemy* holdingObj;
 	int coin;
 
 	void OnCollisionWithEnemy(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
+	void OnCollisionWithPlant(LPCOLLISIONEVENT e);
+	void OnCollisionWithFireBall(LPCOLLISIONEVENT e);
 
 public:
 	CMario(float x, float y) : CGameObject(x, y)
@@ -95,6 +102,7 @@ public:
 		coin = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void HoldingUpdate(DWORD dt);
 	void Render();
 	void SetState(int state);
 	void ChangeForm(int newLevel);
@@ -104,12 +112,14 @@ public:
 		return (state != MARIO_STATE_DIE);
 	}
 
+	bool IsReadyToHold() { return isReadyToHold; }
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void SetLevel(int l);
+	void SetHoldingObject(CEnemy* obj) { this->holdingObj = obj; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -120,6 +130,7 @@ public:
 	int GetLevel() { return currentForm->GetLevel(); }
 	CMarioForm* GetCurrentForm() { return currentForm; }
 
+	void TakeDamage() { currentForm->OnTakeDamage(this); }
 	void SetMaxVx(float maxVx) { this->maxVx = maxVx; }
 	void SetOnPlatform(bool isOnPlatform) { this->isOnPlatform = isOnPlatform; }
 	void SetAx(float ax) { this->ax = ax; }

@@ -10,9 +10,10 @@
 #define GOOMBA_BBOX_HEIGHT_DIE 7
 
 #define GOOMBA_DIE_TIMEOUT 200
+#define GOOMBA_DIE_UD_TIMEOUT 2000
 
 #define GOOMBA_STATE_WALKING 100
-#define GOOMBA_STATE_DIE 200
+
 
 #define ID_ANI_GOOMBA_WALKING 5000
 #define ID_ANI_GOOMBA_DIE 5001
@@ -22,22 +23,25 @@ class CGoomba : public CEnemy
 {
 protected:
 	bool isUpsideDown = false;
+	
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 
-	virtual int IsCollidable() { return state != GOOMBA_STATE_DIE; };
+	virtual int IsCollidable() { return state != ENEMY_STATE_DIE; };
 	virtual int IsBlocking() { return 0; }
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
+	
 
 public:
 	CGoomba(float x, float y);
 	virtual void SetState(int state);
-	virtual bool IsDamagable() { return state != GOOMBA_STATE_DIE; }
+	virtual bool IsDamagable() { return state != ENEMY_STATE_DIE; }
 	virtual void OnCollisionByMario(LPCOLLISIONEVENT e);
 	virtual void TakeJumpDamage();
 	virtual void TakeTailAttackDamage();
 	virtual void TakeKoopaDamage();
+	virtual void TakeKoopaDamage(float xKoopa);
 };
