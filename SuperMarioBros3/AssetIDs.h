@@ -11,6 +11,7 @@
 
 #define OBJECT_TYPE_MARIO	0
 #define OBJECT_TYPE_LIMIT_OBJ 1
+
 // From 2: Enemies
 #define OBJECT_TYPE_GOOMBA	2
 #define OBJECT_TYPE_PARAGOOMBA	3
@@ -38,6 +39,7 @@
 
 #define OBJECT_TYPE_PORTAL	50
 
+#define OBJECT_TYPE_BACKGROUND 100
 
 #pragma region MARIO 
 
@@ -172,3 +174,6 @@
 #define ID_SPRITE_SEMI_SOLID_PINK (ID_SPRITE_SEMI_SOLID+300) //1->3 top, 4->6 mid, 7->9 bot
 #define ID_SPRITE_SEMI_SOLID_BLUE (ID_SPRITE_SEMI_SOLID+400) //1->3 top, 4->6 mid, 7->9 bot
 #define ID_SPRITE_SEMI_SOLID_SHADOW (ID_SPRITE_SEMI_SOLID+500) //1->3 vertical, 4-5 horizontal
+
+//From 20: Background
+#define ID_SPRITE_BG_WORLD_1_1 200000
