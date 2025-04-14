@@ -201,6 +201,7 @@ void CKoopa::ResetPos() {
 	if (state != ENEMY_STATE_DIE) {
 		CEnemy::ResetPos();
 		SetState(KOOPA_STATE_WALKING);
+		isBeingHold = false;
 	}
 }
 

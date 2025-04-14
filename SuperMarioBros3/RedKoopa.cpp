@@ -15,7 +15,7 @@ void CRedKoopa::OnNoCollision(DWORD dt) {
 void CRedKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (dynamic_cast<CMario*>(e->obj)) return;
-	if (dynamic_cast<CEnemy*>(e->obj) && state != KOOPA_STATE_DEFEND_SLIDING) return;
+	if (dynamic_cast<CEnemy*>(e->obj) && state != KOOPA_STATE_DEFEND_SLIDING && !isBeingHold) return;
 
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{

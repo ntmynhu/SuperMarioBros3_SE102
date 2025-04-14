@@ -31,10 +31,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
-
+	
 	currentForm->Update(dt, this, coObjects);
-	HoldingUpdate(dt);
+	
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+	HoldingUpdate(dt);
 }
 
 void CMario::OnNoCollision(DWORD dt)
@@ -122,9 +123,9 @@ void CMario::HoldingUpdate(DWORD dt) {
 		if (holdingObj->GetState() != ENEMY_STATE_DIE) {
 			if (isReadyToHold) {
 				if (nx >= 0)
-					holdingObj->SetPosition(this->x + currentForm->GetHoldOffset(), this->y - 3);
+					holdingObj->SetPosition(this->x + currentForm->GetHoldOffset(), this->y - 2);
 				else
-					holdingObj->SetPosition(this->x - currentForm->GetHoldOffset(), this->y - 3);
+					holdingObj->SetPosition(this->x - currentForm->GetHoldOffset(), this->y - 2);
 			}
 			else {
 				holdingObj->HandleMarioRelease(nx);
