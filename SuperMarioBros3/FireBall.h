@@ -49,6 +49,7 @@ public:
 		this->xDir = 0;
 		this->yDir = 0;
 		SetState(FIRE_BALL_STATE_IDLE);
+		CGameObject::ResetPos();
 	}
 };
 

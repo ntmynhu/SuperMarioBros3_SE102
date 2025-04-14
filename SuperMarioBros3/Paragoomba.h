@@ -1,7 +1,6 @@
 #pragma once
 #include "Goomba.h"
-#include "Mario.h"
-#include "PlayScene.h"
+
 #define ID_ANI_PARA_GOOMBA_WALKING 5100
 #define ID_ANI_PARA_GOOMBA_DIE 5101
 #define ID_ANI_PARA_GOOMBA_DIE_UPSIDE_DOWN 5102
@@ -25,20 +24,12 @@ protected:
 	ULONGLONG walk_start;
 	bool isFlying;
 	int jumpCount;
-	CMario* mario;
+	
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Render();
-	virtual int CheckXDirection();
-	virtual void SetMario() {
-		CPlayScene* scene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-		if (scene) {
-			CMario* mario = dynamic_cast<CMario*>(scene->GetPlayer());
-			if (mario) {
-				this->mario = mario;
-			}
-		}
-	}
+	virtual void ResetPos();
+	
 public:
 	CParagoomba(float x, float y) : CGoomba(x, y) {
 		SetState(PARA_GOOMBA_STATE_HASWING);

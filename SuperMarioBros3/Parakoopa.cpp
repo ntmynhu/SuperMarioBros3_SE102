@@ -7,6 +7,14 @@ void CParakoopa::TakeJumpDamage() {
 	CKoopa::TakeJumpDamage();
 }
 
+void CParakoopa::ResetPos() {
+	if (state != ENEMY_STATE_DIE) {
+		CEnemy::ResetPos();
+		SetState(PARA_KOOPA_STATE_HASWING);
+	}
+}
+
+
 void CParakoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (HasWing()) {

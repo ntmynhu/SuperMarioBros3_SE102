@@ -15,6 +15,7 @@ protected:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 
 	virtual void Render();
+	virtual void ResetPos();
 public:
 	CParakoopa(float x, float y) : CKoopa(x, y) {
 		this->ay = KOOPA_GRAVITY * 0.6f;

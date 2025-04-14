@@ -197,6 +197,12 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CEnemy::Update(dt, coObjects);
 }
 
+void CKoopa::ResetPos() {
+	if (state != ENEMY_STATE_DIE) {
+		CEnemy::ResetPos();
+		SetState(KOOPA_STATE_WALKING);
+	}
+}
 
 void CKoopa::Render()
 {

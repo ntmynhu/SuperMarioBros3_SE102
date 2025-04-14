@@ -45,7 +45,16 @@ void CParagoomba::Render()
 	//RenderBoundingBox();
 }
 
-
+void CParagoomba::ResetPos() {
+	if (state != ENEMY_STATE_DIE) {
+		CEnemy::ResetPos();
+		SetState(PARA_GOOMBA_STATE_HASWING);
+		ay = GOOMBA_GRAVITY;
+		jumpCount = 0;
+		isFlying = false;
+		walk_start = -1;
+	}
+}
 void CParagoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (HasWing()) {
@@ -80,19 +89,4 @@ void CParagoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	CGoomba::Update(dt, coObjects);
-}
-
-int CParagoomba::CheckXDirection() {
-	if (mario == NULL) {
-		SetMario();
-	}
-	if (mario != NULL) {
-		float mx, my;
-		mario->GetPosition(mx, my);
-
-		float dx = mx - x;
-
-		return (dx < 0) ? -1 : 1;
-	}
-	return 1;
 }
