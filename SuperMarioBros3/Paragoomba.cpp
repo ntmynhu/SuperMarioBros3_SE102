@@ -63,20 +63,36 @@ void CParagoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else
 			{
 				vy = -PARA_GOOMBA_FLY_SPEED_Y;
-				ay = GOOMBA_GRAVITY * 0.5;
+				ay = GOOMBA_GRAVITY * 0.3;
 				jumpCount = 4;
 				isFlying = false; //After one fly, no longer fly
 				walk_start = GetTickCount64(); //Start walking
 			}
 
 		}
-		else if (!isFlying && isOnPlatform) {
+		else if (ay != GOOMBA_GRAVITY && isOnPlatform) { //Check direction once when first touch the platform after flying
 			jumpCount = 0;
 			ay = GOOMBA_GRAVITY;
+			vx = abs(vx) * CheckXDirection();
 		}
 
 
 	}
 
 	CGoomba::Update(dt, coObjects);
+}
+
+int CParagoomba::CheckXDirection() {
+	if (mario == NULL) {
+		SetMario();
+	}
+	if (mario != NULL) {
+		float mx, my;
+		mario->GetPosition(mx, my);
+
+		float dx = mx - x;
+
+		return (dx < 0) ? -1 : 1;
+	}
+	return 1;
 }
