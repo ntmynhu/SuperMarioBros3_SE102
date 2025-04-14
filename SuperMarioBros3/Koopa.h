@@ -53,7 +53,7 @@ public:
 	virtual bool IsDamagable() { return state != KOOPA_STATE_DEFEND && state != KOOPA_STATE_RECOVER && state != ENEMY_STATE_DIE; }
 	virtual void OnCollisionByMario(LPCOLLISIONEVENT e);
 	virtual void TakeJumpDamage();
-	virtual void TakeTailAttackDamage();
+	virtual void TakeTailAttackDamage(float xMario);
 	virtual void TakeKoopaDamage(float xKoopa);
 };
 

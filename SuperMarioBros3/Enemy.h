@@ -32,7 +32,7 @@ public:
 	virtual void OnCollisionByMario(LPCOLLISIONEVENT e) {};
 	virtual void TakeJumpDamage() {};
 	virtual void TakeAttackDamage() {};
-	virtual void TakeTailAttackDamage() {};
+	virtual void TakeTailAttackDamage(float xKoopa) {};
 	virtual void TakeKoopaDamage() {};
 	virtual void HandleMarioRelease(float nx) {};
 	virtual void TakeKoopaDamage(float xKoopa) {};

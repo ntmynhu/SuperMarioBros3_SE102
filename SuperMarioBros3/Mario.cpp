@@ -105,7 +105,7 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 		{
 			if (racoon->IsTailAttacking())
 			{
-				enemy->TakeTailAttackDamage();
+				enemy->TakeTailAttackDamage(e->nx);
 				isTailAttack = true;
 			}
 		}

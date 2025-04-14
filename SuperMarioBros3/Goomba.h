@@ -41,7 +41,6 @@ public:
 	virtual bool IsDamagable() { return state != ENEMY_STATE_DIE; }
 	virtual void OnCollisionByMario(LPCOLLISIONEVENT e);
 	virtual void TakeJumpDamage();
-	virtual void TakeTailAttackDamage();
-	virtual void TakeKoopaDamage();
+	virtual void TakeTailAttackDamage(float xMario);
 	virtual void TakeKoopaDamage(float xKoopa);
 };

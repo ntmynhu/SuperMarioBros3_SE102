@@ -114,7 +114,7 @@ void CKoopa::TakeJumpDamage() {
 	}
 }
 
-void CKoopa::TakeTailAttackDamage()
+void CKoopa::TakeTailAttackDamage(float xMario)
 {
 	if (GetState() != KOOPA_STATE_DEFEND)
 	{

@@ -64,16 +64,22 @@ void CGoomba::TakeJumpDamage() {
 
 }
 
-void CGoomba::TakeTailAttackDamage()
+void CGoomba::TakeTailAttackDamage(float xMario)
 {
-	if (GetState() != GOOMBA_STATE_DIE)
+	if (GetState() != ENEMY_STATE_DIE)
 	{
-		SetState(GOOMBA_STATE_DIE);
+		isUpsideDown = true;
+		if (xMario > x) {
+			vx = -ENEMY_DIE_UPSIDE_DOWN_VX;
+		}
+		else {
+			vx = ENEMY_DIE_UPSIDE_DOWN_VX;
+		}
+		vy = -ENEMY_DIE_UPSIDE_DOWN_VY;
+		SetState(ENEMY_STATE_DIE);
 	}
 }
 
-void CGoomba::TakeKoopaDamage() {
-	if (GetState() != GOOMBA_STATE_DIE)
 void CGoomba::TakeKoopaDamage(float xKoopa) {
 	if (GetState() != ENEMY_STATE_DIE)
 	{
