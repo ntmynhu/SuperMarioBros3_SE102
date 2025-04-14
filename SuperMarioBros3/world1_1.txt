@@ -48,7 +48,7 @@ background1_1.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 #Limit
-1	2816	432
+1	2816	480
 
 #Portal 
 50	900	393	916	424	5
