@@ -13,7 +13,7 @@
 #define PLANT_STATE_MOVING 200
 #define PLANT_STATE_HIDE 300
 
-#define HIDE_OFFSET 8
+#define HIDE_OFFSET 4
 #define PLANT_NOT_UP_RANGE 30
 
 class CPlant :
