@@ -75,5 +75,6 @@ public:
 		this->isAbleToUp = isAbleToUp;
 	}
 	virtual void TakeAttackDamage() {};
+	virtual void TakeTailAttackDamage(float xMario);
 };
 

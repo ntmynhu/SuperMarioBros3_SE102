@@ -32,6 +32,8 @@ public:
 	virtual void OnCollisionByMario(LPCOLLISIONEVENT e) {};
 	virtual void TakeJumpDamage() {};
 	virtual void TakeAttackDamage() {};
+	virtual void TakeTailAttackDamage(float xMario) {};
+	virtual void TakeKoopaDamage() {};
 	virtual void HandleMarioRelease(float nx) {};
 	virtual void TakeKoopaDamage(float xKoopa) {};
 	virtual bool IsDamagable() { return true; };

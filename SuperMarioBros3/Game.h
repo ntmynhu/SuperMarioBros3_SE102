@@ -20,8 +20,7 @@ using namespace std;
 #define KEYBOARD_STATE_SIZE 256
 
 #define CAM_MARGIN 50.0f
-
-
+#define MARIO_STATE_CHANGE_PAUSE_TIME 500
 /*
 	Our simple game framework
 */
@@ -61,6 +60,9 @@ class CGame
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
+
+	bool marioPause = false;
+	ULONGLONG marioPause_start = -1;
 
 public:
 	// Init DirectX, Sprite Handler
@@ -117,7 +119,9 @@ public:
 	void InitiateSwitchScene(int scene_id);
 
 	void _ParseSection_TEXTURES(string line);
-
+	void StartMarioPause();
+	bool IsMarioStateChangedPause() { return marioPause; }
+	ULONGLONG GetMarioPauseStart() { return marioPause_start; }
 
 	~CGame();
 };

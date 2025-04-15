@@ -147,6 +147,14 @@ void CKoopa::TakeJumpDamage() {
 	}
 }
 
+void CKoopa::TakeTailAttackDamage(float xMario)
+{
+	if (GetState() != KOOPA_STATE_DEFEND)
+	{
+		SetState(KOOPA_STATE_DEFEND);
+	}
+}
+
 void CKoopa::OnCollisionByMario(LPCOLLISIONEVENT e)
 {
 	float mario_x, mario_y;

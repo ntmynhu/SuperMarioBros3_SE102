@@ -457,6 +457,11 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: Set a max camY
 	CGame* game = CGame::GetInstance();
 
+	if (GetTickCount64() - game->GetMarioPauseStart() < MARIO_STATE_CHANGE_PAUSE_TIME)
+	{
+		return;
+	}
+
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
 	{

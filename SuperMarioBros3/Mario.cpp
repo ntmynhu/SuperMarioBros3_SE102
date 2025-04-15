@@ -31,7 +31,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
-	
+  
+	if (GetTickCount64() - stateChange_start > MARIO_STATE_CHANGE_TIME)
+	{
+		stateChange_start = 0;
+		isChangingState = false;
+	}
+  
 	currentForm->Update(dt, this, coObjects);
 	
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -78,7 +84,19 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithPlant(LPCOLLISIONEVENT e)
 {
 	CPlant* plant = dynamic_cast<CPlant*>(e->obj);
-	if(plant->GetState() != PLANT_STATE_DIE && untouchable == 0)
+
+	bool isTailAttack = false;
+	CMarioRacoon* racoon = dynamic_cast<CMarioRacoon*>(currentForm);
+	if (racoon)
+	{
+		if (racoon->IsTailAttacking())
+		{
+			plant->TakeTailAttackDamage(e->nx);
+			isTailAttack = true;
+		}
+	}
+
+	if(plant->GetState() != PLANT_STATE_DIE && untouchable == 0 && !isTailAttack)
 		TakeDamage();
 }
 
@@ -100,7 +118,18 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 	}
 	else // hit by Goomba
 	{
-		if (untouchable == 0)
+		bool isTailAttack = false;
+		CMarioRacoon* racoon = dynamic_cast<CMarioRacoon*>(currentForm);
+		if (racoon)
+		{
+			if (racoon->IsTailAttacking())
+			{
+				enemy->TakeTailAttackDamage(e->nx);
+				isTailAttack = true;
+			}
+		}
+
+		if (untouchable == 0 && !isTailAttack)
 		{
 			if (enemy->IsDamagable())
 			{
@@ -108,6 +137,7 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 			}
 		}
 	}
+
 	// jump on top >> kill Goomba and deflect a bit 
 	enemy->OnCollisionByMario(e);
 }
@@ -141,7 +171,13 @@ void CMario::Render()
 	else
 		aniId = currentForm->GetAniId(this);
 
-	animations->Get(aniId)->Render(x, y);
+	if (!isChangingState)
+		animations->Get(aniId)->Render(x, y);
+	else
+	{
+		float a = (GetTickCount64() - stateChange_start) % 5 == 0? 1 : 0;
+		animations->Get(aniId)->Render(x, y, a);
+	}
 
 	//RenderBoundingBox();
 
@@ -178,6 +214,11 @@ void CMario::SetState(int state)
 
 void CMario::ChangeForm(int newLevel)
 {
+	StartChangingState();
+
+	// Pause game for a bit
+	CGame::GetInstance()->StartMarioPause();
+
 	switch (newLevel) {
 		case MARIO_LEVEL_SMALL:
 			y += (currentForm->GetLevel() > MARIO_LEVEL_SMALL) ? (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2 : 0;

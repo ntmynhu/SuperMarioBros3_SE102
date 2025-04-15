@@ -26,7 +26,7 @@
 #define ID_ANI_MARIO_RACOON_TAIL_ATTACK_LEFT 2701
 
 #define FLY_DURATION 3000
-#define TAIL_FLOATING_DURATION 500
+#define TAIL_FLOATING_DURATION 375
 
 class CMarioRacoon : public CMarioBig
 {
