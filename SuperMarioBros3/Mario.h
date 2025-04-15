@@ -45,7 +45,6 @@
 #define MARIO_STATE_TURBO_A		800
 #define MARIO_STATE_TURBO_B		900
 
-
 #pragma region ANIMATION_ID
 
 #define ID_ANI_MARIO_DIE 999
@@ -62,7 +61,8 @@
 #define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
 
 
-#define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_UNTOUCHABLE_TIME 2000
+#define MARIO_STATE_CHANGE_TIME 2000
 
 class CMario : public CGameObject
 {
@@ -80,6 +80,9 @@ class CMario : public CGameObject
 	CEnemy* holdingObj;
 	int coin;
 
+	ULONGLONG stateChange_start;
+	bool isChangingState;
+
 	void OnCollisionWithEnemy(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
@@ -90,14 +93,18 @@ public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		currentForm = new CMarioRacoon();
+		level = MARIO_LEVEL_RACOON;
 
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
 
-		level = MARIO_LEVEL_RACOON;
 		untouchable = 0;
 		untouchable_start = -1;
+
+		isChangingState = false;
+		stateChange_start = -1;
+
 		isOnPlatform = false;
 		coin = 0;
 	}
@@ -121,6 +128,7 @@ public:
 	void SetLevel(int l);
 	void SetHoldingObject(CEnemy* obj) { this->holdingObj = obj; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
+	void StartChangingState() { isChangingState = true; stateChange_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 

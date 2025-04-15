@@ -32,6 +32,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
+	if (GetTickCount64() - stateChange_start > MARIO_STATE_CHANGE_TIME)
+	{
+		stateChange_start = 0;
+		isChangingState = false;
+	}
+
 	currentForm->Update(dt, this, coObjects);
 	HoldingUpdate(dt);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -158,7 +164,13 @@ void CMario::Render()
 	else
 		aniId = currentForm->GetAniId(this);
 
-	animations->Get(aniId)->Render(x, y);
+	if (!isChangingState)
+		animations->Get(aniId)->Render(x, y);
+	else
+	{
+		float a = (GetTickCount64() - stateChange_start) % 5 == 0? 1 : 0;
+		animations->Get(aniId)->Render(x, y, a);
+	}
 
 	//RenderBoundingBox();
 
@@ -191,6 +203,8 @@ void CMario::SetState(int state)
 
 void CMario::ChangeForm(int newLevel)
 {
+	StartChangingState();
+
 	switch (newLevel) {
 		case MARIO_LEVEL_SMALL:
 			y += (currentForm->GetLevel() > MARIO_LEVEL_SMALL) ? (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2 : 0;
