@@ -121,13 +121,7 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 void CMario::HoldingUpdate(DWORD dt) {
 	if (holdingObj != NULL) {
 		if (holdingObj->GetState() != ENEMY_STATE_DIE) {
-			if (isReadyToHold) {
-				if (nx >= 0)
-					holdingObj->SetPosition(this->x + currentForm->GetHoldOffset(), this->y - 2);
-				else
-					holdingObj->SetPosition(this->x - currentForm->GetHoldOffset(), this->y - 2);
-			}
-			else {
+			if (!isReadyToHold) {
 				holdingObj->HandleMarioRelease(nx);
 				holdingObj = NULL;
 			}
@@ -174,7 +168,11 @@ void CMario::SetState(int state)
 	else if (state == MARIO_STATE_B_RELEASE) {
 		isReadyToHold = false;
 	}
+
+	int old_nx = nx;
+
 	currentForm->SetState(state, this);
+
 	CGameObject::SetState(state);
 }
 
