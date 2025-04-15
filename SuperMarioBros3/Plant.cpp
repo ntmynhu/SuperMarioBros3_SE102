@@ -37,3 +37,9 @@ void CPlant::SetState(int state) {
 		break;
 	}
 }
+
+void CPlant::TakeTailAttackDamage(float xMario)
+{
+	if (state != PLANT_STATE_DIE)
+		SetState(PLANT_STATE_DIE);
+}

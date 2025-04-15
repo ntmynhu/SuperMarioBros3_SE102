@@ -83,7 +83,19 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithPlant(LPCOLLISIONEVENT e)
 {
 	CPlant* plant = dynamic_cast<CPlant*>(e->obj);
-	if(plant->GetState() != PLANT_STATE_DIE && untouchable == 0)
+
+	bool isTailAttack = false;
+	CMarioRacoon* racoon = dynamic_cast<CMarioRacoon*>(currentForm);
+	if (racoon)
+	{
+		if (racoon->IsTailAttacking())
+		{
+			plant->TakeTailAttackDamage(e->nx);
+			isTailAttack = true;
+		}
+	}
+
+	if(plant->GetState() != PLANT_STATE_DIE && untouchable == 0 && !isTailAttack)
 		TakeDamage();
 }
 
