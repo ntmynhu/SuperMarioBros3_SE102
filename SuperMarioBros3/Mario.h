@@ -127,6 +127,12 @@ public:
 	bool IsOnPlatform() { return isOnPlatform; }
 	void GetPhysics(float& vx, float& vy, float& ax, float& ay, float& nx) { vx = this->vx; vy = this->vy; ax = this->ax; ay = this->ay; nx = this->nx; }
 	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }
+	void GetHoldOffset(float &ox, float &oy) { 
+		float res_ox, res_oy;
+		currentForm->GetHoldOffset(res_ox, res_oy);
+		ox = res_ox;
+		oy = res_oy;
+	}
 
 	void TakeDamage() { currentForm->OnTakeDamage(this); }
 	void SetMaxVx(float maxVx) { this->maxVx = maxVx; }

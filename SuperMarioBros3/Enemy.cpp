@@ -18,6 +18,9 @@ void CEnemy::OnNoCollision(DWORD dt)
 
 void CEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (mario == NULL) {
+		SetMario();
+	}
 	vy += ay * dt;
 	vx += ax * dt;
 

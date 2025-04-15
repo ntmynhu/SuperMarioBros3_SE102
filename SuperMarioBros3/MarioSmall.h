@@ -33,7 +33,8 @@
 #define MARIO_SMALL_BBOX_WIDTH  13
 #define MARIO_SMALL_BBOX_HEIGHT 12
 
-#define MARIO_SMALL_HOLD_OFFSET 10
+#define MARIO_SMALL_HOLD_OFFSET_X 10
+#define MARIO_SMALL_HOLD_OFFSET_Y 3
 
 class CMario;
 
@@ -46,6 +47,6 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom, CMario* mario);
 	int GetLevel() const;
 
-	float GetHoldOffset() { return MARIO_SMALL_HOLD_OFFSET; }
+	void GetHoldOffset(float& ox, float& oy) { ox = MARIO_SMALL_HOLD_OFFSET_X; oy = MARIO_SMALL_HOLD_OFFSET_Y; }
 	void OnTakeDamage(CMario* mario);
 };
