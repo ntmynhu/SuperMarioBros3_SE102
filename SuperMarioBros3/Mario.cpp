@@ -205,6 +205,9 @@ void CMario::ChangeForm(int newLevel)
 {
 	StartChangingState();
 
+	// Pause game for a bit
+	CGame::GetInstance()->StartMarioPause();
+
 	switch (newLevel) {
 		case MARIO_LEVEL_SMALL:
 			y += (currentForm->GetLevel() > MARIO_LEVEL_SMALL) ? (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2 : 0;

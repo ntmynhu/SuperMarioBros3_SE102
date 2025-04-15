@@ -543,6 +543,12 @@ void CGame::_ParseSection_TEXTURES(string line)
 	CTextures::GetInstance()->Add(texID, path.c_str());
 }
 
+void CGame::StartMarioPause()
+{
+	marioPause = true;
+	marioPause_start = GetTickCount64();
+}
+
 bool CGame::IsInCam(CGameObject* obj) {
 	float objTop, objLeft, objRight, objBottom = 0.0f;
 	obj->GetBoundingBox(objLeft, objTop, objRight, objBottom);
