@@ -4,7 +4,7 @@
 #define KOOPA_GRAVITY 0.002f
 #define KOOPA_WALKING_SPEED 0.04f
 #define KOOPA_SLIDING_SPEED 0.2f
-#define KOOPA_SHAKE_SPEED 0.1f
+#define KOOPA_SHAKE_SPEED 0.08f
 
 #define KOOPA_BBOX_WIDTH 16.0f
 #define KOOPA_BBOX_WIDTH_DEFEND 16.0f
@@ -37,6 +37,9 @@ protected:
 	ULONGLONG defend_start;
 	bool isBeingHold = false;
 	bool isUpsideDown = false;
+
+	float shakeVx;
+
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
@@ -47,6 +50,9 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	virtual void OnCollisionWithEnemy(LPCOLLISIONEVENT e);
 	virtual void ResetPos();
+
+	virtual void OnNoCollision(DWORD dt);
+	virtual void HoldingUpdate(DWORD dt);
 public:
 	CKoopa(float x, float y);
 	virtual void SetState(int state);
