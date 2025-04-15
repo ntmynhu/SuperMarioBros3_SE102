@@ -9,6 +9,7 @@
 
 CKoopa::CKoopa(float x, float y) :CEnemy(x, y)
 {
+	this->shakeVx = KOOPA_SHAKE_SPEED;
 	this->ay = KOOPA_GRAVITY;
 	SetState(KOOPA_STATE_WALKING);
 }
@@ -36,25 +37,59 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CMario*>(e->obj)) return;
 	if (dynamic_cast<CEnemy*>(e->obj) && state != KOOPA_STATE_DEFEND_SLIDING && !isBeingHold) return;
 
-	if (e->ny != 0 && e->obj->IsBlocking())
-	{
-		vy = 0.0f;
-		if (e->ny < 0)
+	if (!isBeingHold) {
+		if (e->ny != 0 && e->obj->IsBlocking())
 		{
-			isOnPlatform = true;
+			vy = 0.0f;
+			if (e->ny < 0)
+			{
+				isOnPlatform = true;
+			}
 		}
-	}
-	else if (e->nx != 0 && e->obj->IsBlocking())
-	{
-		vx = -vx;
+		else if (e->nx != 0 && e->obj->IsBlocking())
+		{
+			vx = -vx;
+		}
 	}
 
 	if (dynamic_cast<CEnemy*>(e->obj)) {
 		OnCollisionWithEnemy(e);
 	}
-
 }
 
+void CKoopa::HoldingUpdate(DWORD dt) {
+	if (mario) {
+		float m_x, m_y, m_vx, m_vy, m_ax, m_ay, m_nx, m_ox, m_oy;
+		mario->GetPosition(m_x, m_y);
+		mario->GetPhysics(m_vx, m_vy, m_ax, m_ay, m_nx);
+		mario->GetHoldOffset(m_ox, m_oy);
+		// As Mario will be updated first, predict next Mario pos
+		if (m_vy == 0) m_ay = 0;
+		m_vy += m_ay * dt;
+		m_vx += m_ax * dt;
+		/*if (m_nx == 1 && m_ax < 0 && m_vx < 0) m_vx = 0;
+		if (m_nx == -1 && m_ax > 0 && m_vx > 0) m_vx = 0;*/
+
+		m_x += m_vx * dt;
+		m_y += m_ay * dt;
+
+
+		float targetX = (m_nx >= 0) ? (m_x + m_ox) : (m_x - m_ox);
+		float targetY = m_y - m_oy;
+
+		float dx = targetX - x;
+		float dy = targetY - y;
+		if (dt != 0)
+			SetSpeed(dx / dt, dy / dt);
+
+		if (state == KOOPA_STATE_RECOVER)
+		{
+			vx += shakeVx;
+		}
+		x += vx * dt;
+		y += vy * dt;
+	}
+}
 void CKoopa::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 {
 	CEnemy* enemy = dynamic_cast<CEnemy*>(e->obj);
@@ -98,8 +133,6 @@ void CKoopa::HandleMarioRelease(float nx) {
 		DebugOut(L"Release DEFEND\n");
 	}
 	else {
-		CPlayScene* scene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-		CMario* mario = scene ? dynamic_cast<CMario*>(scene->GetPlayer()) : nullptr;
 		if (mario) {
 			mario->TakeDamage();
 			mario->SetHoldingObject(NULL);
@@ -124,8 +157,6 @@ void CKoopa::TakeTailAttackDamage(float xMario)
 
 void CKoopa::OnCollisionByMario(LPCOLLISIONEVENT e)
 {
-	CMario* mario = dynamic_cast<CMario*>(e->src_obj);
-
 	float mario_x, mario_y;
 	mario->GetPosition(mario_x, mario_y);
 	//Mario collide from top
@@ -175,6 +206,11 @@ void CKoopa::OnCollisionByMario(LPCOLLISIONEVENT e)
 
 }
 
+void CKoopa::OnNoCollision(DWORD dt) {
+	if (isBeingHold) return;
+	
+	CEnemy::OnNoCollision(dt);
+}
 
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -191,7 +227,11 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	if (state == KOOPA_STATE_RECOVER)
 	{
-		vx = -vx;
+		shakeVx = -shakeVx;
+		if (!isBeingHold) {
+			vx = 0 + shakeVx;
+		}
+		
 		if (GetTickCount64() - recover_start > KOOPA_RECOVER_TIMEOUT) {
 			SetState(KOOPA_STATE_WALKING);
 			if (isBeingHold) {
@@ -202,13 +242,19 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
+	if (isBeingHold)
+		HoldingUpdate(dt);
+
 	CEnemy::Update(dt, coObjects);
+
+	
 }
 
 void CKoopa::ResetPos() {
 	if (state != ENEMY_STATE_DIE) {
 		CEnemy::ResetPos();
 		SetState(KOOPA_STATE_WALKING);
+		isBeingHold = false;
 	}
 }
 
@@ -266,6 +312,7 @@ void CKoopa::SetState(int state)
 		break;
 	case ENEMY_STATE_DIE:
 		die_start = GetTickCount64();
+		isBeingHold = false;
 		ay = KOOPA_GRAVITY;
 		break;
 	case KOOPA_STATE_DEFEND_SLIDING:

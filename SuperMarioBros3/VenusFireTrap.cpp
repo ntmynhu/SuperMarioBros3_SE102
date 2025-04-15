@@ -38,7 +38,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 
 	
-	//DebugOutTitle(L"isAbleToUp: %d", isAbleToUp);
+	DebugOutTitle(L"Firedegree: %f", fireDegree);
 	CPlant::Update(dt, coObjects);
 }
 
@@ -52,7 +52,7 @@ void CVenusFireTrap::GetBoundingBox(float& left, float& top, float& right, float
 float CVenusFireTrap::GetFireDegree() {
 	float flowerY = this->y - flowerOffsetY;
 	float degree = 0;
-	float angles[] = { 15, 45, 135, 165, 195, 225, 315, 345 };
+	float angles[] = { 20, 45, 135, 160, 200, 225, 315, 340 };
 	int numAngles = sizeof(angles) / sizeof(angles[0]);
 	
 

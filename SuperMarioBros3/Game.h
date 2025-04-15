@@ -19,9 +19,8 @@ using namespace std;
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
 
-#define CAM_MARGIN 100.0f
+#define CAM_MARGIN 50.0f
 #define MARIO_STATE_CHANGE_PAUSE_TIME 500
-
 /*
 	Our simple game framework
 */

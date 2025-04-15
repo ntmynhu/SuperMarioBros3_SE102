@@ -8,6 +8,7 @@
 #include "Sprites.h"
 #include "Portal.h"
 #include "Coin.h"
+#include "Background.h"
 
 #include "Goomba.h"
 #include "Paragoomba.h"
@@ -42,6 +43,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_ASSETS	1
 #define SCENE_SECTION_OBJECTS	2
+#define SCENE_SECTION_BACKGROUND	3
 
 #define ASSETS_SECTION_UNKNOWN -1
 #define ASSETS_SECTION_SPRITES 1
@@ -104,6 +106,47 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	}
 
 	CAnimations::GetInstance()->Add(ani_id, ani);
+}
+
+/*
+	Parse a line in section [BACKGROUND]
+*/
+void CPlayScene::_ParseSection_BACKGROUND(string line)
+{
+	vector<string> tokens = split(line);
+	// skip invalid lines - an object set must have at least id, x, y
+	if (tokens.size() < 2) return;
+
+	//Background is always the first object if any
+	if (objects.empty())
+	{
+		int object_type = atoi(tokens[0].c_str());
+		float x = (float)atof(tokens[1].c_str());
+		float y = (float)atof(tokens[2].c_str());
+		int w = atoi(tokens[3].c_str());
+		int h = atoi(tokens[4].c_str());
+		int base_asset_id = atoi(tokens[5].c_str());
+
+		CGameObject* obj = NULL;
+		if (object_type == OBJECT_TYPE_BACKGROUND) {
+			obj = new CBackground(x, y, w, h, base_asset_id);
+
+			DebugOut(L"[INFO] Background object has been created!\n");
+			// General object setup
+			obj->SetPosition(x, y);
+			objects.push_back(obj);
+		}
+	}
+	else {
+		CBackground* background = dynamic_cast<CBackground*>(objects[0]);
+		if (background) {
+			int row = atoi(tokens[0].c_str());
+			for (int col = 1; col <= background->GetWidth(); col++) {
+				background->SetTile(col - 1, row, atoi(tokens[col].c_str()));
+			}
+		}
+		return;
+	}
 }
 
 /*
@@ -389,6 +432,7 @@ void CPlayScene::Load()
 		if (line[0] == '#') continue;	// skip comment lines	
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
 		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
+		if (line == "[BACKGROUND]") { section = SCENE_SECTION_BACKGROUND; continue; };
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		//
@@ -398,6 +442,7 @@ void CPlayScene::Load()
 		{ 
 			case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+			case SCENE_SECTION_BACKGROUND: _ParseSection_BACKGROUND(line); break;
 		}
 	}
 

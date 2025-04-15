@@ -137,6 +137,12 @@ public:
 	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }
 	int GetLevel() { return currentForm->GetLevel(); }
 	CMarioForm* GetCurrentForm() { return currentForm; }
+	void GetHoldOffset(float &ox, float &oy) { 
+		float res_ox, res_oy;
+		currentForm->GetHoldOffset(res_ox, res_oy);
+		ox = res_ox;
+		oy = res_oy;
+	}
 
 	void TakeDamage() { currentForm->OnTakeDamage(this); }
 	void SetMaxVx(float maxVx) { this->maxVx = maxVx; }

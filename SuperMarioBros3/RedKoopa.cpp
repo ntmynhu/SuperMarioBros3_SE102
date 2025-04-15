@@ -15,7 +15,7 @@ void CRedKoopa::OnNoCollision(DWORD dt) {
 void CRedKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (dynamic_cast<CMario*>(e->obj)) return;
-	if (dynamic_cast<CEnemy*>(e->obj) && state != KOOPA_STATE_DEFEND_SLIDING) return;
+	if (dynamic_cast<CEnemy*>(e->obj) && state != KOOPA_STATE_DEFEND_SLIDING && !isBeingHold) return;
 
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
@@ -64,7 +64,7 @@ void CRedKoopa::OnCollisionWithGround(LPCOLLISIONEVENT e)
 
 void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	DebugOutTitle(L"left_lim %f right_lim %f", left_lim, right_lim);
+	//DebugOutTitle(L"left_lim %f right_lim %f", left_lim, right_lim);
 	if (left_lim != right_lim) {
 		if (this->isOnPlatform && state == KOOPA_STATE_WALKING) {
 			if (this->x <= left_lim) {

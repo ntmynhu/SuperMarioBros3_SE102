@@ -1,8 +1,8 @@
 #pragma once
 #include "GameObject.h"
 
-#define FIRE_BALL_VX 0.05f
-#define FIRE_BALL_VY 0.05f
+#define FIRE_BALL_VX 0.03f
+#define FIRE_BALL_VY 0.03f
 
 #define ID_ANI_FIRE_BALL 7001
 
@@ -37,19 +37,10 @@ public:
 
 	void SetDir(float degree) {
 		float radian = degree * (3.14 / 180);
-		if (state == FIRE_BALL_STATE_IDLE) {
-			xDir = cos(radian) * 2;
-			yDir = -sin(radian) * 2;
-		}
+		xDir = cos(radian) * 2;
+		yDir = -sin(radian) * 2;
 	}
 
-	void ResetPos() {
-		this->x = init_x;
-		this->y = init_y;
-		this->xDir = 0;
-		this->yDir = 0;
-		SetState(FIRE_BALL_STATE_IDLE);
-		CGameObject::ResetPos();
-	}
+	void ResetPos() {}
 };
 

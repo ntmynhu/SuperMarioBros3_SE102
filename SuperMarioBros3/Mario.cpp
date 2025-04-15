@@ -31,16 +31,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
-
+  
 	if (GetTickCount64() - stateChange_start > MARIO_STATE_CHANGE_TIME)
 	{
 		stateChange_start = 0;
 		isChangingState = false;
 	}
-
+  
 	currentForm->Update(dt, this, coObjects);
-	HoldingUpdate(dt);
+	
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+	HoldingUpdate(dt);
 }
 
 void CMario::OnNoCollision(DWORD dt)
@@ -150,13 +151,7 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 void CMario::HoldingUpdate(DWORD dt) {
 	if (holdingObj != NULL) {
 		if (holdingObj->GetState() != ENEMY_STATE_DIE) {
-			if (isReadyToHold) {
-				if (nx >= 0)
-					holdingObj->SetPosition(this->x + currentForm->GetHoldOffset(), this->y - 3);
-				else
-					holdingObj->SetPosition(this->x - currentForm->GetHoldOffset(), this->y - 3);
-			}
-			else {
+			if (!isReadyToHold) {
 				holdingObj->HandleMarioRelease(nx);
 				holdingObj = NULL;
 			}
@@ -209,7 +204,11 @@ void CMario::SetState(int state)
 	else if (state == MARIO_STATE_B_RELEASE) {
 		isReadyToHold = false;
 	}
+
+	int old_nx = nx;
+
 	currentForm->SetState(state, this);
+
 	CGameObject::SetState(state);
 }
 
