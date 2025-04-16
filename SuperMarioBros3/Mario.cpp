@@ -8,6 +8,7 @@
 #include "Plant.h"
 #include "FireBall.h"
 #include "Coin.h"
+#include "QuestionBlock.h"
 
 #include "Collision.h"
 #include "Portal.h"
@@ -73,6 +74,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFireBall(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
+	else if (dynamic_cast<CQuestionBlock*>(e->obj))
+		OnCollisionWithQuestionBlock(e);
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -106,6 +109,19 @@ void CMario::OnCollisionWithFireBall(LPCOLLISIONEVENT e)
 	CFireBall* fireball = dynamic_cast<CFireBall*>(e->obj);
 	if (fireball->GetState() != FIRE_BALL_STATE_IDLE && untouchable == 0)
 		TakeDamage();
+}
+
+void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
+{
+	CQuestionBlock* qBlock = dynamic_cast<CQuestionBlock*>(e->obj);
+
+	if (e->ny > 0)
+	{
+		if (!qBlock->IsEmpty())
+		{
+			qBlock->SpawnItem();
+		}
+	}
 }
 
 void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)

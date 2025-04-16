@@ -1,4 +1,6 @@
 #include "QuestionBlock.h"
+#include "Coin.h"
+#include "debug.h"
 
 void CQuestionBlock::Render()
 {
@@ -20,4 +22,24 @@ void CQuestionBlock::Render()
 void CQuestionBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	CBlock::GetBoundingBox(l, t, r, b);
+}
+
+void CQuestionBlock::SpawnItem()
+{
+	if (item == NULL) return;
+
+	DebugOut(L"[INFO] Spawn item in question block %d\n", itemId);
+	switch (itemId)
+	{
+	case ID_ITEM_COIN:
+		DebugOut(L"[INFO] Spawn coin\n");
+		CCoin* coin = dynamic_cast<CCoin*>(item);
+		if (coin)
+		{
+			DebugOut(L"[INFO] Start Bouncing");
+			coin->StartBouncing();
+			isEmpty = true;
+		}
+		break;
+	}
 }
