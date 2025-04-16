@@ -26,6 +26,8 @@
 #include "NoCollideWall.h"
 #include "Tunnel.h"
 #include "TunnelPlant.h"
+#include "Block.h"
+#include "QuestionBlock.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -199,6 +201,30 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BRICK:
 	{
 		obj = new CBrick(x, y);
+		break;
+	}
+
+	case OBJECT_TYPE_BLOCK:
+	{
+		obj = new CBlock(x, y);
+		break;
+	}
+
+	case OBJECT_TYPE_QUESTION_BLOCK:
+	{
+		int itemID = atoi(tokens[3].c_str());
+
+		switch (itemID)
+		{
+			case ID_ITEM_COIN:
+			{
+				CCoin* coin = new CCoin(x, y);
+				obj = new CQuestionBlock(x, y, coin);
+				objects.push_back(coin);
+				break;
+			}
+		}
+
 		break;
 	}
 
