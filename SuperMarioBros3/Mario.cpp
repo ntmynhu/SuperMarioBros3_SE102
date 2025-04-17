@@ -122,7 +122,7 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 	{
 		if (!qBlock->IsEmpty())
 		{
-			qBlock->SpawnItem();
+			qBlock->StartBouncing();
 		}
 	}
 }

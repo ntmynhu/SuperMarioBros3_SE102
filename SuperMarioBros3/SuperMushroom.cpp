@@ -8,6 +8,25 @@ void CSuperMushroom::Render()
 
 void CSuperMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (isAppearing)
+	{
+		if (y > originalY - SUPER_MUSHROOM_BBOX_HEIGHT)
+		{
+			y -= SUPER_MUSHROOM_APPEAR_SPEED * dt;
+
+			if (y <= originalY - SUPER_MUSHROOM_BBOX_HEIGHT)
+			{
+				y = originalY - SUPER_MUSHROOM_BBOX_HEIGHT;
+				isAppearing = false;
+				isMoving = true;
+			}
+		}
+	}
+
+	if (isMoving)
+	{
+		
+	}
 }
 
 void CSuperMushroom::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -20,6 +39,7 @@ void CSuperMushroom::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CSuperMushroom::AppearFromQuestionBlock(float x, float y)
 {
-	Activate();
-	SetPosition(x, y - 15);
+	originalY = y;
+
+	StartAppearing();
 }

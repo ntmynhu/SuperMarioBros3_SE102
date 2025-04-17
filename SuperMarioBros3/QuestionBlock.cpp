@@ -8,7 +8,7 @@ void CQuestionBlock::Render()
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
 
-	if (!isEmpty)
+	if (!isEmpty && !isBouncing)
 	{
 		aniId = ID_ANI_QUESTION_BLOCK;
 	}
@@ -24,6 +24,12 @@ void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (isBouncing)
 	{
+		// If the item is coin, spawn it immediately
+		if (itemId == ID_ITEM_COIN && !isEmpty)
+		{
+			SpawnItem();
+		}
+
 		y += vy * BLOCK_BOUNCING_SPEED * dt;
 
 		if (y <= originalY - BLOCK_BOUNCING_HEIGHT)
@@ -36,6 +42,8 @@ void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vy = 0;
 			isBouncing = false;
 			y = originalY;
+
+			SpawnItem();
 		}
 	}
 }
@@ -56,10 +64,7 @@ void CQuestionBlock::SpawnItem()
 			CCoin* coin = dynamic_cast<CCoin*>(item);
 			if (coin)
 			{
-				coin->StartBouncing();
-				isEmpty = true;
-				isBouncing = true;
-				vy = -1;
+				coin->StartBouncing(y);
 			}
 			break;
 		}
@@ -70,11 +75,10 @@ void CQuestionBlock::SpawnItem()
 			if (mushroom)
 			{
 				mushroom->AppearFromQuestionBlock(x, y);
-				isEmpty = true;
-				isBouncing = true;
-				vy = -1;
 			}
 			break;
 		}	
 	}
+
+	isEmpty = true;
 }

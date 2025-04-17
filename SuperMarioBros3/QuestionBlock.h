@@ -31,6 +31,7 @@ public:
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 
 	bool IsEmpty() { return isEmpty; }
+	void StartBouncing() { isBouncing = true; vy = -1; }
 	void SpawnItem();
 };
 
