@@ -10,9 +10,9 @@
 #define COIN_BBOX_WIDTH 10
 #define COIN_BBOX_HEIGHT 16
 
-#define BOUNCING_TIME 385
-#define BOUNCING_SPEED 0.35f
-#define BOUNCING_HEIGHT 75
+#define COIN_BOUNCING_TIME 385
+#define COIN_BOUNCING_SPEED 0.35f
+#define COIN_BOUNCING_HEIGHT 100
 
 class CCoin : public CGameObject {
 private:
