@@ -7,6 +7,7 @@ coin.txt
 cloud.txt
 brick.txt
 block.txt
+mushroom.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -60,6 +61,9 @@ block.txt
 20	100	80
 20	120	80
 20	140	80
+
+#RED_MUSHROOM
+21	300	80
 
 
 

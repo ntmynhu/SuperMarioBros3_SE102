@@ -28,6 +28,7 @@
 #include "TunnelPlant.h"
 #include "Block.h"
 #include "QuestionBlock.h"
+#include "SuperMushroom.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -229,6 +230,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+
+	case OBJECT_TYPE_SUPER_MUSHROOM:
+	{
+		obj = new CSuperMushroom(x, y);
+		break;
+	}
 
 	case OBJECT_TYPE_PLATFORM:
 	{

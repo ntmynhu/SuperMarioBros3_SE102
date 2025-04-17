@@ -9,6 +9,7 @@
 #include "FireBall.h"
 #include "Coin.h"
 #include "QuestionBlock.h"
+#include "SuperMushroom.h"
 
 #include "Collision.h"
 #include "Portal.h"
@@ -76,6 +77,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CQuestionBlock*>(e->obj))
 		OnCollisionWithQuestionBlock(e);
+	else if (dynamic_cast<CSuperMushroom*>(e->obj))
+		OnCollisionWithSuperMushroom(e);
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -122,6 +125,12 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 			qBlock->SpawnItem();
 		}
 	}
+}
+
+void CMario::OnCollisionWithSuperMushroom(LPCOLLISIONEVENT e)
+{
+	ChangeForm(MARIO_LEVEL_BIG, false);
+	e->obj->Delete();
 }
 
 void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
@@ -228,12 +237,15 @@ void CMario::SetState(int state)
 	CGameObject::SetState(state);
 }
 
-void CMario::ChangeForm(int newLevel)
+void CMario::ChangeForm(int newLevel, bool die)
 {
-	StartChangingState();
+	if (die)
+	{
+		StartChangingState();
 
-	// Pause game for a bit
-	CGame::GetInstance()->StartMarioPause();
+		// Pause game for a bit
+		CGame::GetInstance()->StartMarioPause();
+	}
 
 	switch (newLevel) {
 		case MARIO_LEVEL_SMALL:
