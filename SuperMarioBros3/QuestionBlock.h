@@ -1,5 +1,6 @@
 #pragma once
 #include "Block.h"
+#include "Mario.h"
 
 #define ID_ANI_QUESTION_BLOCK 81101
 
@@ -16,6 +17,8 @@ class CQuestionBlock : public CBlock
 	CGameObject* item = NULL;
 	bool isBouncing = false;
 	float originalY;
+
+	CMario* mario = NULL;
 public:
 	CQuestionBlock(float x, float y, int itemId, CGameObject* item) : CBlock(x, y)
 	{
@@ -31,7 +34,7 @@ public:
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 
 	bool IsEmpty() { return isEmpty; }
-	void StartBouncing() { isBouncing = true; vy = -1; }
+	void StartBouncing(CMario* mario) { isBouncing = true; vy = -1; this->mario = mario; }
 	void SpawnItem();
 };
 

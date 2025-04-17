@@ -74,7 +74,9 @@ void CQuestionBlock::SpawnItem()
 			CSuperMushroom* mushroom = dynamic_cast<CSuperMushroom*>(item);
 			if (mushroom)
 			{
-				mushroom->AppearFromQuestionBlock(x, y);
+				float marioX, marioY;
+				mario->GetPosition(marioX, marioY);
+				mushroom->AppearFromQuestionBlock(marioX, y);
 			}
 			break;
 		}	

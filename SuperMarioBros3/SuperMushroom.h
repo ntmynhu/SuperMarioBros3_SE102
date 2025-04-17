@@ -21,6 +21,7 @@ class CSuperMushroom : public CGameObject
 	float originalY = 0;
 	bool isMoving = false;
 	bool isOnPlatform = false;
+	int nx = 1; // Staring direction of the mushroom
 public:
 	CSuperMushroom(float x, float y) : CGameObject(x, y) {}
 
@@ -33,7 +34,7 @@ public:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	virtual void OnNoCollision(DWORD dt);
 
-	void AppearFromQuestionBlock(float x, float y);
+	void AppearFromQuestionBlock(float x_mario, float y_qBlock); // To determine the originalY and the moving direction of mushroom
 	void StartAppearing() { isAppearing = true; Activate(); }
 };
 

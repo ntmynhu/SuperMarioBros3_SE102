@@ -21,7 +21,7 @@ void CSuperMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				isAppearing = false;
 				isMoving = true;
 
-				vx = SUPER_MUSHROOM_SPEED_X;
+				vx = nx * SUPER_MUSHROOM_SPEED_X;
 				vy = 0;
 			}
 		}
@@ -65,9 +65,14 @@ void CSuperMushroom::OnNoCollision(DWORD dt)
 	}
 }
 
-void CSuperMushroom::AppearFromQuestionBlock(float x, float y)
+void CSuperMushroom::AppearFromQuestionBlock(float marioX, float y)
 {
 	originalY = y;
+
+	if (marioX < x)
+		nx = 1;
+	else
+		nx = -1;
 
 	StartAppearing();
 }
