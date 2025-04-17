@@ -6,6 +6,7 @@ koopa.txt
 coin.txt
 cloud.txt
 brick.txt
+block.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -28,7 +29,11 @@ brick.txt
 40	212	100
 30	228	100	16	16	2	90200	90200	90300
 
+#BLOCK
+60	40	100
 
+#QUESTION_BLOCK_COIN
+61	56	100	0
 
 #GOOMBA
 2	200	150
