@@ -224,6 +224,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				objects.push_back(coin);
 				break;
 			}
+			case ID_ITEM_SUPER_MUSHROOM:
+			{
+				CSuperMushroom* mushroom = new CSuperMushroom(x, y);
+				obj = new CQuestionBlock(x, y, itemID, mushroom);
+				objects.push_back(mushroom);
+				break;
+			}
 		}
 
 		break;

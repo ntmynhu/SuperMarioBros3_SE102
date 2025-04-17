@@ -17,3 +17,9 @@ void CSuperMushroom::GetBoundingBox(float& l, float& t, float& r, float& b)
 	r = l + SUPER_MUSHROOM_BBOX_WIDTH;
 	b = t + SUPER_MUSHROOM_BBOX_HEIGHT;
 }
+
+void CSuperMushroom::AppearFromQuestionBlock(float x, float y)
+{
+	Activate();
+	SetPosition(x, y - 15);
+}

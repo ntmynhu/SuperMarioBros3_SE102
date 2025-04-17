@@ -1,5 +1,6 @@
 #include "QuestionBlock.h"
 #include "Coin.h"
+#include "SuperMushroom.h"
 #include "debug.h"
 
 void CQuestionBlock::Render()
@@ -50,15 +51,30 @@ void CQuestionBlock::SpawnItem()
 
 	switch (itemId)
 	{
-	case ID_ITEM_COIN:
-		CCoin* coin = dynamic_cast<CCoin*>(item);
-		if (coin)
+		case ID_ITEM_COIN:
 		{
-			coin->StartBouncing();
-			isEmpty = true;
-			isBouncing = true;
-			vy = -1;
+			CCoin* coin = dynamic_cast<CCoin*>(item);
+			if (coin)
+			{
+				coin->StartBouncing();
+				isEmpty = true;
+				isBouncing = true;
+				vy = -1;
+			}
+			break;
 		}
-		break;
+
+		case ID_ITEM_SUPER_MUSHROOM:
+		{
+			CSuperMushroom* mushroom = dynamic_cast<CSuperMushroom*>(item);
+			if (mushroom)
+			{
+				mushroom->AppearFromQuestionBlock(x, y);
+				isEmpty = true;
+				isBouncing = true;
+				vy = -1;
+			}
+			break;
+		}	
 	}
 }

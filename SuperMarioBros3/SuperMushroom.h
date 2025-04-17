@@ -18,5 +18,6 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	int IsBlocking() { return 0; }
+	void AppearFromQuestionBlock(float x, float y);
 };
 
