@@ -183,6 +183,7 @@
     <ClCompile Include="SampleKeyEventHandler.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="SuperMushroom.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Tunnel.cpp" />
     <ClCompile Include="TunnelPlant.cpp" />
@@ -231,6 +232,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
+    <ClInclude Include="SuperMushroom.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Tunnel.h" />
