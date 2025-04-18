@@ -79,9 +79,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<CQuestionBlock*>(e->obj))
 		OnCollisionWithQuestionBlock(e);
 	else if (dynamic_cast<CSuperMushroom*>(e->obj))
-		OnCollisionWithSuperMushroom(e);
+		OnCollisionWithMushroomAndLeaf(e);
 	else if (dynamic_cast<CSuperLeaf*>(e->obj))
-		OnCollisionWithSuperLeaf(e);
+		OnCollisionWithMushroomAndLeaf(e);
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -130,15 +130,12 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 	}
 }
 
-void CMario::OnCollisionWithSuperMushroom(LPCOLLISIONEVENT e)
+void CMario::OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e)
 {
-	ChangeForm(MARIO_LEVEL_BIG, false);
-	e->obj->Delete();
-}
+	int nextForm = currentForm->GetLevel() + 1;
+	if (nextForm > MARIO_LEVEL_RACOON) nextForm = MARIO_LEVEL_RACOON; // max level is racoon
 
-void CMario::OnCollisionWithSuperLeaf(LPCOLLISIONEVENT e)
-{
-	ChangeForm(MARIO_LEVEL_RACOON, false);
+	ChangeForm(nextForm, false);
 	e->obj->Delete();
 }
 
