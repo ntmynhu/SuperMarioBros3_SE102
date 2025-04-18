@@ -23,7 +23,15 @@ void CQuestionBlock::Render()
 
 void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (!isEmpty && item) item->Deactivate();
+	if (!isEmpty && item)
+	{
+		item->Deactivate();
+		
+		if (item2)
+		{
+			item2->Deactivate();
+		}
+	}
 
 	if (isBouncing)
 	{
@@ -63,6 +71,14 @@ void CQuestionBlock::SpawnItem()
 		return;
 	}
 
+	if (itemId2 != -1)
+	{
+		if (!item2 || item2->IsDeleted()) {
+			item2 = NULL;
+			return;
+		}
+	}
+
 	switch (itemId)
 	{
 		case ID_ITEM_COIN:
@@ -94,6 +110,34 @@ void CQuestionBlock::SpawnItem()
 			{
 				leaf->AppearFromQuestionBlock(x, y);
 			}
+			break;
+		}
+
+		case ID_ITEM_SUPER_MUSHROOM_AND_LEAF:
+		{
+			if (mario->GetLevel() == MARIO_LEVEL_SMALL)
+			{
+				CSuperMushroom* mushroom = dynamic_cast<CSuperMushroom*>(item);
+				if (mushroom)
+				{
+					float marioX, marioY;
+					mario->GetPosition(marioX, marioY);
+					mushroom->AppearFromQuestionBlock(marioX, y);
+				}
+
+				item2->Delete();
+			}
+			else if (mario->GetLevel() == MARIO_LEVEL_BIG || mario->GetLevel() == MARIO_LEVEL_RACOON)
+			{
+				CSuperLeaf* leaf = dynamic_cast<CSuperLeaf*>(item2);
+				if (leaf)
+				{
+					leaf->AppearFromQuestionBlock(x, y);
+				}
+
+				item->Delete();
+			}
+
 			break;
 		}
 	}
