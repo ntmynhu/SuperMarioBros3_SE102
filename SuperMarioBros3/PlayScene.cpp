@@ -29,6 +29,7 @@
 #include "Block.h"
 #include "QuestionBlock.h"
 #include "SuperMushroom.h"
+#include "SuperLeaf.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -241,6 +242,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_SUPER_MUSHROOM:
 	{
 		obj = new CSuperMushroom(x, y);
+		break;
+	}
+
+	case OBJECT_TYPE_SUPER_LEAF:
+	{
+		obj = new CSuperLeaf(x, y);
 		break;
 	}
 
