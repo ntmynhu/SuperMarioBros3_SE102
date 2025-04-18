@@ -23,6 +23,8 @@ void CQuestionBlock::Render()
 
 void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (!isEmpty && item) item->Deactivate();
+
 	if (isBouncing)
 	{
 		// If the item is coin, spawn it immediately
@@ -56,7 +58,10 @@ void CQuestionBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CQuestionBlock::SpawnItem()
 {
-	if (item == NULL) return;
+	if (!item || item->IsDeleted()) {
+		item = NULL;
+		return;
+	}
 
 	switch (itemId)
 	{
