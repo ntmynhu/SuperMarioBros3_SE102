@@ -13,6 +13,7 @@
 
 #include "Collision.h"
 #include "Portal.h"
+#include "SuperLeaf.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -79,6 +80,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithQuestionBlock(e);
 	else if (dynamic_cast<CSuperMushroom*>(e->obj))
 		OnCollisionWithSuperMushroom(e);
+	else if (dynamic_cast<CSuperLeaf*>(e->obj))
+		OnCollisionWithSuperLeaf(e);
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -130,6 +133,12 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithSuperMushroom(LPCOLLISIONEVENT e)
 {
 	ChangeForm(MARIO_LEVEL_BIG, false);
+	e->obj->Delete();
+}
+
+void CMario::OnCollisionWithSuperLeaf(LPCOLLISIONEVENT e)
+{
+	ChangeForm(MARIO_LEVEL_RACOON, false);
 	e->obj->Delete();
 }
 
