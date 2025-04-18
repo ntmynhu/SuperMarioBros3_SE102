@@ -43,6 +43,9 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 			vy = 0.0f;
 			if (e->ny < 0)
 			{
+				if (state == KOOPA_STATE_DEFEND) {
+					vx = 0;
+				}
 				isOnPlatform = true;
 			}
 		}
@@ -149,10 +152,15 @@ void CKoopa::TakeJumpDamage() {
 
 void CKoopa::TakeTailAttackDamage(float xMario)
 {
-	if (GetState() != KOOPA_STATE_DEFEND)
-	{
-		SetState(KOOPA_STATE_DEFEND);
+	isUpsideDown = true;
+	if (xMario > x) {
+		vx = -KOOPA_TAIL_HIT_VX;
 	}
+	else {
+		vx = KOOPA_TAIL_HIT_VX;
+	}
+	vy = -KOOPA_TAIL_HIT_VY;
+	SetState(KOOPA_STATE_DEFEND);
 }
 
 void CKoopa::OnCollisionByMario(LPCOLLISIONEVENT e)
@@ -252,9 +260,10 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CKoopa::ResetPos() {
 	if (state != ENEMY_STATE_DIE) {
-		CEnemy::ResetPos();
 		SetState(KOOPA_STATE_WALKING);
 		isBeingHold = false;
+		isUpsideDown = false;
+		CEnemy::ResetPos();
 	}
 }
 
@@ -297,8 +306,6 @@ void CKoopa::SetState(int state)
 	{
 	case KOOPA_STATE_DEFEND:
 		defend_start = GetTickCount64();
-		vx = 0;
-		vy = 0;
 		break;
 	case KOOPA_STATE_RECOVER:
 		recover_start = GetTickCount64();

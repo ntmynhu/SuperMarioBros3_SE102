@@ -1,5 +1,7 @@
 # id	left	top	right	bottom	texture_id
 [SPRITES]
+#ZEBRA_BLOCK
+80002	462	534	477	549	50
 
 #EMPTY_BLOCK
 81001	500	534	515	549	50

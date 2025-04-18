@@ -1,7 +1,7 @@
 #pragma once
 #include "VenusFireTrap.h"
 
-#define RED_VENUS_BBOX_HEIGHT 30
+#define RED_VENUS_BBOX_HEIGHT 28
 
 #define ID_ANI_RED_VENUS_MOVING_UP_LEFT 7200
 #define ID_ANI_RED_VENUS_MOVING_DOWN_LEFT 7201

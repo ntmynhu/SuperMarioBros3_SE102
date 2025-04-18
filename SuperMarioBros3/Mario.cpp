@@ -134,18 +134,17 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 	}
 	else // hit by Goomba
 	{
-		bool isTailAttack = false;
 		CMarioRacoon* racoon = dynamic_cast<CMarioRacoon*>(currentForm);
 		if (racoon)
 		{
 			if (racoon->IsTailAttacking())
 			{
 				enemy->TakeTailAttackDamage(e->nx);
-				isTailAttack = true;
+				return;
 			}
 		}
 
-		if (untouchable == 0 && !isTailAttack)
+		if (untouchable == 0)
 		{
 			if (enemy->IsDamagable())
 			{
