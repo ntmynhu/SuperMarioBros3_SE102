@@ -38,6 +38,12 @@ void CPlant::SetState(int state) {
 	}
 }
 
+void CPlant::TakeKoopaDamage(float xKoopa) {
+	if (state != PLANT_STATE_DIE)
+		SetState(PLANT_STATE_DIE);
+
+}
+
 void CPlant::TakeTailAttackDamage(float xMario)
 {
 	if (state != PLANT_STATE_DIE)

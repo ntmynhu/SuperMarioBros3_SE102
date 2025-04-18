@@ -29,14 +29,27 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 }
 
 void CPiranhaPlant::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
-	left = x - PIRANHA_BBOX_WIDTH / 2;
-	top = y - PIRANHA_BBOX_HEIGHT / 2;
-	right = left + PIRANHA_BBOX_WIDTH;
-	bottom = top + PIRANHA_BBOX_HEIGHT;
+	if (state == PLANT_STATE_DIE) {
+		left = x - PLANT_DIE_BBOX_WIDTH / 2;
+		top = y - PLANT_DIE_BBOX_HEIGHT / 2;
+		right = left + PLANT_DIE_BBOX_WIDTH;
+		bottom = top + PLANT_DIE_BBOX_HEIGHT;
+	}
+	else {
+		left = x - PIRANHA_BBOX_WIDTH / 2;
+		top = y - PIRANHA_BBOX_HEIGHT / 2;
+		right = left + PIRANHA_BBOX_WIDTH;
+		bottom = top + PIRANHA_BBOX_HEIGHT;
+	}
 }
 
 void CPiranhaPlant::Render() {
 	int aniId = ID_ANI_PIRANHA;
+	switch (state) {
+	case PLANT_STATE_DIE:
+		aniId = ID_ANI_PLANT_DIE;
+		break;
+	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	//RenderBoundingBox();
 }
