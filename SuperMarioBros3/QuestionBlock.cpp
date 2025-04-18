@@ -1,6 +1,7 @@
 #include "QuestionBlock.h"
 #include "Coin.h"
 #include "SuperMushroom.h"
+#include "SuperLeaf.h"
 #include "debug.h"
 
 void CQuestionBlock::Render()
@@ -80,6 +81,16 @@ void CQuestionBlock::SpawnItem()
 			}
 			break;
 		}	
+
+		case ID_ITEM_SUPER_LEAF:
+		{
+			CSuperLeaf* leaf = dynamic_cast<CSuperLeaf*>(item);
+			if (leaf)
+			{
+				leaf->AppearFromQuestionBlock(x, y);
+			}
+			break;
+		}
 	}
 
 	isEmpty = true;

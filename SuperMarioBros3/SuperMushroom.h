@@ -13,7 +13,7 @@
 #define SUPER_MUSHROOM_APPEAR_SPEED 0.01f
 
 #define SUPER_MUSHROOM_SPEED_X 0.05f
-#define SUPER_MUSHROOM_SPEED_Y 0.0015f
+#define SUPER_MUSHROOM_SPEED_Y 0.005f
 
 class CSuperMushroom : public CGameObject
 {
