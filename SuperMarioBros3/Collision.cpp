@@ -203,7 +203,8 @@ void CCollision::Filter( LPGAMEOBJECT objSrc,
 		// ignore collision event with object having IsBlocking = 0 (like coin, mushroom, etc)
 		if (filterBlock == 1 && !c->obj->IsBlocking()) 
 		{
-			continue;
+			if (!c->obj->IsBlocking(objSrc))
+				continue;
 		}
 
 		if (c->t < min_tx && c->nx != 0 && filterX == 1) {

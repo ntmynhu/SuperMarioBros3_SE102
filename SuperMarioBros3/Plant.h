@@ -5,7 +5,8 @@
 #include "Game.h"
 
 #define PLANT_DIE_TIME_OUT 200
-
+#define PLANT_DIE_BBOX_WIDTH 16
+#define PLANT_DIE_BBOX_HEIGHT 16
 #define PLANT_VY 0.05f
 
 #define PLANT_STATE_DIE 1000
@@ -15,6 +16,7 @@
 
 #define HIDE_OFFSET 6
 #define PLANT_NOT_UP_RANGE 30
+#define ID_ANI_PLANT_DIE 7300
 
 class CPlant :
     public CGameObject
@@ -33,7 +35,7 @@ protected:
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render() {};
-	virtual int IsCollidable() { return 1; };
+	virtual int IsCollidable() { return state != PLANT_STATE_DIE; };
 	virtual int IsBlocking() { return 0; }
 
 	virtual void CheckAbleToUp() {
@@ -74,7 +76,7 @@ public:
 	virtual void SetIsAbleToUp(bool isAbleToUp) {
 		this->isAbleToUp = isAbleToUp;
 	}
-	virtual void TakeAttackDamage() {};
+	virtual void TakeKoopaDamage(float xKoopa);
 	virtual void TakeTailAttackDamage(float xMario);
 };
 

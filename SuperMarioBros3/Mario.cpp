@@ -76,6 +76,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CQuestionBlock*>(e->obj))
 		OnCollisionWithQuestionBlock(e);
+		
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)

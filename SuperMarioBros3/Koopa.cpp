@@ -3,8 +3,7 @@
 #include "Mario.h"
 #include "PlayScene.h"
 #include "Game.h"
-#include "Brick.h"
-#include "Platform.h"
+#include "Plant.h"
 #include "debug.h"
 
 CKoopa::CKoopa(float x, float y) :CEnemy(x, y)
@@ -58,6 +57,9 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CEnemy*>(e->obj)) {
 		OnCollisionWithEnemy(e);
 	}
+	if (dynamic_cast<CPlant*>(e->obj)) {
+		OnCollisionWithPlant(e);
+	}
 }
 
 void CKoopa::HoldingUpdate(DWORD dt) {
@@ -93,6 +95,17 @@ void CKoopa::HoldingUpdate(DWORD dt) {
 		y += vy * dt;
 	}
 }
+
+void CKoopa::OnCollisionWithPlant(LPCOLLISIONEVENT e)
+{
+	CPlant* plant = dynamic_cast<CPlant*>(e->obj);
+
+	if (isBeingHold) {
+		this->TakeKoopaDamage(x - e->nx);
+	}
+	plant->TakeKoopaDamage(x);
+}
+
 void CKoopa::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 {
 	CEnemy* enemy = dynamic_cast<CEnemy*>(e->obj);
@@ -207,6 +220,24 @@ void CKoopa::OnCollisionByMario(LPCOLLISIONEVENT e)
 			else
 			{
 				vx = KOOPA_SLIDING_SPEED;
+			}
+		}
+		else if (e->ny > 0) {
+			if (mario->IsReadyToHold()) {
+				isBeingHold = true;
+				ay = 0;
+				mario->SetHoldingObject(this);
+			}
+			else {
+				SetState(KOOPA_STATE_DEFEND_SLIDING);
+				//Mario collide from right
+				if (x <= mario_x) {
+					vx = -KOOPA_SLIDING_SPEED;
+				}
+				else
+				{
+					vx = KOOPA_SLIDING_SPEED;
+				}
 			}
 		}
 	}
