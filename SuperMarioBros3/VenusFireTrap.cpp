@@ -2,6 +2,7 @@
 #include "FireBall.h"
 #include "debug.h"
 void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	CPlant::Update(dt, coObjects);
 	float fireDegree = GetFireDegree();
 	if (state == PLANT_STATE_HIDE && isAbleToUp != 0) {
 		if (GetTickCount64() - down_start >= VENUS_DOWN_TIME_OUT) {
@@ -38,8 +39,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 
 	
-	DebugOutTitle(L"Firedegree: %f", fireDegree);
-	CPlant::Update(dt, coObjects);
+	DebugOutTitle(L"Is able to up: %d, state: %d", isAbleToUp, state);
 }
 
 void CVenusFireTrap::GetBoundingBox(float& left, float& top, float& right, float& bottom) {

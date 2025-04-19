@@ -96,11 +96,11 @@ void CMario::OnCollisionWithPlant(LPCOLLISIONEVENT e)
 		if (racoon->IsTailAttacking())
 		{
 			plant->TakeTailAttackDamage(e->nx);
-			isTailAttack = true;
+			return;
 		}
 	}
 
-	if(plant->GetState() != PLANT_STATE_DIE && untouchable == 0 && !isTailAttack)
+	if(plant->isDamagable() && untouchable == 0)
 		TakeDamage();
 }
 

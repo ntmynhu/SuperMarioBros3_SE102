@@ -35,7 +35,7 @@ protected:
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render() {};
-	virtual int IsCollidable() { return state != PLANT_STATE_DIE; };
+	virtual int IsCollidable() { return state != PLANT_STATE_DIE && state != PLANT_STATE_HIDE; };
 	virtual int IsBlocking() { return 0; }
 
 	virtual void CheckAbleToUp() {
@@ -72,6 +72,9 @@ public:
 		isAbleToUp = 0;
 		SetState(PLANT_STATE_HIDE);
 	};
+	virtual bool isDamagable() {
+		return state != PLANT_STATE_DIE && state != PLANT_STATE_HIDE;
+	}
 	virtual void SetState(int state);
 	virtual void SetIsAbleToUp(bool isAbleToUp) {
 		this->isAbleToUp = isAbleToUp;

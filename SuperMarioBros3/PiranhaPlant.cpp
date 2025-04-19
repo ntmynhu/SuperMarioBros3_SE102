@@ -1,6 +1,7 @@
 #include "PiranhaPlant.h"
 #include "debug.h"
 void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	CPlant::Update(dt, coObjects);
 	if (state == PLANT_STATE_HIDE && isAbleToUp != 0) {
 		if (GetTickCount64() - down_start >= PIRANHA_DOWN_TIME_OUT) {
 			this->vy = -PLANT_VY;
@@ -25,7 +26,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 
 	//DebugOutTitle(L"isAbleToUp: %d", isAbleToUp);
-	CPlant::Update(dt, coObjects);
+	
 }
 
 void CPiranhaPlant::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
