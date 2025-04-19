@@ -191,6 +191,7 @@
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="VenusFireTrap.cpp" />
     <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="WallMario.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -242,6 +243,7 @@
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VenusFireTrap.h" />
     <ClInclude Include="Wall.h" />
+    <ClInclude Include="WallMario.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

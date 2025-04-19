@@ -22,6 +22,7 @@
 #include "Platform.h"
 #include "FullPlatform.h"
 #include "Wall.h"
+#include "WallMario.h"
 #include "NoCollidePlatform.h"
 #include "NoCollideWall.h"
 #include "Tunnel.h"
@@ -316,6 +317,24 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int sprite_end = atoi(tokens[8].c_str());
 
 		obj = new CWall(
+			x, y,
+			cell_width, cell_height, length,
+			sprite_begin, sprite_middle, sprite_end
+		);
+
+		break;
+	}
+	case OBJECT_TYPE_ONLY_MARIO_COLLIDE_WALL:
+	{
+
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int sprite_begin = atoi(tokens[6].c_str());
+		int sprite_middle = atoi(tokens[7].c_str());
+		int sprite_end = atoi(tokens[8].c_str());
+
+		obj = new CWallMario(
 			x, y,
 			cell_width, cell_height, length,
 			sprite_begin, sprite_middle, sprite_end

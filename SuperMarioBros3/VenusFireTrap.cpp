@@ -43,10 +43,18 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 }
 
 void CVenusFireTrap::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
-	left = x - VENUS_BBOX_WIDTH / 2;
-	top = y - VENUS_BBOX_HEIGHT / 2;
-	right = left + VENUS_BBOX_WIDTH;
-	bottom = top + VENUS_BBOX_HEIGHT;
+	if (state == PLANT_STATE_DIE) {
+		left = x - PLANT_DIE_BBOX_WIDTH / 2;
+		top = y - PLANT_DIE_BBOX_HEIGHT / 2;
+		right = left + PLANT_DIE_BBOX_WIDTH;
+		bottom = top + PLANT_DIE_BBOX_HEIGHT;
+	}
+	else {
+		left = x - VENUS_BBOX_WIDTH / 2;
+		top = y - VENUS_BBOX_HEIGHT / 2;
+		right = left + VENUS_BBOX_WIDTH;
+		bottom = top + VENUS_BBOX_HEIGHT;
+	}
 }
 
 float CVenusFireTrap::GetFireDegree() {
@@ -125,6 +133,9 @@ void CVenusFireTrap::Render() {
 			else
 				aniId = ID_ANI_VENUS_DOWN_RIGHT;
 		}
+		break;
+	case PLANT_STATE_DIE:
+		aniId = ID_ANI_PLANT_DIE;
 		break;
 	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);

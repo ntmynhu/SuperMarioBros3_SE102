@@ -3,8 +3,7 @@
 #include "Mario.h"
 #include "PlayScene.h"
 #include "Game.h"
-#include "Brick.h"
-#include "Platform.h"
+#include "Plant.h"
 #include "debug.h"
 
 CKoopa::CKoopa(float x, float y) :CEnemy(x, y)
@@ -43,6 +42,9 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 			vy = 0.0f;
 			if (e->ny < 0)
 			{
+				if (state == KOOPA_STATE_DEFEND) {
+					vx = 0;
+				}
 				isOnPlatform = true;
 			}
 		}
@@ -54,6 +56,9 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CEnemy*>(e->obj)) {
 		OnCollisionWithEnemy(e);
+	}
+	if (dynamic_cast<CPlant*>(e->obj)) {
+		OnCollisionWithPlant(e);
 	}
 }
 
@@ -90,6 +95,17 @@ void CKoopa::HoldingUpdate(DWORD dt) {
 		y += vy * dt;
 	}
 }
+
+void CKoopa::OnCollisionWithPlant(LPCOLLISIONEVENT e)
+{
+	CPlant* plant = dynamic_cast<CPlant*>(e->obj);
+
+	if (isBeingHold) {
+		this->TakeKoopaDamage(x - e->nx);
+	}
+	plant->TakeKoopaDamage(x);
+}
+
 void CKoopa::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 {
 	CEnemy* enemy = dynamic_cast<CEnemy*>(e->obj);
@@ -149,10 +165,15 @@ void CKoopa::TakeJumpDamage() {
 
 void CKoopa::TakeTailAttackDamage(float xMario)
 {
-	if (GetState() != KOOPA_STATE_DEFEND)
-	{
-		SetState(KOOPA_STATE_DEFEND);
+	isUpsideDown = true;
+	if (xMario > x) {
+		vx = -KOOPA_TAIL_HIT_VX;
 	}
+	else {
+		vx = KOOPA_TAIL_HIT_VX;
+	}
+	vy = -KOOPA_TAIL_HIT_VY;
+	SetState(KOOPA_STATE_DEFEND);
 }
 
 void CKoopa::OnCollisionByMario(LPCOLLISIONEVENT e)
@@ -199,6 +220,24 @@ void CKoopa::OnCollisionByMario(LPCOLLISIONEVENT e)
 			else
 			{
 				vx = KOOPA_SLIDING_SPEED;
+			}
+		}
+		else if (e->ny > 0) {
+			if (mario->IsReadyToHold()) {
+				isBeingHold = true;
+				ay = 0;
+				mario->SetHoldingObject(this);
+			}
+			else {
+				SetState(KOOPA_STATE_DEFEND_SLIDING);
+				//Mario collide from right
+				if (x <= mario_x) {
+					vx = -KOOPA_SLIDING_SPEED;
+				}
+				else
+				{
+					vx = KOOPA_SLIDING_SPEED;
+				}
 			}
 		}
 	}
@@ -252,9 +291,10 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CKoopa::ResetPos() {
 	if (state != ENEMY_STATE_DIE) {
-		CEnemy::ResetPos();
 		SetState(KOOPA_STATE_WALKING);
 		isBeingHold = false;
+		isUpsideDown = false;
+		CEnemy::ResetPos();
 	}
 }
 
@@ -297,8 +337,6 @@ void CKoopa::SetState(int state)
 	{
 	case KOOPA_STATE_DEFEND:
 		defend_start = GetTickCount64();
-		vx = 0;
-		vy = 0;
 		break;
 	case KOOPA_STATE_RECOVER:
 		recover_start = GetTickCount64();

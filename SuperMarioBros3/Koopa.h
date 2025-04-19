@@ -1,15 +1,17 @@
 #pragma once
 #include "Enemy.h"
 
-#define KOOPA_GRAVITY 0.002f
+#define KOOPA_GRAVITY 0.001f
 #define KOOPA_WALKING_SPEED 0.04f
 #define KOOPA_SLIDING_SPEED 0.2f
 #define KOOPA_SHAKE_SPEED 0.08f
+#define KOOPA_TAIL_HIT_VY 0.3f
+#define KOOPA_TAIL_HIT_VX 0.1f
 
 #define KOOPA_BBOX_WIDTH 16.0f
 #define KOOPA_BBOX_WIDTH_DEFEND 16.0f
-#define KOOPA_BBOX_HEIGHT 25.0f
-#define KOOPA_BBOX_HEIGHT_DEFEND 16.0f
+#define KOOPA_BBOX_HEIGHT 24.0f
+#define KOOPA_BBOX_HEIGHT_DEFEND 14.0f
 
 #define KOOPA_DIE_TIMEOUT 2000
 #define KOOPA_DEFEND_TIMEOUT 8000
@@ -49,6 +51,7 @@ protected:
 	virtual void HandleMarioRelease(float nx);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	virtual void OnCollisionWithEnemy(LPCOLLISIONEVENT e);
+	virtual void OnCollisionWithPlant(LPCOLLISIONEVENT e);
 	virtual void ResetPos();
 
 	virtual void OnNoCollision(DWORD dt);

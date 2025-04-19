@@ -4,6 +4,8 @@
 #include "Enemy.h"
 #include "Mario.h"
 #include "Brick.h"
+#include "Block.h"
+#include "Plant.h"
 #include "Platform.h"
 #include "debug.h"
 
@@ -23,8 +25,12 @@ void CRedKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (e->ny < 0)
 		{
 			isOnPlatform = true;
+			if (state == KOOPA_STATE_DEFEND) {
+				vx = 0;
+			}
+
 			if (state != KOOPA_STATE_DEFEND_SLIDING) {
-				if (dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CBrick*>(e->obj)) {
+				if (dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBlock*>(e->obj)) {
 					OnCollisionWithGround(e);
 
 				}
@@ -40,6 +46,9 @@ void CRedKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CEnemy*>(e->obj)) {
 		OnCollisionWithEnemy(e);
+	}
+	if (dynamic_cast<CPlant*>(e->obj)) {
+		OnCollisionWithPlant(e);
 	}
 
 }

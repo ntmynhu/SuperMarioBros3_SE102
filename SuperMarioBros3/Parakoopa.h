@@ -5,7 +5,7 @@
 #define ID_ANI_PARA_KOOPA_FLY 6200
 #define ID_ANI_PARA_KOOPA_FLY_RIGHT 6201
 
-#define PARA_KOOPA_FLY_SPEED_Y 0.3f
+#define PARA_KOOPA_FLY_SPEED_Y 0.18f
 
 #define PARA_KOOPA_STATE_HASWING 600
 
@@ -18,7 +18,7 @@ protected:
 	virtual void ResetPos();
 public:
 	CParakoopa(float x, float y) : CKoopa(x, y) {
-		this->ay = KOOPA_GRAVITY * 0.6f;
+		this->ay = KOOPA_GRAVITY * 0.50f;
 		SetState(PARA_KOOPA_STATE_HASWING);
 	};
 	bool HasWing() { return (state == PARA_KOOPA_STATE_HASWING); }
