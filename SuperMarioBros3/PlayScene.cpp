@@ -220,7 +220,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			case ID_ITEM_COIN:
 			{
-				CCoin* coin = new CCoin(x, y);
+				CCoin* coin = new CCoin(x, y - COIN_APPEARING_HEIGHT);
 				obj = new CQuestionBlock(x, y, itemID, coin);
 				objects.push_back(coin);
 				break;

@@ -9,7 +9,7 @@
 #define ID_ITEM_SUPER_LEAF 2
 #define ID_ITEM_SUPER_MUSHROOM_AND_LEAF 3
 
-#define BLOCK_BOUNCING_SPEED 0.35f
+#define BLOCK_BOUNCING_SPEED 0.2f
 #define BLOCK_BOUNCING_HEIGHT 20
 
 class CQuestionBlock : public CBlock

@@ -23,7 +23,7 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (GetTickCount64() - bouncing_start < COIN_BOUNCING_TIME)
 		{
-			if (y < startingY - COIN_BOUNCING_HEIGHT && vy < 0)
+			if (y < startingY - COIN_BOUNCING_HEIGHT)
 			{
 				vy = 1;
 			}

@@ -10,9 +10,11 @@
 #define COIN_BBOX_WIDTH 10
 #define COIN_BBOX_HEIGHT 16
 
-#define COIN_BOUNCING_TIME 200
-#define COIN_BOUNCING_SPEED 0.35f
+#define COIN_BOUNCING_TIME 325
+#define COIN_BOUNCING_SPEED 0.2f
 #define COIN_BOUNCING_HEIGHT 70
+
+#define COIN_APPEARING_HEIGHT COIN_BBOX_HEIGHT + 5
 
 class CCoin : public CGameObject {
 private:
@@ -22,7 +24,7 @@ private:
 	float startingY;
 public:
 	CCoin(float x, float y) : CGameObject(x, y) {
-		vy = -1;
+		startingY = y;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
@@ -30,8 +32,7 @@ public:
 	int IsBlocking() { return 0; }
 	void StartBouncing(float block_y)
 	{ 
-		startingY = block_y;
-		//y = block_y;// -COIN_BBOX_HEIGHT;
+		vy = -1;
 
 		isBouncing = true;
 		bouncing_start = GetTickCount64();
