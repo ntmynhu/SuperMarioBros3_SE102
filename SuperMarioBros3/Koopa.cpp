@@ -4,6 +4,7 @@
 #include "PlayScene.h"
 #include "Game.h"
 #include "Plant.h"
+#include "Block.h"
 #include "debug.h"
 
 CKoopa::CKoopa(float x, float y) :CEnemy(x, y)
@@ -34,8 +35,7 @@ void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (dynamic_cast<CMario*>(e->obj)) return;
-	if (dynamic_cast<CEnemy*>(e->obj) && state != KOOPA_STATE_DEFEND_SLIDING && !isBeingHold) return;
-
+	if (dynamic_cast<CEnemy*>(e->obj) && state == KOOPA_STATE_DEFEND) return;
 	if (!isBeingHold) {
 		if (e->ny != 0 && e->obj->IsBlocking())
 		{
@@ -54,11 +54,28 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		}
 	}
 
-	if (dynamic_cast<CEnemy*>(e->obj)) {
-		OnCollisionWithEnemy(e);
+	if (state == KOOPA_STATE_DEFEND_SLIDING || isBeingHold) {
+		if (dynamic_cast<CEnemy*>(e->obj)) {
+			OnCollisionWithEnemy(e);
+		}
+		if (dynamic_cast<CPlant*>(e->obj)) {
+			OnCollisionWithPlant(e);
+		}
+		if (dynamic_cast<CBlock*>(e->obj)) {
+			OnCollisionWithBlock(e);
+		}
 	}
-	if (dynamic_cast<CPlant*>(e->obj)) {
-		OnCollisionWithPlant(e);
+	else {
+		if (dynamic_cast<CKoopa*>(e->obj)) {
+			CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+			if (koopa->GetState() != KOOPA_STATE_DEFEND_SLIDING && !koopa->isBeingHold)
+			{
+				float k_vx, k_vy;
+				koopa->GetSpeed(k_vx, k_vy);
+				koopa->SetSpeed(-k_vx, k_vy);
+				vx = -vx;
+			}
+		}
 	}
 }
 
@@ -93,6 +110,15 @@ void CKoopa::HoldingUpdate(DWORD dt) {
 		}
 		x += vx * dt;
 		y += vy * dt;
+	}
+}
+
+void CKoopa::OnCollisionWithBlock(LPCOLLISIONEVENT e)
+{
+	CBlock* block = dynamic_cast<CBlock*>(e->obj);
+
+	if (state == KOOPA_STATE_DEFEND_SLIDING) {
+		block->TriggerAction();
 	}
 }
 

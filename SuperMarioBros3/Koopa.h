@@ -52,6 +52,7 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	virtual void OnCollisionWithEnemy(LPCOLLISIONEVENT e);
 	virtual void OnCollisionWithPlant(LPCOLLISIONEVENT e);
+	virtual void OnCollisionWithBlock(LPCOLLISIONEVENT e);
 	virtual void ResetPos();
 
 	virtual void OnNoCollision(DWORD dt);

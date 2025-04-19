@@ -76,8 +76,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFireBall(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
-	else if (dynamic_cast<CQuestionBlock*>(e->obj))
-		OnCollisionWithQuestionBlock(e);
+	else if (dynamic_cast<CBlock*>(e->obj))
+		OnCollisionWithBlock(e);
 	else if (dynamic_cast<CSuperMushroom*>(e->obj))
 		OnCollisionWithMushroomAndLeaf(e);
 	else if (dynamic_cast<CSuperLeaf*>(e->obj))
@@ -117,16 +117,13 @@ void CMario::OnCollisionWithFireBall(LPCOLLISIONEVENT e)
 		TakeDamage();
 }
 
-void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
+void CMario::OnCollisionWithBlock(LPCOLLISIONEVENT e)
 {
-	CQuestionBlock* qBlock = dynamic_cast<CQuestionBlock*>(e->obj);
+	CBlock* qBlock = dynamic_cast<CBlock*>(e->obj);
 
 	if (e->ny > 0)
 	{
-		if (!qBlock->IsEmpty())
-		{
-			qBlock->StartBouncing(this);
-		}
+		qBlock->TriggerAction();
 	}
 }
 

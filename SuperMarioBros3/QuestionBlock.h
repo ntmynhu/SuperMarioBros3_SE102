@@ -20,9 +20,6 @@ class CQuestionBlock : public CBlock
 	CGameObject* item = NULL;
 	CGameObject* item2 = NULL;
 	bool isBouncing = false;
-	float originalY;
-
-	CMario* mario = NULL;
 public:
 	CQuestionBlock(float x, float y, int itemId, CGameObject* item, int itemId2 = -1, CGameObject* item2 = NULL) : CBlock(x, y)
 	{
@@ -30,7 +27,6 @@ public:
 		this->item = item;
 		isEmpty = false;	
 		this->itemId = itemId;
-		originalY = y;
 		this->itemId2 = itemId2;
 		this->item2 = item2;
 	}
@@ -40,7 +36,9 @@ public:
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 
 	bool IsEmpty() { return isEmpty; }
-	void StartBouncing(CMario* mario) { isBouncing = true; vy = -1; this->mario = mario; }
+	void StartBouncing() { isBouncing = true; vy = -1;}
 	void SpawnItem();
+
+	void TriggerAction() { if (!isEmpty) StartBouncing(); }
 };
 

@@ -43,20 +43,21 @@ void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		y += vy * BLOCK_BOUNCING_SPEED * dt;
 
-		if (y <= originalY - BLOCK_BOUNCING_HEIGHT)
+		if (y <= init_y - BLOCK_BOUNCING_HEIGHT)
 		{
 			vy = 1;
 		}
 
-		if (vy == 1 && y >= originalY)
+		if (vy == 1 && y >= init_y)
 		{
 			vy = 0;
 			isBouncing = false;
-			y = originalY;
+			y = init_y;
 
 			SpawnItem();
 		}
 	}
+	CBlock::Update(dt, coObjects);
 }
 
 void CQuestionBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -115,30 +116,32 @@ void CQuestionBlock::SpawnItem()
 
 		case ID_ITEM_SUPER_MUSHROOM_AND_LEAF:
 		{
-			if (mario->GetLevel() == MARIO_LEVEL_SMALL)
-			{
-				CSuperMushroom* mushroom = dynamic_cast<CSuperMushroom*>(item);
-				if (mushroom)
+			if (mario) {
+				if (mario->GetLevel() == MARIO_LEVEL_SMALL)
 				{
-					float marioX, marioY;
-					mario->GetPosition(marioX, marioY);
-					mushroom->AppearFromQuestionBlock(marioX, y);
+					CSuperMushroom* mushroom = dynamic_cast<CSuperMushroom*>(item);
+					if (mushroom)
+					{
+						float marioX, marioY;
+						mario->GetPosition(marioX, marioY);
+						mushroom->AppearFromQuestionBlock(marioX, y);
+					}
+
+					item2->Delete();
+				}
+				else if (mario->GetLevel() == MARIO_LEVEL_BIG || mario->GetLevel() == MARIO_LEVEL_RACOON)
+				{
+					CSuperLeaf* leaf = dynamic_cast<CSuperLeaf*>(item2);
+					if (leaf)
+					{
+						leaf->AppearFromQuestionBlock(x, y);
+					}
+
+					item->Delete();
 				}
 
-				item2->Delete();
+				break;
 			}
-			else if (mario->GetLevel() == MARIO_LEVEL_BIG || mario->GetLevel() == MARIO_LEVEL_RACOON)
-			{
-				CSuperLeaf* leaf = dynamic_cast<CSuperLeaf*>(item2);
-				if (leaf)
-				{
-					leaf->AppearFromQuestionBlock(x, y);
-				}
-
-				item->Delete();
-			}
-
-			break;
 		}
 	}
 

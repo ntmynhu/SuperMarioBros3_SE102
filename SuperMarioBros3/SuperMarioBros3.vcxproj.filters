@@ -153,6 +153,9 @@
     <ClCompile Include="WallMario.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FallCensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -303,6 +306,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WallMario.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FallCensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
