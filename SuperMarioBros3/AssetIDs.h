@@ -24,6 +24,8 @@
 
 // From 20: Collectible
 #define OBJECT_TYPE_COIN 20
+#define OBJECT_TYPE_SUPER_MUSHROOM 21
+#define OBJECT_TYPE_SUPER_LEAF 22
 
 // From 30: Static
 #define OBJECT_TYPE_PLATFORM 30

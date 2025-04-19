@@ -9,9 +9,11 @@
 #include "FireBall.h"
 #include "Coin.h"
 #include "QuestionBlock.h"
+#include "SuperMushroom.h"
 
 #include "Collision.h"
 #include "Portal.h"
+#include "SuperLeaf.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -76,7 +78,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CQuestionBlock*>(e->obj))
 		OnCollisionWithQuestionBlock(e);
-		
+	else if (dynamic_cast<CSuperMushroom*>(e->obj))
+		OnCollisionWithMushroomAndLeaf(e);
+	else if (dynamic_cast<CSuperLeaf*>(e->obj))
+		OnCollisionWithMushroomAndLeaf(e);
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -120,9 +125,18 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 	{
 		if (!qBlock->IsEmpty())
 		{
-			qBlock->SpawnItem();
+			qBlock->StartBouncing(this);
 		}
 	}
+}
+
+void CMario::OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e)
+{
+	int nextForm = currentForm->GetLevel() + 1;
+	if (nextForm > MARIO_LEVEL_RACOON) nextForm = MARIO_LEVEL_RACOON; // max level is racoon
+
+	ChangeForm(nextForm, false);
+	e->obj->Delete();
 }
 
 void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
@@ -228,12 +242,15 @@ void CMario::SetState(int state)
 	CGameObject::SetState(state);
 }
 
-void CMario::ChangeForm(int newLevel)
+void CMario::ChangeForm(int newLevel, bool die)
 {
-	StartChangingState();
+	if (die)
+	{
+		StartChangingState();
 
-	// Pause game for a bit
-	CGame::GetInstance()->StartMarioPause();
+		// Pause game for a bit
+		CGame::GetInstance()->StartMarioPause();
+	}
 
 	switch (newLevel) {
 		case MARIO_LEVEL_SMALL:

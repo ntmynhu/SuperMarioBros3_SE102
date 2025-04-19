@@ -89,6 +89,7 @@ class CMario : public CGameObject
 	void OnCollisionWithPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithFireBall(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e);
+	void OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e);
 
 public:
 	CMario(float x, float y) : CGameObject(x, y)
@@ -113,8 +114,8 @@ public:
 	void HoldingUpdate(DWORD dt);
 	void Render();
 	void SetState(int state);
-	void ChangeForm(int newLevel);
-
+	void ChangeForm(int newLevel, bool die = true);
+	
 	int IsCollidable()
 	{
 		return (state != MARIO_STATE_DIE);
