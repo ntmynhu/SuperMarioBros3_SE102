@@ -10,20 +10,26 @@
 #define ID_ANI_RED_KOOPA_SLIDE_UD 6106
 #define ID_ANI_RED_KOOPA_RECOVER_UD 6107
 
+class CFallCensor;
 class CRedKoopa :
     public CKoopa
 {
 protected:
-	float left_lim = 0.0f;
-	float right_lim = 0.0f;
+	CFallCensor* fallCensor;
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 
 	virtual void OnNoCollision(DWORD dt);
-	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
-	virtual void OnCollisionWithGround(LPCOLLISIONEVENT e);
 
 public:
-	CRedKoopa(float x, float y) :CKoopa(x, y) {};
+	CRedKoopa(float x, float y);
+	~CRedKoopa()
+	{
+		if (fallCensor != nullptr)
+		{
+			delete fallCensor;
+			fallCensor = nullptr;
+		}
+	}
 };
 
