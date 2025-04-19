@@ -144,6 +144,12 @@
     <ClCompile Include="QuestionBlock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SuperMushroom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SuperLeaf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="WallMario.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -288,6 +294,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="QuestionBlock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SuperMushroom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SuperLeaf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WallMario.h">

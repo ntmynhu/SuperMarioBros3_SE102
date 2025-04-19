@@ -29,6 +29,8 @@
 #include "TunnelPlant.h"
 #include "Block.h"
 #include "QuestionBlock.h"
+#include "SuperMushroom.h"
+#include "SuperLeaf.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -219,9 +221,32 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			case ID_ITEM_COIN:
 			{
-				CCoin* coin = new CCoin(x, y);
+				CCoin* coin = new CCoin(x, y - COIN_APPEARING_HEIGHT);
 				obj = new CQuestionBlock(x, y, itemID, coin);
 				objects.push_back(coin);
+				break;
+			}
+			case ID_ITEM_SUPER_MUSHROOM:
+			{
+				CSuperMushroom* mushroom = new CSuperMushroom(x, y);
+				obj = new CQuestionBlock(x, y, itemID, mushroom);
+				objects.push_back(mushroom);
+				break;
+			}
+			case ID_ITEM_SUPER_LEAF:
+			{
+				CSuperLeaf* leaf = new CSuperLeaf(x, y);
+				obj = new CQuestionBlock(x, y, itemID, leaf);
+				objects.push_back(leaf);
+				break;
+			}
+			case ID_ITEM_SUPER_MUSHROOM_AND_LEAF:
+			{
+				CSuperMushroom* mushroom = new CSuperMushroom(x, y);
+				CSuperLeaf* leaf = new CSuperLeaf(x, y);
+				obj = new CQuestionBlock(x, y, itemID, mushroom, ID_ITEM_SUPER_LEAF, leaf);
+				objects.push_back(mushroom);
+				objects.push_back(leaf);
 				break;
 			}
 		}
@@ -230,6 +255,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+
+	case OBJECT_TYPE_SUPER_MUSHROOM:
+	{
+		obj = new CSuperMushroom(x, y);
+		break;
+	}
+
+	case OBJECT_TYPE_SUPER_LEAF:
+	{
+		obj = new CSuperLeaf(x, y);
+		break;
+	}
 
 	case OBJECT_TYPE_PLATFORM:
 	{

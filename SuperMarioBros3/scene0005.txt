@@ -7,6 +7,8 @@ coin.txt
 cloud.txt
 brick.txt
 block.txt
+mushroom.txt
+leaf.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -34,6 +36,12 @@ block.txt
 
 #QUESTION_BLOCK_COIN
 61	56	100	0
+61	72	100	0
+61	88	100	0
+61	280	80	0
+
+#QUESTION_BLOCK_SUPERMUSHROOM_AND_LEAF
+61	300	80	3
 
 #GOOMBA
 2	200	150
