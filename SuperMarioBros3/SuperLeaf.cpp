@@ -1,47 +1,72 @@
 #include "SuperLeaf.h"
-
+#include "debug.h"
 void CSuperLeaf::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniID = nx > 0 ? ID_ANI_SUPER_LEAF_RIGHT : ID_ANI_SUPER_LEAF_LEFT;
 	animations->Get(aniID)->Render(x, y);
+	//RenderBoundingBox();
 }
 
 void CSuperLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (isAppearing)
 	{
-		if (y > originalY - SUPER_LEAF_BOUNCING_HEIGHT)
+		if (y > init_y - SUPER_LEAF_BOUNCING_HEIGHT)
 		{
-			y -= SUPER_LEAF_APPEAR_SPEED * dt;
+			float distanceToTop = y - (init_y - SUPER_LEAF_BOUNCING_HEIGHT) + 6;
+			float ratio = distanceToTop / SUPER_LEAF_BOUNCING_HEIGHT;
 
-			if (y <= originalY - SUPER_LEAF_BOUNCING_HEIGHT)
+			vy = - SUPER_LEAF_APPEAR_SPEED * ratio;
+
+			if (y <= init_y - SUPER_LEAF_BOUNCING_HEIGHT)
 			{
-				y = originalY - SUPER_LEAF_BOUNCING_HEIGHT;
+				y = init_y - SUPER_LEAF_BOUNCING_HEIGHT;
+				vy = 0.0f;
+
+				reach_time = GetTickCount64();
+			}
+		}
+		else
+		{
+			if (GetTickCount64() - reach_time >= SUPER_LEAF_PAUSE_OFFSET)
+			{
 				isAppearing = false;
 				isFalling = true;
 
-				vx = nx * SUPER_LEAF_SPEED_X;
-				vy = SUPER_LEAF_SPEED_Y;
+				oscillation_time = 0;
+				vy = 0.0f;
 			}
 		}
 	}
-
-	if (isFalling)
+	else if (isFalling)
 	{
-		x += nx * vx * dt;
-		y += vy * dt;
+		// Oscillating horizontal motion using a sine wave
+		oscillation_time += dt;
 
-		if (x > originalX + SUPER_LEAF_FAILING_BOUNDING_RIGHT)
+		vx = SUPER_LEAF_OSCILLATION_AMPLITUDE * sin(oscillation_time * SUPER_LEAF_OSCILLATION_FREQ);
+
+		float absVx = abs(vx);
+		if (absVx < 0.01f) // Turning point threshold
 		{
-			nx = -1;
+			vy -= SUPER_LEAF_FLUTTER_LIFT * dt;
+			if (vy < 0) vy = 0;
 		}
-		else if (x < originalX)
+		else
 		{
-			nx = 1;
+			if (vy < SUPER_LEAF_MAX_FALL_SPEED)
+				vy += SUPER_LEAF_GRAVITY * dt;
 		}
+
+		// Update direction
+		nx = (vx > 0) ? 1 : -1;
 	}
+	// Position update
+	x += vx * dt;
+	y += vy * dt;
 }
+
+
 
 void CSuperLeaf::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
@@ -53,7 +78,5 @@ void CSuperLeaf::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CSuperLeaf::AppearFromQuestionBlock(float x, float y)
 {
-	originalX = x;
-	originalY = y;
 	StartAppearing();
 }

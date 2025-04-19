@@ -17,6 +17,7 @@
 
 class CSuperMushroom : public CGameObject
 {
+protected:
 	bool isAppearing = false;
 	float originalY = 0;
 	bool isMoving = false;

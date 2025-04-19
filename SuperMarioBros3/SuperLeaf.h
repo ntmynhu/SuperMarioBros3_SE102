@@ -10,21 +10,28 @@
 #define SUPER_LEAF_BBOX_WIDTH 15
 #define SUPER_LEAF_BBOX_HEIGHT 13
 
-#define SUPER_LEAF_APPEAR_SPEED 0.15f
+#define SUPER_LEAF_APPEAR_SPEED 0.3f
 
-#define SUPER_LEAF_SPEED_X 0.05f
-#define SUPER_LEAF_SPEED_Y 0.009f
+#define SUPER_LEAF_OSCILLATION_AMPLITUDE 0.07f
+#define SUPER_LEAF_OSCILLATION_FREQ 0.003f
 
-#define SUPER_LEAF_BOUNCING_HEIGHT 40
-#define SUPER_LEAF_FAILING_BOUNDING_RIGHT 30
+#define SUPER_LEAF_GRAVITY 0.0003f
+#define SUPER_LEAF_MAX_FALL_SPEED 0.08f           
+
+#define SUPER_LEAF_FLUTTER_LIFT 0.0005f       
+
+#define SUPER_LEAF_BOUNCING_HEIGHT 60
+
+#define SUPER_LEAF_PAUSE_OFFSET 100
 
 class CSuperLeaf : public CGameObject
 {
+protected:
 	bool isAppearing = false;
 	bool isFalling = false;
-	float originalY = 0;
-	float originalX = 0;
+	ULONGLONG reach_time = 0;
 	int nx = 1; // Staring direction of the leaf
+	ULONGLONG oscillation_time = 0;
 public:
 	CSuperLeaf(float x, float y) : CGameObject(x, y) {}
 
