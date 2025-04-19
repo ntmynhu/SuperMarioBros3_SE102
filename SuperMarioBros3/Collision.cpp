@@ -18,6 +18,53 @@ CCollision* CCollision::GetInstance()
 	return __instance;
 }
 
+/*  Overlap detection  */
+void CCollision::Overlap(
+	float l1, float t1, float r1, float b1,
+	float l2, float t2, float r2, float b2,
+	float x1, float x2, float y1, float y2,
+	float& t, float& nx, float& ny)
+{
+	// Default: no overlap
+	t = -1.0f;
+	nx = ny = 0.0f;
+
+	if (r1 <= l2 || l1 >= r2 || b1 <= t2 || t1 >= b2)
+		return;
+
+	// Overlapping detected
+	t = 0.0f;
+
+	// Determine horizontal direction
+	if (x1 < x2)
+		nx = -1.0f; // obj1 is on the left of obj2
+	else if (x1 > x2)
+		nx = 1.0f;  // obj1 is on the right of obj2
+
+	// Determine vertical direction
+	if (y1 < y2)
+		ny = -1.0f; // obj1 is on top of obj2
+	else if (y1 > y2)
+		ny = 1.0f;  // obj1 is below obj2
+}
+
+LPCOLLISIONEVENT CCollision::Overlap(LPGAMEOBJECT objSrc, LPGAMEOBJECT objDest)
+{
+	float sl, st, sr, sb; //source obj
+	float dl, dt, dr, db; //dest obj
+	float sx, sy;
+	float dx, dy;
+	objSrc->GetBoundingBox(sl, st, sr, sb);
+	objDest->GetBoundingBox(dl, dt, dr, db);
+	objSrc->GetPosition(sx, sy);
+	objDest->GetPosition(dx, dy);
+
+	float t, nx, ny;
+
+	Overlap(sl, st, sr, sb, dl, dt, dr, db, sx, dx, sy, dt, t, nx, ny);
+	CCollisionEvent* e = new CCollisionEvent(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, objDest, objSrc);
+	return e;
+}
 /*
 	SweptAABB 
 */
@@ -168,9 +215,20 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 {
 	for (UINT i = 0; i < objDests->size(); i++)
 	{
-		LPCOLLISIONEVENT e = SweptAABB(objSrc, dt, objDests->at(i));
+		LPCOLLISIONEVENT e;
+		if (objSrc->IsOverlappable())
+		{
 
-		if (e->WasCollided()==1)
+			e = Overlap(objSrc, objDests->at(i));
+		}
+		else if (objDests->at(i)->IsOverlappable()) {
+			e = Overlap(objDests->at(i), objSrc);
+		}
+		else {
+			e = SweptAABB(objSrc, dt, objDests->at(i));
+		}
+
+		if (e && e->WasCollided()==1)
 			coEvents.push_back(e);
 		else
 			delete e;
