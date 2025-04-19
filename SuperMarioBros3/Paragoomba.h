@@ -15,8 +15,8 @@
 
 #define PARA_GOOMBA_STATE_HASWING 300
 
-#define PARA_GOOMBA_BBOX_WIDTH 20
-#define PARA_GOOMBA_BBOX_HEIGHT 22
+#define PARA_GOOMBA_BBOX_WIDTH 16
+#define PARA_GOOMBA_BBOX_HEIGHT 17
 
 class CParagoomba : public CGoomba
 {
