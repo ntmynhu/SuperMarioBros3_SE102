@@ -242,9 +242,9 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 
 	case MARIO_STATE_IDLE:
 		if (nx > 0)
-			mario->SetAx(-MARIO_ACCEL_WALK_X);
+			mario->SetAx(MARIO_DECEL_WALK_X);
 		else
-			mario->SetAx(MARIO_ACCEL_WALK_X);
+			mario->SetAx(-MARIO_DECEL_WALK_X);
 		break;
 	}
 }

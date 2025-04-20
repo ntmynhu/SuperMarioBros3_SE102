@@ -14,15 +14,16 @@
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
 
-#define MARIO_DECEL_WALK_X	-0.0004f
+#define MARIO_DECEL_WALK_X	-0.0001f
+#define MARIO_DECEL_RUN_X	-0.0002f
 
 #define MARIO_ACCEL_WALK_X	0.0004f
 #define MARIO_ACCEL_RUN_X	0.0006f
 
-#define MARIO_JUMP_SPEED_Y		0.6f
-#define MARIO_JUMP_RUN_SPEED_Y	0.65f
+#define MARIO_JUMP_SPEED_Y		0.375f
+#define MARIO_JUMP_RUN_SPEED_Y	0.40f
 
-#define MARIO_GRAVITY			0.002f
+#define MARIO_GRAVITY			0.00095f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
@@ -94,8 +95,8 @@ class CMario : public CGameObject
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
-		currentForm = new CMarioRacoon();
-		level = MARIO_LEVEL_RACOON;
+		currentForm = new CMarioSmall();
+		level = MARIO_LEVEL_SMALL;
 
 		maxVx = 0.0f;
 		ax = 0.0f;
