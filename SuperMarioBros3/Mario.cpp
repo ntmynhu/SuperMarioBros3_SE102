@@ -255,6 +255,7 @@ void CMario::ChangeForm(int newLevel, bool die)
 			currentForm = new CMarioSmall();
 			break;
 		case MARIO_LEVEL_BIG:
+			y -= (currentForm->GetLevel() < MARIO_LEVEL_BIG) ? (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2 : 0;
 			currentForm = new CMarioBig();
 			break;
 		case MARIO_LEVEL_RACOON:
