@@ -291,6 +291,7 @@ int CMarioRacoon::GetLevel() const
 
 void CMarioRacoon::OnTakeDamage(CMario* mario)
 {
+	mario->SetAy(MARIO_GRAVITY);
 	mario->ChangeForm(MARIO_LEVEL_BIG);
 	mario->StartUntouchable();
 }
