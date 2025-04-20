@@ -28,7 +28,7 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 		else if (mario->GetState() == MARIO_STATE_TURBO_A)
 		{
 			const float SLOW_FALL_GRAVITY = MARIO_GRAVITY * 0.9f;
-			const float MAX_SLOW_FALL_SPEED = 0.15f;
+			const float MAX_SLOW_FALL_SPEED = 0.05f;
 
 			float newVy = vy + SLOW_FALL_GRAVITY * dt;
 			if (newVy > MAX_SLOW_FALL_SPEED)
@@ -167,6 +167,10 @@ int CMarioRacoon::GetAniId(CMario* mario)
 		if (nx > 0) aniId = ID_ANI_MARIO_RACOON_FLOATING_RIGHT;
 		else aniId = ID_ANI_MARIO_RACOON_FLOATING_LEFT;
 	}
+	else if (mario->GetState() == MARIO_STATE_TURBO_A && !mario->IsOnPlatform())
+	{
+		aniId = (nx > 0) ? ID_ANI_MARIO_RACOON_FLOATING_TURBO_RIGHT : ID_ANI_MARIO_RACOON_FLOATING_TURBO_LEFT;
+	}
 
 	if (aniId == -1)
 	{
@@ -225,7 +229,7 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 	case MARIO_STATE_TURBO_A:
 		if (mario->IsOnPlatform())
 		{
-			mario->SetVy(-MARIO_JUMP_SPEED_Y/1.25);
+			mario->SetVy(-MARIO_JUMP_SPEED_Y/1.5);
 		}
 		break;
 
