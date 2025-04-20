@@ -13,9 +13,6 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
-	case DIK_DOWN:
-		mario->SetState(MARIO_STATE_SIT);
-		break;
 	case DIK_S:
 		mario->SetState(MARIO_STATE_JUMP);
 		break;
@@ -67,10 +64,17 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
+	if (game->IsKeyDown(DIK_DOWN) && mario->GetState() != MARIO_STATE_SIT)
+	{
+		mario->SetState(MARIO_STATE_SIT);
+	}
+
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
 		if (game->IsKeyDown(DIK_A))
+		{
 			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+		}
 		else
 			mario->SetState(MARIO_STATE_WALKING_RIGHT);
 	}
@@ -91,5 +95,14 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	else if (game->IsKeyDown(DIK_Z))
 	{
 		mario->SetState(MARIO_STATE_TURBO_B);
+	}
+
+	if (mario->GetState() == MARIO_STATE_RUNNING_LEFT || mario->GetState() == MARIO_STATE_RUNNING_RIGHT)
+	{
+		mario->SetChargingPower(true);
+	}
+	else
+	{
+		mario->SetChargingPower(false);
 	}
 }

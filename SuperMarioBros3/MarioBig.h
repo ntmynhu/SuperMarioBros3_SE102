@@ -47,5 +47,6 @@ public:
 
 	void GetHoldOffset(float& ox, float& oy) { ox = MARIO_BIG_HOLD_OFFSET_X; oy = MARIO_BIG_HOLD_OFFSET_Y; }
 	void OnTakeDamage(CMario* mario);
+	void OnSitRelease(int state, CMario* mario);
 };
 

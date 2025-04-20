@@ -189,25 +189,21 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 	switch (state)
 	{
 	case MARIO_STATE_RUNNING_RIGHT:
-		if (isSitting) break;
 		mario->SetMaxVx(MARIO_RUNNING_SPEED);
 		mario->SetAx(MARIO_ACCEL_RUN_X);
 		mario->SetNx(1);
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
-		if (isSitting) break;
 		mario->SetMaxVx(-MARIO_RUNNING_SPEED);
 		mario->SetAx(-MARIO_ACCEL_RUN_X);
 		mario->SetNx(-1);
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
-		if (isSitting) break;
 		mario->SetMaxVx(MARIO_WALKING_SPEED);
 		mario->SetAx(MARIO_ACCEL_WALK_X);
 		mario->SetNx(1);
 		break;
 	case MARIO_STATE_WALKING_LEFT:
-		if (isSitting) break;
 		mario->SetMaxVx(-MARIO_WALKING_SPEED);
 		mario->SetAx(-MARIO_ACCEL_WALK_X);
 		mario->SetNx(-1);
