@@ -17,9 +17,11 @@ int CMarioBig::GetAniId(CMario* mario)
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_MARIO_JUMP_RUN_RIGHT;
+				if (!mario->IsFullPower()) aniId = ID_ANI_MARIO_JUMP_RUN_RIGHT;
+				else aniId = ID_ANI_MARIO_BIG_FULL_POWER_JUMP_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_JUMP_RUN_LEFT;
+				if (!mario->IsFullPower()) aniId = ID_ANI_MARIO_JUMP_RUN_LEFT;
+				else aniId = ID_ANI_MARIO_BIG_FULL_POWER_JUMP_LEFT;
 		}
 		else
 		{
@@ -47,6 +49,8 @@ int CMarioBig::GetAniId(CMario* mario)
 			{
 				if (ax < 0 && (mario->GetState() == MARIO_STATE_WALKING_LEFT || mario->GetState() == MARIO_STATE_RUNNING_LEFT))
 					aniId = ID_ANI_MARIO_BRACE_RIGHT;
+				else if (mario->IsFullPower() && mario->GetState() == MARIO_STATE_RUNNING_RIGHT)
+					aniId = ID_ANI_MARIO_BIG_FULL_POWER_RUN_RIGHT;
 				else if (ax == MARIO_ACCEL_RUN_X || ax == MARIO_DECEL_RUN_X)
 					aniId = ID_ANI_MARIO_RUNNING_RIGHT;
 				else if (ax == MARIO_ACCEL_WALK_X || ax == MARIO_DECEL_WALK_X)
@@ -56,6 +60,8 @@ int CMarioBig::GetAniId(CMario* mario)
 			{
 				if (ax > 0 && (mario->GetState() == MARIO_STATE_WALKING_RIGHT || mario->GetState() == MARIO_STATE_RUNNING_RIGHT))
 					aniId = ID_ANI_MARIO_BRACE_LEFT;
+				else if (mario->IsFullPower() && mario->GetState() == MARIO_STATE_RUNNING_LEFT)
+					aniId = ID_ANI_MARIO_BIG_FULL_POWER_RUN_LEFT;
 				else if (ax == -MARIO_ACCEL_RUN_X || ax == -MARIO_DECEL_RUN_X)
 					aniId = ID_ANI_MARIO_RUNNING_LEFT;
 				else if (ax == -MARIO_ACCEL_WALK_X || ax == -MARIO_DECEL_WALK_X)
@@ -80,13 +86,27 @@ void CMarioBig::SetState(int state, CMario* mario)
 	{
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) OnSitRelease(state, mario);
-		mario->SetMaxVx(MARIO_RUNNING_SPEED);
+		if (!mario->IsFullPower())
+		{
+			mario->SetMaxVx(MARIO_RUNNING_SPEED);
+		}
+		else
+		{
+			mario->SetMaxVx(MARIO_FULL_POWER_SPEED_X);
+		}
 		mario->SetAx(MARIO_ACCEL_RUN_X);
 		mario->SetNx(1);
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
 		if (isSitting) OnSitRelease(state, mario);
-		mario->SetMaxVx(-MARIO_RUNNING_SPEED);
+		if (!mario->IsFullPower())
+		{
+			mario->SetMaxVx(-MARIO_RUNNING_SPEED);
+		}
+		else
+		{
+			mario->SetMaxVx(-MARIO_FULL_POWER_SPEED_X);
+		}
 		mario->SetAx(-MARIO_ACCEL_RUN_X);
 		mario->SetNx(-1);
 		break;
@@ -107,6 +127,8 @@ void CMarioBig::SetState(int state, CMario* mario)
 		{
 			if (abs(vx) == MARIO_RUNNING_SPEED)
 				mario->SetVy(-MARIO_JUMP_RUN_SPEED_Y);
+			else if (abs(vx) == MARIO_FULL_POWER_SPEED_X)
+				mario->SetVy(-MARIO_FULL_POWER_SPEED_Y);
 			else
 				mario->SetVy(-MARIO_JUMP_SPEED_Y);
 		}

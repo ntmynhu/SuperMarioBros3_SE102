@@ -128,10 +128,10 @@ int CMarioSmall::GetAniId(CMario* mario)
 		{
 			if (nx >= 0)
 				if (!mario->IsFullPower()) aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT;
-				else aniId = ID_ANI_MARIO_SMALL_FULL_POWER_JUM_RIGHT;
+				else aniId = ID_ANI_MARIO_SMALL_FULL_POWER_JUMP_RIGHT;
 			else
 				if (!mario->IsFullPower()) aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT;
-				else aniId = ID_ANI_MARIO_SMALL_FULL_POWER_JUM_LEFT;
+				else aniId = ID_ANI_MARIO_SMALL_FULL_POWER_JUMP_LEFT;
 		}
 		else
 		{
