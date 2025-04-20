@@ -54,6 +54,8 @@ void CMarioSmall::SetState(int state, CMario* mario)
 		{
 			if (abs(vx) == MARIO_RUNNING_SPEED)
 				mario->SetVy(-MARIO_JUMP_RUN_SPEED_Y);
+			else if (abs(vx) == MARIO_FULL_POWER_SPEED_X)
+				mario->SetVy(-MARIO_FULL_POWER_SPEED_Y);
 			else
 				mario->SetVy(-MARIO_JUMP_SPEED_Y);
 		}
@@ -125,9 +127,11 @@ int CMarioSmall::GetAniId(CMario* mario)
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT;
+				if (!mario->IsFullPower()) aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT;
+				else aniId = ID_ANI_MARIO_SMALL_FULL_POWER_JUM_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT;
+				if (!mario->IsFullPower()) aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT;
+				else aniId = ID_ANI_MARIO_SMALL_FULL_POWER_JUM_LEFT;
 		}
 		else
 		{

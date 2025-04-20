@@ -34,7 +34,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
-  
+
 	if (GetTickCount64() - stateChange_start > MARIO_STATE_CHANGE_TIME)
 	{
 		stateChange_start = 0;
@@ -70,9 +70,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			isChargingPower = false;
 		}
 	}
-  
+
 	currentForm->Update(dt, this, coObjects);
-	
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 	HoldingUpdate(dt);
 
@@ -80,7 +80,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		DebugOutTitle(L"Full Power");
 	}
-	else if (isChargingPower)
+	else if (isChargingPower || chargingPowerTime > 0)
 	{
 		DebugOutTitle(L"Charging Power");
 	}
