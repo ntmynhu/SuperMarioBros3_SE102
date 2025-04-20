@@ -122,18 +122,18 @@ int CMarioRacoon::GetAniId(CMario* mario)
 			{
 				if (ax < 0 && (mario->GetState() == MARIO_STATE_WALKING_LEFT || mario->GetState() == MARIO_STATE_RUNNING_LEFT))
 					aniId = ID_ANI_MARIO_RACOON_BRACE_RIGHT;
-				else if (ax == MARIO_ACCEL_RUN_X)
+				else if (ax == MARIO_ACCEL_RUN_X || ax == MARIO_DECEL_RUN_X)
 					aniId = ID_ANI_MARIO_RACOON_RUNNING_RIGHT;
-				else if (ax == MARIO_ACCEL_WALK_X)
+				else if (ax == MARIO_ACCEL_WALK_X || ax == MARIO_DECEL_WALK_X)
 					aniId = ID_ANI_MARIO_RACOON_WALKING_RIGHT;
 			}
 			else // vx < 0
 			{
 				if (ax > 0 && (mario->GetState() == MARIO_STATE_WALKING_RIGHT || mario->GetState() == MARIO_STATE_RUNNING_RIGHT))
 					aniId = ID_ANI_MARIO_RACOON_BRACE_LEFT;
-				else if (ax == -MARIO_ACCEL_RUN_X)
+				else if (ax == -MARIO_ACCEL_RUN_X || ax == -MARIO_DECEL_RUN_X)
 					aniId = ID_ANI_MARIO_RACOON_RUNNING_LEFT;
-				else if (ax == -MARIO_ACCEL_WALK_X)
+				else if (ax == -MARIO_ACCEL_WALK_X || ax == -MARIO_DECEL_WALK_X)
 					aniId = ID_ANI_MARIO_RACOON_WALKING_LEFT;
 			}
 
