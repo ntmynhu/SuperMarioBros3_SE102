@@ -79,19 +79,19 @@ void CMarioBig::SetState(int state, CMario* mario)
 	switch (state)
 	{
 	case MARIO_STATE_RUNNING_RIGHT:
-		OnSitRelease(state, mario);
+		if (isSitting) OnSitRelease(state, mario);
 		mario->SetMaxVx(MARIO_RUNNING_SPEED);
 		mario->SetAx(MARIO_ACCEL_RUN_X);
 		mario->SetNx(1);
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
-		OnSitRelease(state, mario);
+		if (isSitting) OnSitRelease(state, mario);
 		mario->SetMaxVx(-MARIO_RUNNING_SPEED);
 		mario->SetAx(-MARIO_ACCEL_RUN_X);
 		mario->SetNx(-1);
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
-		OnSitRelease(state, mario);
+		if (isSitting) OnSitRelease(state, mario);
 		mario->SetMaxVx(MARIO_WALKING_SPEED);
 		mario->SetAx(MARIO_ACCEL_WALK_X);
 		mario->SetNx(1);
@@ -185,6 +185,9 @@ int CMarioBig::GetLevel() const
 
 void CMarioBig::OnTakeDamage(CMario* mario)
 {
+	if (isSitting)
+		OnSitRelease(MARIO_STATE_IDLE, mario);
+
 	mario->ChangeForm(MARIO_LEVEL_SMALL);
 	mario->StartUntouchable();
 }

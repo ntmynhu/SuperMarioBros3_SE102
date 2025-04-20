@@ -189,21 +189,25 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 	switch (state)
 	{
 	case MARIO_STATE_RUNNING_RIGHT:
+		if (isSitting) OnSitRelease(state, mario);
 		mario->SetMaxVx(MARIO_RUNNING_SPEED);
 		mario->SetAx(MARIO_ACCEL_RUN_X);
 		mario->SetNx(1);
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
+		if (isSitting) OnSitRelease(state, mario);
 		mario->SetMaxVx(-MARIO_RUNNING_SPEED);
 		mario->SetAx(-MARIO_ACCEL_RUN_X);
 		mario->SetNx(-1);
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
+		if (isSitting) OnSitRelease(state, mario);
 		mario->SetMaxVx(MARIO_WALKING_SPEED);
 		mario->SetAx(MARIO_ACCEL_WALK_X);
 		mario->SetNx(1);
 		break;
 	case MARIO_STATE_WALKING_LEFT:
+		if (isSitting) OnSitRelease(state, mario);
 		mario->SetMaxVx(-MARIO_WALKING_SPEED);
 		mario->SetAx(-MARIO_ACCEL_WALK_X);
 		mario->SetNx(-1);
@@ -242,11 +246,9 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 		break;
 
 	case MARIO_STATE_SIT:
-		if (mario->IsOnPlatform())
+		if (!isSitting && mario->IsOnPlatform())
 		{
-			state = MARIO_STATE_IDLE;
 			isSitting = true;
-			mario->SetVx(0); mario->SetVy(0.0f);
 
 			float x, y;
 			mario->GetPosition(x, y);
@@ -287,6 +289,7 @@ int CMarioRacoon::GetLevel() const
 
 void CMarioRacoon::OnTakeDamage(CMario* mario)
 {
+	if (isSitting) OnSitRelease(MARIO_STATE_IDLE ,mario);
 	mario->SetAy(MARIO_GRAVITY);
 	mario->ChangeForm(MARIO_LEVEL_BIG);
 	mario->StartUntouchable();
