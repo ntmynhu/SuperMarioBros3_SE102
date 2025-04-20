@@ -162,6 +162,12 @@ int CMarioRacoon::GetAniId(CMario* mario)
 		aniId = (nx > 0) ? ID_ANI_MARIO_RACOON_TAIL_ATTACK_RIGHT : ID_ANI_MARIO_RACOON_TAIL_ATTACK_LEFT;
 	}
 
+	if (isFloating)
+	{
+		if (nx > 0) aniId = ID_ANI_MARIO_RACOON_FLOATING_RIGHT;
+		else aniId = ID_ANI_MARIO_RACOON_FLOATING_LEFT;
+	}
+
 	if (aniId == -1)
 	{
 		if (nx > 0) aniId = ID_ANI_MARIO_RACOON_IDLE_RIGHT;
