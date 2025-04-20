@@ -17,6 +17,16 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (GetLevel() == MARIO_LEVEL_SMALL)
+	{
+		CMarioSmall* marioSmall = dynamic_cast<CMarioSmall*>(currentForm);
+		if (marioSmall->IsChangingToBig())
+		{
+			marioSmall->Update(dt, this, coObjects);
+			return;
+		}
+	}
+
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -173,6 +183,14 @@ void CMario::OnCollisionWithBlock(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e)
 {
+	if (GetLevel() == MARIO_LEVEL_SMALL)
+	{
+		CMarioSmall* marioSmall = dynamic_cast<CMarioSmall*>(currentForm);
+		marioSmall->ChangeToBig(this);
+		e->obj->Delete();
+		return;
+	}
+
 	int nextForm = currentForm->GetLevel() + 1;
 	if (nextForm > MARIO_LEVEL_RACOON) nextForm = MARIO_LEVEL_RACOON; // max level is racoon
 
@@ -299,7 +317,6 @@ void CMario::ChangeForm(int newLevel, bool die)
 			currentForm = new CMarioSmall();
 			break;
 		case MARIO_LEVEL_BIG:
-			y -= (currentForm->GetLevel() < MARIO_LEVEL_BIG) ? (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2 : 0;
 			currentForm = new CMarioBig();
 			break;
 		case MARIO_LEVEL_RACOON:
