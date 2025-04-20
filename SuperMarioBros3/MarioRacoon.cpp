@@ -91,17 +91,37 @@ int CMarioRacoon::GetAniId(CMario* mario)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
-			if (nx >= 0)
-				aniId = ID_ANI_MARIO_RACOON_JUMP_RUN_RIGHT;
+			if (vy < 0)
+			{
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_RACOON_JUMP_RUN_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_RACOON_JUMP_RUN_LEFT;
+			}
 			else
-				aniId = ID_ANI_MARIO_RACOON_JUMP_RUN_LEFT;
+			{
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_RACOON_FALL_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_RACOON_FALL_LEFT;
+			}
 		}
 		else
 		{
-			if (nx >= 0)
-				aniId = ID_ANI_MARIO_RACOON_JUMP_WALK_RIGHT;
+			if (vy < 0)
+			{
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_RACOON_JUMP_WALK_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_RACOON_JUMP_WALK_LEFT;
+			}
 			else
-				aniId = ID_ANI_MARIO_RACOON_JUMP_WALK_LEFT;
+			{
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_RACOON_FALL_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_RACOON_FALL_LEFT;
+			}
 		}
 	}
 	else
