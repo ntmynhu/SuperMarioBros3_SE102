@@ -12,7 +12,8 @@
 #include "debug.h"
 
 #define MARIO_WALKING_SPEED		0.1f
-#define MARIO_RUNNING_SPEED		0.2f
+#define MARIO_RUNNING_SPEED		0.15f
+#define MARIO_FULL_POWER_SPEED_X	0.25f
 
 #define MARIO_DECEL_WALK_X	-0.00015f
 #define MARIO_DECEL_RUN_X	-0.00015f
@@ -22,6 +23,7 @@
 
 #define MARIO_JUMP_SPEED_Y		0.375f
 #define MARIO_JUMP_RUN_SPEED_Y	0.40f
+#define MARIO_FULL_POWER_SPEED_Y	0.5f
 
 #define MARIO_GRAVITY			0.00095f
 
@@ -63,6 +65,9 @@
 #define MARIO_UNTOUCHABLE_TIME 2000
 #define MARIO_STATE_CHANGE_TIME 2000
 
+#define MARIO_CHARGING_POWER_TIME 1500
+#define MARIO_FULL_POWER_TIME 2000
+
 class CMario : public CGameObject
 {
 	CMarioForm* currentForm = nullptr;
@@ -81,6 +86,12 @@ class CMario : public CGameObject
 
 	ULONGLONG stateChange_start;
 	bool isChangingState;
+
+	float chargingPowerTime = 0.0f;
+	bool isChargingPower = false;
+
+	float fullPowerTime = MARIO_FULL_POWER_TIME;
+	bool isFullPower = false;
 
 	void OnCollisionWithEnemy(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -154,4 +165,12 @@ public:
 	void SetVy(float vy) { this->vy = vy; }
 	void SetNx(int nx) { this->nx = nx; }
 	void SetPosition(float x, float y) { this->x = x; this->y = y; }
+
+	bool IsChargingPower() { return isChargingPower; }
+	bool IsFullPower() { return isFullPower; }
+
+	void SetChargingPower(bool value)
+	{
+		isChargingPower = value;
+	}
 };

@@ -40,11 +40,55 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		stateChange_start = 0;
 		isChangingState = false;
 	}
+
+	if (isChargingPower)
+	{
+		if (!isFullPower) chargingPowerTime += dt;
+
+		if (chargingPowerTime > MARIO_CHARGING_POWER_TIME)
+		{
+			isFullPower = true;
+			fullPowerTime = MARIO_FULL_POWER_TIME;
+		}
+	}
+	else
+	{
+		isFullPower = false;
+
+		chargingPowerTime -= dt;
+		if (chargingPowerTime < 0)
+			chargingPowerTime = 0;
+	}
+
+	if (isFullPower)
+	{
+		fullPowerTime -= dt;
+
+		if (fullPowerTime < 0)
+		{
+			isFullPower = false;
+			isChargingPower = false;
+		}
+	}
   
 	currentForm->Update(dt, this, coObjects);
 	
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 	HoldingUpdate(dt);
+
+	if (isFullPower)
+	{
+		DebugOutTitle(L"Full Power");
+	}
+	else if (isChargingPower)
+	{
+		DebugOutTitle(L"Charging Power");
+	}
+	else
+	{
+		DebugOutTitle(L"Normal Power");
+	}
+
 }
 
 void CMario::OnNoCollision(DWORD dt)
