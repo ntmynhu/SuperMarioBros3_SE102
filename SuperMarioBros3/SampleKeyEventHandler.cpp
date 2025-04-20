@@ -81,7 +81,10 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 		else
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 	}
-	else if (game->IsKeyDown(DIK_X))
+	else
+		mario->SetState(MARIO_STATE_IDLE);
+
+	if (game->IsKeyDown(DIK_X))
 	{
 		mario->SetState(MARIO_STATE_TURBO_A);
 	}
@@ -89,6 +92,4 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	{
 		mario->SetState(MARIO_STATE_TURBO_B);
 	}
-	else
-		mario->SetState(MARIO_STATE_IDLE);
 }
