@@ -12,19 +12,22 @@
 #include "debug.h"
 
 #define MARIO_WALKING_SPEED		0.1f
-#define MARIO_RUNNING_SPEED		0.2f
+#define MARIO_RUNNING_SPEED		0.15f
+#define MARIO_FULL_POWER_SPEED_X	0.2f
 
-#define MARIO_DECEL_WALK_X	-0.0004f
+#define MARIO_DECEL_WALK_X	-0.00015f
+#define MARIO_DECEL_RUN_X	-0.00015f
 
 #define MARIO_ACCEL_WALK_X	0.0004f
 #define MARIO_ACCEL_RUN_X	0.0006f
 
-#define MARIO_JUMP_SPEED_Y		0.6f
-#define MARIO_JUMP_RUN_SPEED_Y	0.65f
+#define MARIO_JUMP_SPEED_Y		0.375f
+#define MARIO_JUMP_RUN_SPEED_Y	0.40f
+#define MARIO_FULL_POWER_SPEED_Y	0.45f
 
-#define MARIO_GRAVITY			0.002f
+#define MARIO_GRAVITY			0.00095f
 
-#define MARIO_JUMP_DEFLECT_SPEED  0.4f
+#define MARIO_JUMP_DEFLECT_SPEED  MARIO_JUMP_SPEED_Y / 1.5f
 
 #define MARIO_STATE_DIE				-10
 #define MARIO_STATE_IDLE			0
@@ -57,12 +60,13 @@
 #define	MARIO_LEVEL_BIG		2
 #define	MARIO_LEVEL_RACOON	3
 
-
 #define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
-
 
 #define MARIO_UNTOUCHABLE_TIME 2000
 #define MARIO_STATE_CHANGE_TIME 2000
+
+#define MARIO_CHARGING_POWER_TIME 1500
+#define MARIO_FULL_POWER_TIME 2000
 
 class CMario : public CGameObject
 {
@@ -83,6 +87,12 @@ class CMario : public CGameObject
 	ULONGLONG stateChange_start;
 	bool isChangingState;
 
+	float chargingPowerTime = 0.0f;
+	bool isChargingPower = false;
+
+	float fullPowerTime = MARIO_FULL_POWER_TIME;
+	bool isFullPower = false;
+
 	void OnCollisionWithEnemy(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
@@ -94,8 +104,8 @@ class CMario : public CGameObject
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
-		currentForm = new CMarioRacoon();
-		level = MARIO_LEVEL_RACOON;
+		currentForm = new CMarioSmall();
+		level = MARIO_LEVEL_SMALL;
 
 		maxVx = 0.0f;
 		ax = 0.0f;
@@ -155,4 +165,12 @@ public:
 	void SetVy(float vy) { this->vy = vy; }
 	void SetNx(int nx) { this->nx = nx; }
 	void SetPosition(float x, float y) { this->x = x; this->y = y; }
+
+	bool IsChargingPower() { return isChargingPower; }
+	bool IsFullPower() { return isFullPower; }
+
+	void SetChargingPower(bool value)
+	{
+		isChargingPower = value;
+	}
 };

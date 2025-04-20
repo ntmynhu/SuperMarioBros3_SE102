@@ -4,6 +4,14 @@
 void CMarioSmall::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjects)
 {
 	// No additional updates needed
+
+	if (isChangingToBig)
+	{
+		if (GetTickCount64() - changingToBig_start > MARIO_SMALL_TO_BIG_DURATION)
+		{
+			mario->ChangeForm(MARIO_LEVEL_BIG, false);
+		}
+	}
 }
 
 void CMarioSmall::SetState(int state, CMario* mario)
@@ -14,12 +22,28 @@ void CMarioSmall::SetState(int state, CMario* mario)
 	switch (state)
 	{
 	case MARIO_STATE_RUNNING_RIGHT:
-		mario->SetMaxVx(MARIO_RUNNING_SPEED);
+		if (!mario->IsFullPower())
+		{
+			mario->SetMaxVx(MARIO_RUNNING_SPEED);
+		}
+		else
+		{
+			mario->SetMaxVx(MARIO_FULL_POWER_SPEED_X);
+		}
+
 		mario->SetAx(MARIO_ACCEL_RUN_X);
 		mario->SetNx(1);
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
-		mario->SetMaxVx(-MARIO_RUNNING_SPEED);
+		if (!mario->IsFullPower())
+		{
+			mario->SetMaxVx(-MARIO_RUNNING_SPEED);
+		}
+		else
+		{
+			mario->SetMaxVx(-MARIO_FULL_POWER_SPEED_X);
+		}
+
 		mario->SetAx(-MARIO_ACCEL_RUN_X);
 		mario->SetNx(-1);
 		break;
@@ -38,6 +62,8 @@ void CMarioSmall::SetState(int state, CMario* mario)
 		{
 			if (abs(vx) == MARIO_RUNNING_SPEED)
 				mario->SetVy(-MARIO_JUMP_RUN_SPEED_Y);
+			else if (abs(vx) == MARIO_FULL_POWER_SPEED_X)
+				mario->SetVy(-MARIO_FULL_POWER_SPEED_Y);
 			else
 				mario->SetVy(-MARIO_JUMP_SPEED_Y);
 		}
@@ -67,9 +93,9 @@ void CMarioSmall::SetState(int state, CMario* mario)
 
 	case MARIO_STATE_IDLE:
 		if (nx > 0)
-			mario->SetAx(-MARIO_ACCEL_WALK_X);
+			mario->SetAx(MARIO_DECEL_WALK_X);
 		else
-			mario->SetAx(MARIO_ACCEL_WALK_X);
+			mario->SetAx(-MARIO_DECEL_WALK_X);
 		break;
 	}
 }
@@ -95,6 +121,16 @@ void CMarioSmall::OnTakeDamage(CMario* mario)
 	mario->SetState(MARIO_STATE_DIE);
 }
 
+void CMarioSmall::ChangeToBig(CMario* mario)
+{
+	float x, y;
+	mario->GetPosition(x, y);
+	y = y - (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
+	mario->SetPosition(x, y);
+	isChangingToBig = true;
+	changingToBig_start = GetTickCount64();
+}
+
 //
 // Get animation ID for small Mario
 //
@@ -104,14 +140,21 @@ int CMarioSmall::GetAniId(CMario* mario)
 	float vx, vy, ax, ay, nx;
 	mario->GetPhysics(vx, vy, ax, ay, nx);
 
+	if (isChangingToBig)
+	{
+		return (nx > 0) ? ID_ANI_FROM_SMALL_TO_BIG_RIGHT : ID_ANI_FROM_SMALL_TO_BIG_LEFT;
+	}
+
 	if (!mario->IsOnPlatform())
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT;
+				if (!mario->IsFullPower()) aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT;
+				else aniId = ID_ANI_MARIO_SMALL_FULL_POWER_JUMP_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT;
+				if (!mario->IsFullPower()) aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT;
+				else aniId = ID_ANI_MARIO_SMALL_FULL_POWER_JUMP_LEFT;
 		}
 		else
 		{
@@ -131,18 +174,22 @@ int CMarioSmall::GetAniId(CMario* mario)
 		{
 			if (ax < 0 && (mario->GetState() == MARIO_STATE_WALKING_LEFT || mario->GetState() == MARIO_STATE_RUNNING_LEFT))
 				aniId = ID_ANI_MARIO_SMALL_BRACE_RIGHT;
-			else if (ax == MARIO_ACCEL_RUN_X)
+			else if (mario->IsFullPower() && mario->GetState() == MARIO_STATE_RUNNING_RIGHT)
+				aniId = ID_ANI_SMALL_FULL_POWER_RUN_RIGHT;
+			else if (ax == MARIO_ACCEL_RUN_X || ax == MARIO_DECEL_RUN_X)
 				aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
-			else if (ax == MARIO_ACCEL_WALK_X)
+			else if (ax == MARIO_ACCEL_WALK_X || ax == MARIO_DECEL_WALK_X)
 				aniId = ID_ANI_MARIO_SMALL_WALKING_RIGHT;
 		}
 		else // vx < 0
 		{
 			if (ax > 0 && (mario->GetState() == MARIO_STATE_WALKING_RIGHT || mario->GetState() == MARIO_STATE_RUNNING_RIGHT))
 				aniId = ID_ANI_MARIO_SMALL_BRACE_LEFT;
-			else if (ax == -MARIO_ACCEL_RUN_X)
+			else if (mario->IsFullPower() && mario->GetState() == MARIO_STATE_RUNNING_LEFT)
+				aniId = ID_ANI_SMALL_FULL_POWER_RUN_LEFT;
+			else if (ax == -MARIO_ACCEL_RUN_X || ax == -MARIO_DECEL_RUN_X)
 				aniId = ID_ANI_MARIO_SMALL_RUNNING_LEFT;
-			else if (ax == -MARIO_ACCEL_WALK_X)
+			else if (ax == -MARIO_ACCEL_WALK_X || ax == -MARIO_DECEL_WALK_X)
 				aniId = ID_ANI_MARIO_SMALL_WALKING_LEFT;
 		}
 

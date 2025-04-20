@@ -17,9 +17,11 @@ int CMarioBig::GetAniId(CMario* mario)
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_MARIO_JUMP_RUN_RIGHT;
+				if (!mario->IsFullPower()) aniId = ID_ANI_MARIO_JUMP_RUN_RIGHT;
+				else aniId = ID_ANI_MARIO_BIG_FULL_POWER_JUMP_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_JUMP_RUN_LEFT;
+				if (!mario->IsFullPower()) aniId = ID_ANI_MARIO_JUMP_RUN_LEFT;
+				else aniId = ID_ANI_MARIO_BIG_FULL_POWER_JUMP_LEFT;
 		}
 		else
 		{
@@ -47,18 +49,22 @@ int CMarioBig::GetAniId(CMario* mario)
 			{
 				if (ax < 0 && (mario->GetState() == MARIO_STATE_WALKING_LEFT || mario->GetState() == MARIO_STATE_RUNNING_LEFT))
 					aniId = ID_ANI_MARIO_BRACE_RIGHT;
-				else if (ax == MARIO_ACCEL_RUN_X)
+				else if (mario->IsFullPower() && mario->GetState() == MARIO_STATE_RUNNING_RIGHT)
+					aniId = ID_ANI_MARIO_BIG_FULL_POWER_RUN_RIGHT;
+				else if (ax == MARIO_ACCEL_RUN_X || ax == MARIO_DECEL_RUN_X)
 					aniId = ID_ANI_MARIO_RUNNING_RIGHT;
-				else if (ax == MARIO_ACCEL_WALK_X)
+				else if (ax == MARIO_ACCEL_WALK_X || ax == MARIO_DECEL_WALK_X)
 					aniId = ID_ANI_MARIO_WALKING_RIGHT;
 			}
 			else // vx < 0
 			{
 				if (ax > 0 && (mario->GetState() == MARIO_STATE_WALKING_RIGHT || mario->GetState() == MARIO_STATE_RUNNING_RIGHT))
 					aniId = ID_ANI_MARIO_BRACE_LEFT;
-				else if (ax == -MARIO_ACCEL_RUN_X)
+				else if (mario->IsFullPower() && mario->GetState() == MARIO_STATE_RUNNING_LEFT)
+					aniId = ID_ANI_MARIO_BIG_FULL_POWER_RUN_LEFT;
+				else if (ax == -MARIO_ACCEL_RUN_X || ax == -MARIO_DECEL_RUN_X)
 					aniId = ID_ANI_MARIO_RUNNING_LEFT;
-				else if (ax == -MARIO_ACCEL_WALK_X)
+				else if (ax == -MARIO_ACCEL_WALK_X || ax == -MARIO_DECEL_WALK_X)
 					aniId = ID_ANI_MARIO_WALKING_LEFT;
 			}
 
@@ -79,25 +85,39 @@ void CMarioBig::SetState(int state, CMario* mario)
 	switch (state)
 	{
 	case MARIO_STATE_RUNNING_RIGHT:
-		if (isSitting) break;
-		mario->SetMaxVx(MARIO_RUNNING_SPEED);
+		if (isSitting) OnSitRelease(state, mario);
+		if (!mario->IsFullPower())
+		{
+			mario->SetMaxVx(MARIO_RUNNING_SPEED);
+		}
+		else
+		{
+			mario->SetMaxVx(MARIO_FULL_POWER_SPEED_X);
+		}
 		mario->SetAx(MARIO_ACCEL_RUN_X);
 		mario->SetNx(1);
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
-		if (isSitting) break;
-		mario->SetMaxVx(-MARIO_RUNNING_SPEED);
+		if (isSitting) OnSitRelease(state, mario);
+		if (!mario->IsFullPower())
+		{
+			mario->SetMaxVx(-MARIO_RUNNING_SPEED);
+		}
+		else
+		{
+			mario->SetMaxVx(-MARIO_FULL_POWER_SPEED_X);
+		}
 		mario->SetAx(-MARIO_ACCEL_RUN_X);
 		mario->SetNx(-1);
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
-		if (isSitting) break;
+		if (isSitting) OnSitRelease(state, mario);
 		mario->SetMaxVx(MARIO_WALKING_SPEED);
 		mario->SetAx(MARIO_ACCEL_WALK_X);
 		mario->SetNx(1);
 		break;
 	case MARIO_STATE_WALKING_LEFT:
-		if (isSitting) break;
+		OnSitRelease(state, mario);
 		mario->SetMaxVx(-MARIO_WALKING_SPEED);
 		mario->SetAx(-MARIO_ACCEL_WALK_X);
 		mario->SetNx(-1);
@@ -107,6 +127,8 @@ void CMarioBig::SetState(int state, CMario* mario)
 		{
 			if (abs(vx) == MARIO_RUNNING_SPEED)
 				mario->SetVy(-MARIO_JUMP_RUN_SPEED_Y);
+			else if (abs(vx) == MARIO_FULL_POWER_SPEED_X)
+				mario->SetVy(-MARIO_FULL_POWER_SPEED_Y);
 			else
 				mario->SetVy(-MARIO_JUMP_SPEED_Y);
 		}
@@ -134,11 +156,9 @@ void CMarioBig::SetState(int state, CMario* mario)
 		break;
 
 	case MARIO_STATE_SIT:
-		if (mario->IsOnPlatform())
+		if (!isSitting && mario->IsOnPlatform())
 		{
-			state = MARIO_STATE_IDLE;
 			isSitting = true;
-			mario->SetVx(0); mario->SetVy(0.0f);
 
 			float x, y;
 			mario->GetPosition(x, y);
@@ -147,22 +167,14 @@ void CMarioBig::SetState(int state, CMario* mario)
 		break;
 
 	case MARIO_STATE_SIT_RELEASE:
-		if (isSitting)
-		{
-			isSitting = false;
-			state = MARIO_STATE_IDLE;
-
-			float x, y;
-			mario->GetPosition(x, y);
-			mario->SetPosition(x, y - MARIO_SIT_HEIGHT_ADJUST);
-		}
+		OnSitRelease(state, mario);
 		break;
 
 	case MARIO_STATE_IDLE:
 		if (nx > 0)
-			mario->SetAx(-MARIO_ACCEL_WALK_X);
+			mario->SetAx(MARIO_DECEL_WALK_X);
 		else
-			mario->SetAx(MARIO_ACCEL_WALK_X);
+			mario->SetAx(-MARIO_DECEL_WALK_X);
 		break;
 	}
 }
@@ -195,6 +207,22 @@ int CMarioBig::GetLevel() const
 
 void CMarioBig::OnTakeDamage(CMario* mario)
 {
+	if (isSitting)
+		OnSitRelease(MARIO_STATE_IDLE, mario);
+
 	mario->ChangeForm(MARIO_LEVEL_SMALL);
 	mario->StartUntouchable();
+}
+
+void CMarioBig::OnSitRelease(int state, CMario* mario)
+{
+	if (isSitting)
+	{
+		isSitting = false;
+		state = MARIO_STATE_IDLE;
+
+		float x, y;
+		mario->GetPosition(x, y);
+		mario->SetPosition(x, y - MARIO_SIT_HEIGHT_ADJUST);
+	}
 }

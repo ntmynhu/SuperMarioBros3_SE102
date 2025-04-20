@@ -17,6 +17,16 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (GetLevel() == MARIO_LEVEL_SMALL)
+	{
+		CMarioSmall* marioSmall = dynamic_cast<CMarioSmall*>(currentForm);
+		if (marioSmall->IsChangingToBig())
+		{
+			marioSmall->Update(dt, this, coObjects);
+			return;
+		}
+	}
+
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -34,17 +44,61 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
-  
+
 	if (GetTickCount64() - stateChange_start > MARIO_STATE_CHANGE_TIME)
 	{
 		stateChange_start = 0;
 		isChangingState = false;
 	}
-  
+
+	if (isChargingPower)
+	{
+		if (!isFullPower) chargingPowerTime += dt;
+
+		if (chargingPowerTime > MARIO_CHARGING_POWER_TIME)
+		{
+			isFullPower = true;
+			fullPowerTime = MARIO_FULL_POWER_TIME;
+		}
+	}
+	else
+	{
+		isFullPower = false;
+
+		chargingPowerTime -= dt;
+		if (chargingPowerTime < 0)
+			chargingPowerTime = 0;
+	}
+
+	if (isFullPower)
+	{
+		fullPowerTime -= dt;
+
+		if (fullPowerTime < 0)
+		{
+			isFullPower = false;
+			isChargingPower = false;
+		}
+	}
+
 	currentForm->Update(dt, this, coObjects);
-	
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 	HoldingUpdate(dt);
+
+	if (isFullPower)
+	{
+		DebugOutTitle(L"Full Power");
+	}
+	else if (isChargingPower || chargingPowerTime > 0)
+	{
+		DebugOutTitle(L"Charging Power");
+	}
+	else
+	{
+		DebugOutTitle(L"Normal Power");
+	}
+
 }
 
 void CMario::OnNoCollision(DWORD dt)
@@ -129,6 +183,14 @@ void CMario::OnCollisionWithBlock(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e)
 {
+	if (GetLevel() == MARIO_LEVEL_SMALL)
+	{
+		CMarioSmall* marioSmall = dynamic_cast<CMarioSmall*>(currentForm);
+		marioSmall->ChangeToBig(this);
+		e->obj->Delete();
+		return;
+	}
+
 	int nextForm = currentForm->GetLevel() + 1;
 	if (nextForm > MARIO_LEVEL_RACOON) nextForm = MARIO_LEVEL_RACOON; // max level is racoon
 

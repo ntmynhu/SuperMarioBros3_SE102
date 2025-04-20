@@ -23,6 +23,11 @@
 #define ID_ANI_MARIO_BRACE_RIGHT 1000
 #define ID_ANI_MARIO_BRACE_LEFT 1001
 
+#define ID_ANI_MARIO_BIG_FULL_POWER_JUMP_RIGHT 850
+#define ID_ANI_MARIO_BIG_FULL_POWER_JUMP_LEFT 851
+
+#define ID_ANI_MARIO_BIG_FULL_POWER_RUN_RIGHT 820
+#define ID_ANI_MARIO_BIG_FULL_POWER_RUN_LEFT 821
 
 #define MARIO_BIG_BBOX_WIDTH  14
 #define MARIO_BIG_BBOX_HEIGHT 24
@@ -47,5 +52,6 @@ public:
 
 	void GetHoldOffset(float& ox, float& oy) { ox = MARIO_BIG_HOLD_OFFSET_X; oy = MARIO_BIG_HOLD_OFFSET_Y; }
 	void OnTakeDamage(CMario* mario);
+	void OnSitRelease(int state, CMario* mario);
 };
 
