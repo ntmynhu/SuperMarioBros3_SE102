@@ -15,6 +15,8 @@
 #include "Portal.h"
 #include "SuperLeaf.h"
 
+#include "GameData.h"
+
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	
@@ -160,6 +162,11 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;
+	float out_x, out_y;
+	p->GetOutPos(out_x, out_y);
+	if (out_x >= 0 && out_y >= 0) {
+		SetPosition(out_x, out_y);
+	}
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
 }
 
@@ -194,7 +201,7 @@ void CMario::OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e)
 	int nextForm = currentForm->GetLevel() + 1;
 	if (nextForm > MARIO_LEVEL_RACOON) return; // max level is racoon, update point logic will come later
 
-	ChangeForm(nextForm, false);
+	ChangeForm(nextForm, 1);
 }
 
 void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
@@ -291,14 +298,18 @@ void CMario::SetState(int state)
 	CGameObject::SetState(state);
 }
 
-void CMario::ChangeForm(int newLevel, bool isDown)
+void CMario::ChangeForm(int newLevel, int isChanging) //-1 as down, 1 as up, 0 as no need to count
 {
-	if (isDown)
+	if (isChanging == -1) {
 		StartChangingStateDown();
-	else
+		CGame::GetInstance()->StartMarioPause();
+	}
+	else if (isChanging == 1) {
 		StartChangingStateUp();
+		CGame::GetInstance()->StartMarioPause();
+	}
 
-	CGame::GetInstance()->StartMarioPause();
+	
 	switch (newLevel) {
 		case MARIO_LEVEL_SMALL:
 			y += (currentForm->GetLevel() > MARIO_LEVEL_SMALL) ? (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2 : 0;
@@ -313,6 +324,7 @@ void CMario::ChangeForm(int newLevel, bool isDown)
 			break;
 	}
 
+	CGameData::GetInstance()->SetLevel(newLevel);
 	DebugOut(L"[INFO] Mario changed to level %d\n", newLevel);
 	DebugOut(L"[INFO] CurrentForm %d\n", currentForm->GetLevel());
 }

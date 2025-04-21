@@ -160,6 +160,7 @@
     <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="FullPlatform.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameData.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="Koopa.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="FireBall.h" />
     <ClInclude Include="FullPlatform.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameData.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="KeyEventHandler.h" />

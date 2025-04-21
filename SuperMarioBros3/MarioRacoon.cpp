@@ -345,6 +345,6 @@ void CMarioRacoon::OnTakeDamage(CMario* mario)
 {
 	if (isSitting) OnSitRelease(MARIO_STATE_IDLE ,mario);
 	mario->SetAy(MARIO_GRAVITY);
-	mario->ChangeForm(MARIO_LEVEL_BIG);
+	mario->ChangeForm(MARIO_LEVEL_BIG, -1);
 	mario->StartUntouchable();
 }

@@ -23,13 +23,13 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		mario->SetState(MARIO_STATE_TURBO_A);
 		break;
 	case DIK_1:
-		mario->ChangeForm(MARIO_LEVEL_SMALL, false);
+		mario->ChangeForm(MARIO_LEVEL_SMALL);
 		break;
 	case DIK_2:
-		mario->ChangeForm(MARIO_LEVEL_BIG, false);
+		mario->ChangeForm(MARIO_LEVEL_BIG);
 		break;
 	case DIK_3:
-		mario->ChangeForm(MARIO_LEVEL_RACOON, false);
+		mario->ChangeForm(MARIO_LEVEL_RACOON);
 		break;
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);

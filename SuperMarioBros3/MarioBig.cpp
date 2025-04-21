@@ -216,7 +216,7 @@ void CMarioBig::OnTakeDamage(CMario* mario)
 	if (isSitting)
 		OnSitRelease(MARIO_STATE_IDLE, mario);
 
-	mario->ChangeForm(MARIO_LEVEL_SMALL);
+	mario->ChangeForm(MARIO_LEVEL_SMALL, -1);
 	mario->StartUntouchable();
 }
 

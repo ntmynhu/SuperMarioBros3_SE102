@@ -128,7 +128,7 @@ public:
 	void HoldingUpdate(DWORD dt);
 	void Render();
 	void SetState(int state);
-	void ChangeForm(int newLevel, bool isDown = true);
+	void ChangeForm(int newLevel, int isChanging = 0);
 	
 	int IsCollidable()
 	{
