@@ -39,6 +39,6 @@ public:
 	void StartBouncing() { isBouncing = true; vy = -1;}
 	void SpawnItem();
 
-	void TriggerAction() { if (!isEmpty) StartBouncing(); }
+	void TriggerAction() { if (!isEmpty && !isBouncing) StartBouncing(); }
 };
 
