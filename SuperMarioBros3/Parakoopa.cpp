@@ -54,6 +54,9 @@ void CParakoopa::Render()
 		if (vx > 0) {
 			aniId = ID_ANI_KOOPA_WALKING_RIGHT;
 		}
+		else {
+			aniId = ID_ANI_KOOPA_WALKING;
+		}
 		break;
 	case (ENEMY_STATE_DIE):
 		aniId = ID_ANI_KOOPA_DEFEND_UD;
