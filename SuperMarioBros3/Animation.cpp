@@ -1,4 +1,5 @@
 #include "Animation.h"
+#include "Game.h"
 #include "debug.h"
 
 void CAnimation::Add(int spriteId, DWORD time)
@@ -14,7 +15,7 @@ void CAnimation::Add(int spriteId, DWORD time)
 	frames.push_back(frame);
 }
 
-void CAnimation::Render(float x, float y, float a)
+void CAnimation::Render(float x, float y, float a, bool isMario)
 {
 	ULONGLONG now = GetTickCount64();
 	if (currentFrame == -1)
@@ -24,12 +25,14 @@ void CAnimation::Render(float x, float y, float a)
 	}
 	else
 	{
-		DWORD t = frames[currentFrame]->GetTime();
-		if (now - lastFrameTime > t)
-		{
-			currentFrame++;
-			lastFrameTime = now;
-			if (currentFrame == frames.size()) currentFrame = 0;
+		if (!CGame::GetInstance()->IsMarioStateChangedPause() || isMario) {
+			DWORD t = frames[currentFrame]->GetTime();
+			if (now - lastFrameTime > t)
+			{
+				currentFrame++;
+				lastFrameTime = now;
+				if (currentFrame == frames.size()) currentFrame = 0;
+			}
 		}
 
 	}
