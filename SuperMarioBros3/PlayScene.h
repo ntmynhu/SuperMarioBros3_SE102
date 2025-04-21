@@ -30,12 +30,14 @@ protected:
 	void LoadAssets(LPCWSTR assetFile);
 	
 public: 
-	CPlayScene(int id, LPCWSTR filePath);
+	CPlayScene(int id, LPCWSTR filePath, int sceneGroup);
 
 	virtual void Load();
+	virtual void SoftLoad(); //Load scene but keep the old object list - only load asset
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
+	virtual void SoftUnload(); //Unload scene but keep the old object list
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 

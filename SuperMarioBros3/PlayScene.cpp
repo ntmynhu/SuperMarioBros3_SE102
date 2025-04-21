@@ -2,6 +2,7 @@
 #include <fstream>
 #include "AssetIDs.h"
 
+#include "GameData.h"
 #include "PlayScene.h"
 #include "Utils.h"
 #include "Textures.h"
@@ -36,8 +37,8 @@
 
 using namespace std;
 
-CPlayScene::CPlayScene(int id, LPCWSTR filePath):
-	CScene(id, filePath)
+CPlayScene::CPlayScene(int id, LPCWSTR filePath, int sceneGroup):
+	CScene(id, filePath, sceneGroup)
 {
 	player = NULL;
 	limit_obj = NULL;
@@ -180,6 +181,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		obj = new CMario(x,y); 
 		player = (CMario*)obj;  
+
+		int level;
+		CGameData::GetInstance()->GetLevel(level);
+		((CMario*)player)->ChangeForm(level);
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
@@ -444,7 +449,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float r = (float)atof(tokens[3].c_str());
 		float b = (float)atof(tokens[4].c_str());
 		int scene_id = atoi(tokens[5].c_str());
-		obj = new CPortal(x, y, r, b, scene_id);
+		float out_x = -1;
+		float out_y = -1;
+		if (tokens.size() > 6) {
+			out_x = (float)atof(tokens[6].c_str());
+			out_y = (float)atof(tokens[7].c_str());
+		}
+		obj = new CPortal(x, y, r, b, scene_id, out_x, out_y);
 	}
 	break;
 
@@ -494,6 +505,50 @@ void CPlayScene::LoadAssets(LPCWSTR assetFile)
 	f.close();
 
 	DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
+}
+
+void CPlayScene::SoftLoad()
+{
+	DebugOut(L"[INFO] Start soft loading scene from : %s \n", sceneFilePath);
+
+	if (objects.empty())
+	{
+		Load();
+		return;
+	}
+	ifstream f;
+	f.open(sceneFilePath);
+
+	// current resource section flag
+	int section = SCENE_SECTION_UNKNOWN;
+
+	char str[MAX_SCENE_LINE];
+	while (f.getline(str, MAX_SCENE_LINE))
+	{
+		string line(str);
+
+		if (line[0] == '#') continue;	// skip comment lines	
+		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
+		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
+
+		//
+		// data section
+		//
+		switch (section)
+		{
+		case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
+		}
+	}
+
+	f.close();
+
+	if (player) {
+		int level;
+		CGameData::GetInstance()->GetLevel(level);
+		((CMario*)player)->ChangeForm(level);
+	}
+
+	DebugOut(L"[INFO] Done soft loading scene  %s\n", sceneFilePath);
 }
 
 void CPlayScene::Load()
@@ -645,6 +700,11 @@ void CPlayScene::Unload()
 	limit_obj = NULL;
 
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
+}
+
+void CPlayScene::SoftUnload()
+{
+	DebugOut(L"[INFO] Scene soft %d unloaded! \n", id);
 }
 
 bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }

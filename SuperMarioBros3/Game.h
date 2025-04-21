@@ -55,6 +55,7 @@ class CGame
 	ID3D10SamplerState* pPointSamplerState;
 
 	unordered_map<int, LPSCENE> scenes;
+	
 	int current_scene;
 	int next_scene = -1;
 

@@ -455,9 +455,10 @@ void CGame::_ParseSection_SCENES(string line)
 
 	if (tokens.size() < 2) return;
 	int id = atoi(tokens[0].c_str());
+	int sceneGroup = tokens.size() > 2 ? atoi(tokens[2].c_str()) : -1;
 	LPCWSTR path = ToLPCWSTR(tokens[1]);   // file: ASCII format (single-byte char) => Wide Char
 
-	LPSCENE scene = new CPlayScene(id, path);
+	LPSCENE scene = new CPlayScene(id, path, sceneGroup);
 	scenes[id] = scene;
 }
 
@@ -511,18 +512,40 @@ void CGame::Load(LPCWSTR gameFile)
 void CGame::SwitchScene()
 {
 	if (next_scene < 0 || next_scene == current_scene) return; 
-
 	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
 
-	scenes[current_scene]->Unload();
+	int currentGroup = scenes[current_scene]->GetSceneGroup();
+	//if current and next scene belong to a scene group e.g. in the same world
+	if (scenes[next_scene]->GetSceneGroup() == currentGroup && currentGroup > 0) {
+		scenes[current_scene]->SoftUnload();
+		CSprites::GetInstance()->Clear();
+		CAnimations::GetInstance()->Clear();
+		current_scene = next_scene;
+		LPSCENE s = scenes[next_scene];
+		this->SetKeyHandler(s->GetKeyEventHandler());
+		s->SoftLoad();
+	}
 
-	CSprites::GetInstance()->Clear();
-	CAnimations::GetInstance()->Clear();
+	else {
+		// if the scene belong to a scene group, but the next scene doesn't belong to this group
+		if (currentGroup > 0) {
+			for (auto& pair : scenes)
+			{
+				if (pair.second->GetSceneGroup() == currentGroup)
+				{
+					pair.second->Unload();  // Unload all scenes in the same hierachy
+				}
+			}
+		}
+		
+		CSprites::GetInstance()->Clear();
+		CAnimations::GetInstance()->Clear();
 
-	current_scene = next_scene;
-	LPSCENE s = scenes[next_scene];
-	this->SetKeyHandler(s->GetKeyEventHandler());
-	s->Load();
+		current_scene = next_scene;
+		LPSCENE s = scenes[next_scene];
+		this->SetKeyHandler(s->GetKeyEventHandler());
+		s->Load();
+	}
 }
 
 void CGame::InitiateSwitchScene(int scene_id)

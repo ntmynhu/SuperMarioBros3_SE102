@@ -11,20 +11,25 @@ protected:
 	LPKEYEVENTHANDLER key_handler;
 	int id;
 	LPCWSTR sceneFilePath;
+	int sceneGroup;
 
 public: 
-	CScene(int id, LPCWSTR filePath)
+	CScene(int id, LPCWSTR filePath, int sceneGroup = -1)
 	{
 		this->id = id;
 		this->sceneFilePath = filePath;
 		this->key_handler = NULL;
+		this->sceneGroup = sceneGroup;
 	}
 
 	LPKEYEVENTHANDLER GetKeyEventHandler() { return key_handler; }
 	virtual void Load() = 0;
 	virtual void Unload() = 0;
+	virtual void SoftUnload() = 0;
+	virtual void SoftLoad() = 0;
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0; 
+	virtual int GetSceneGroup() { return sceneGroup; }
 };
 typedef CScene * LPSCENE;
 
