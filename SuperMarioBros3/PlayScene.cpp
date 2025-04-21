@@ -539,10 +539,6 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: Set a max camY
 	CGame* game = CGame::GetInstance();
 
-	if (GetTickCount64() - game->GetMarioPauseStart() < MARIO_STATE_CHANGE_PAUSE_TIME)
-	{
-		return;
-	}
 
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
@@ -551,6 +547,12 @@ void CPlayScene::Update(DWORD dt)
 			coObjects.push_back(objects[i]);
 	}
 
+	if (player == NULL) return;
+	if (game->IsMarioStateChangedPause())
+	{
+		player->Update(dt, &coObjects);
+		return;
+	}
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (game->IsInCam(objects[i]) && objects[i] -> IsActive()) {
