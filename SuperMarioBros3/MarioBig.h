@@ -37,6 +37,11 @@
 #define MARIO_BIG_HOLD_OFFSET_X 12
 #define MARIO_BIG_HOLD_OFFSET_Y 1
 
+#define ID_ANI_FROM_SMALL_TO_BIG_LEFT 1901
+#define ID_ANI_FROM_SMALL_TO_BIG_RIGHT 1900
+
+#define MARIO_SMALL_TO_BIG_DURATION 1000
+
 class CMario;
 
 class CMarioBig : public CMarioForm
@@ -49,7 +54,7 @@ public:
 	void SetState(int state, CMario* mario);
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom, CMario* mario);
 	int GetLevel() const;
-
+	int GetUpStateChangeTime() { return MARIO_SMALL_TO_BIG_DURATION; }
 	void GetHoldOffset(float& ox, float& oy) { ox = MARIO_BIG_HOLD_OFFSET_X; oy = MARIO_BIG_HOLD_OFFSET_Y; }
 	void OnTakeDamage(CMario* mario);
 	void OnSitRelease(int state, CMario* mario);

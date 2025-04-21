@@ -7,6 +7,8 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 
 	// Slow falling mechanic when holding jump button
 	float vx, vy, ax, ay, nx;
+	float m_x, m_y;
+	mario->GetPosition(m_x, m_y);
 	mario->GetPhysics(vx, vy, ax, ay, nx);
 
 	if (vy > 0)
@@ -61,7 +63,7 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 
 	if ((mario->GetState() == MARIO_STATE_B || mario->GetState() == MARIO_STATE_TURBO_B) && !isTailAttacking)
 	{
-		StartTailAttacking();
+		StartTailAttacking(nx);
 	}
 
 	if (GetTickCount64() - floatingStartTime > 200 && isFloating)
@@ -71,12 +73,20 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 		mario->SetAy(MARIO_GRAVITY);
 	}
 
-	if (GetTickCount64() - tailAttackingStartTime > TAIL_FLOATING_DURATION && isTailAttacking)
+	if (GetTickCount64() - tailAttackingStartTime > TAIL_FLOATING_DURATION/2 && isTailAttacking)
 	{
-		tailAttackingStartTime = 0;
-		isTailAttacking = false;
+		isTailAttacking = -nx;
+		if (GetTickCount64() - tailAttackingStartTime > TAIL_FLOATING_DURATION) {
+			tailAttackingStartTime = 0;
+			isTailAttacking = 0;
+		}
+		
 	}
 
+	if (isTailAttacking != 0) {
+		mario->GetTail()->SetPosition(m_x + isTailAttacking * 8, m_y + 4);
+		mario->GetTail()->Update(dt, coObjects);
+	}
 
 	//DebugOutTitle(L"Vy: %d, IsFloating: %d, State %d", vy > 0, isFloating, mario->GetState());
 }
@@ -87,6 +97,11 @@ int CMarioRacoon::GetAniId(CMario* mario)
 	mario->GetPhysics(vx, vy, ax, ay, nx);
 
 	int aniId = -1;
+
+	if (mario->GetChangingState() == 1)
+	{
+		return ID_ANI_FROM_BIG_TO_RACOON;
+	}
 	if (!mario->IsOnPlatform())
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
@@ -299,7 +314,26 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 
 void CMarioRacoon::GetBoundingBox(float& left, float& top, float& right, float& bottom, CMario* mario)
 {
-	CMarioBig::GetBoundingBox(left, top, right, bottom, mario);
+	float x, y;
+	mario->GetPosition(x, y);
+
+	float vx, vy, ax, ay, nx;
+	mario->GetPhysics(vx, vy, ax, ay, nx);
+
+	if (isSitting)
+	{
+		left = x - MARIO_BIG_SITTING_BBOX_WIDTH / 2 + nx * 4;
+		top = y - MARIO_BIG_SITTING_BBOX_HEIGHT / 2;
+		right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
+		bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
+	}
+	else
+	{
+		left = x - MARIO_BIG_BBOX_WIDTH / 2 + nx * 4;
+		top = y - MARIO_BIG_BBOX_HEIGHT / 2;
+		right = left + MARIO_BIG_BBOX_WIDTH;
+		bottom = top + MARIO_BIG_BBOX_HEIGHT;
+	}	
 }
 
 int CMarioRacoon::GetLevel() const

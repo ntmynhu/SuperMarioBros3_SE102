@@ -37,8 +37,12 @@
 #define ID_ANI_MARIO_RACOON_FULL_POWER_RUN_RIGHT 2910
 #define ID_ANI_MARIO_RACOON_FULL_POWER_RUN_LEFT 2911
 
+#define ID_ANI_FROM_BIG_TO_RACOON 1902
+
 #define FLY_DURATION 3000
 #define TAIL_FLOATING_DURATION 300
+
+#define MARIO_BIG_TO_RACOON_DURATION 300
 
 class CMarioRacoon : public CMarioBig
 {
@@ -50,7 +54,9 @@ private:
     bool isFloating = false;
 
 	ULONGLONG tailAttackingStartTime = -1;
-    bool isTailAttacking = false;
+    int isTailAttacking = 0;
+
+   
 
 public:
     void Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjects);
@@ -60,13 +66,15 @@ public:
     int GetLevel() const;
     void OnTakeDamage(CMario* mario);
 
-    void StartFlying() { isFlying = true; flyStartTime = GetTickCount(); }
+    int GetUpStateChangeTime() { return MARIO_BIG_TO_RACOON_DURATION; }
+
+    void StartFlying() { isFlying = true; flyStartTime = GetTickCount64(); }
     void StopFlying() { isFlying = false; }
     void TailAttack() { isTailAttacking = true; }
     bool IsFlying() const { return isFlying; }
-    bool IsTailAttacking() const { return isTailAttacking; }
+    int IsTailAttacking() const { return isTailAttacking; }
 
     void StartFloating() { isFloating = true; floatingStartTime = GetTickCount64(); }
-    void StartTailAttacking() { isTailAttacking = true; tailAttackingStartTime = GetTickCount64(); }
+    void StartTailAttacking(int nx) { isTailAttacking = nx; tailAttackingStartTime = GetTickCount64(); }
 };
 

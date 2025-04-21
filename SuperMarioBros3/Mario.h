@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Enemy.h"
-
+#include "Tail.h"
 #include "Animation.h"
 #include "Animations.h"
 
@@ -48,6 +48,9 @@
 #define MARIO_STATE_TURBO_A		800
 #define MARIO_STATE_TURBO_B		900
 
+#define MARIO_STATE_CHANGING_UP 1000
+#define MARIO_STATE_CHANGING_DOWN 1001
+
 #pragma region ANIMATION_ID
 
 #define ID_ANI_MARIO_DIE 999
@@ -63,7 +66,6 @@
 #define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
 
 #define MARIO_UNTOUCHABLE_TIME 2000
-#define MARIO_STATE_CHANGE_TIME 2000
 
 #define MARIO_CHARGING_POWER_TIME 1500
 #define MARIO_FULL_POWER_TIME 2000
@@ -82,10 +84,11 @@ class CMario : public CGameObject
 	BOOLEAN isOnPlatform;
 	bool isReadyToHold;
 	CEnemy* holdingObj;
+	CTail* tail;
 	int coin;
 
 	ULONGLONG stateChange_start;
-	bool isChangingState;
+	int isChangingState; // -1 as down, 1 as up
 
 	float chargingPowerTime = 0.0f;
 	bool isChargingPower = false;
@@ -105,6 +108,7 @@ public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		currentForm = new CMarioSmall();
+		tail = new CTail(x, y);
 		level = MARIO_LEVEL_SMALL;
 
 		maxVx = 0.0f;
@@ -114,7 +118,7 @@ public:
 		untouchable = 0;
 		untouchable_start = -1;
 
-		isChangingState = false;
+		isChangingState = 0;
 		stateChange_start = -1;
 
 		isOnPlatform = false;
@@ -124,7 +128,7 @@ public:
 	void HoldingUpdate(DWORD dt);
 	void Render();
 	void SetState(int state);
-	void ChangeForm(int newLevel, bool die = true);
+	void ChangeForm(int newLevel, bool isDown = true);
 	
 	int IsCollidable()
 	{
@@ -140,7 +144,10 @@ public:
 	void SetLevel(int l);
 	void SetHoldingObject(CEnemy* obj) { this->holdingObj = obj; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
-	void StartChangingState() { isChangingState = true; stateChange_start = GetTickCount64(); }
+	void StartChangingStateDown() { isChangingState = -1; stateChange_start = GetTickCount64(); }
+	void StartChangingStateUp() { isChangingState = 1; stateChange_start = GetTickCount64(); }
+
+	int GetChangingState() { return isChangingState; }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
@@ -156,6 +163,7 @@ public:
 		oy = res_oy;
 	}
 
+	CTail* GetTail() { return tail; }
 	void TakeDamage() { currentForm->OnTakeDamage(this); }
 	void SetMaxVx(float maxVx) { this->maxVx = maxVx; }
 	void SetOnPlatform(bool isOnPlatform) { this->isOnPlatform = isOnPlatform; }

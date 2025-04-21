@@ -4,14 +4,6 @@
 void CMarioSmall::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjects)
 {
 	// No additional updates needed
-
-	if (isChangingToBig)
-	{
-		if (GetTickCount64() - changingToBig_start > MARIO_SMALL_TO_BIG_DURATION)
-		{
-			mario->ChangeForm(MARIO_LEVEL_BIG, false);
-		}
-	}
 }
 
 void CMarioSmall::SetState(int state, CMario* mario)
@@ -121,16 +113,6 @@ void CMarioSmall::OnTakeDamage(CMario* mario)
 	mario->SetState(MARIO_STATE_DIE);
 }
 
-void CMarioSmall::ChangeToBig(CMario* mario)
-{
-	float x, y;
-	mario->GetPosition(x, y);
-	y = y - (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
-	mario->SetPosition(x, y);
-	isChangingToBig = true;
-	changingToBig_start = GetTickCount64();
-}
-
 //
 // Get animation ID for small Mario
 //
@@ -139,11 +121,6 @@ int CMarioSmall::GetAniId(CMario* mario)
 	int aniId = -1;
 	float vx, vy, ax, ay, nx;
 	mario->GetPhysics(vx, vy, ax, ay, nx);
-
-	if (isChangingToBig)
-	{
-		return (nx > 0) ? ID_ANI_FROM_SMALL_TO_BIG_RIGHT : ID_ANI_FROM_SMALL_TO_BIG_LEFT;
-	}
 
 	if (!mario->IsOnPlatform())
 	{

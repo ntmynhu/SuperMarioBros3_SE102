@@ -12,6 +12,12 @@ int CMarioBig::GetAniId(CMario* mario)
 	mario->GetPhysics(vx, vy, ax, ay, nx);
 
 	int aniId = -1;
+
+	if (mario->GetChangingState() == 1)
+	{
+		return (nx > 0) ? ID_ANI_FROM_SMALL_TO_BIG_RIGHT : ID_ANI_FROM_SMALL_TO_BIG_LEFT;
+	}
+
 	if (!mario->IsOnPlatform())
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)

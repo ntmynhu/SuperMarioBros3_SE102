@@ -17,13 +17,36 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (GetLevel() == MARIO_LEVEL_SMALL)
+	
+	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
-		CMarioSmall* marioSmall = dynamic_cast<CMarioSmall*>(currentForm);
-		if (marioSmall->IsChangingToBig())
+		untouchable_start = 0;
+		untouchable = 0;
+	}
+
+	if (isChangingState == 1) {
+		if (GetTickCount64() - stateChange_start > currentForm->GetUpStateChangeTime())
 		{
-			marioSmall->Update(dt, this, coObjects);
+			stateChange_start = 0;
+			isChangingState = 0;
+			CGame::GetInstance()->StopMarioPause();
+		}
+		else {
 			return;
+		}
+	}
+	else if (isChangingState == -1) {
+		if (GetTickCount64() - stateChange_start > currentForm->GetDownStateChangeTime() / 2)
+		{
+			CGame::GetInstance()->StopMarioPause();
+		}
+		else {
+			return;
+		}
+		if (GetTickCount64() - stateChange_start > currentForm->GetDownStateChangeTime())
+		{
+			stateChange_start = 0;
+			isChangingState = 0;
 		}
 	}
 
@@ -39,17 +62,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//DebugOutTitle(L"Vx: %d", vx);
 
 	// reset untouchable timer if untouchable time has passed
-	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
-	{
-		untouchable_start = 0;
-		untouchable = 0;
-	}
+	
 
-	if (GetTickCount64() - stateChange_start > MARIO_STATE_CHANGE_TIME)
-	{
-		stateChange_start = 0;
-		isChangingState = false;
-	}
 
 	if (isChargingPower)
 	{
@@ -81,23 +95,28 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
+	tail->SetPosition(x + nx * 8, y + 4);
+
 	currentForm->Update(dt, this, coObjects);
+	
+
+	
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 	HoldingUpdate(dt);
 
-	if (isFullPower)
-	{
-		DebugOutTitle(L"Full Power");
-	}
-	else if (isChargingPower || chargingPowerTime > 0)
-	{
-		DebugOutTitle(L"Charging Power");
-	}
-	else
-	{
-		DebugOutTitle(L"Normal Power");
-	}
+	//if (isFullPower)
+	//{
+	//	DebugOutTitle(L"Full Power");
+	//}
+	//else if (isChargingPower || chargingPowerTime > 0)
+	//{
+	//	DebugOutTitle(L"Charging Power");
+	//}
+	//else
+	//{
+	//	DebugOutTitle(L"Normal Power");
+	//}
 
 }
 
@@ -147,18 +166,6 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithPlant(LPCOLLISIONEVENT e)
 {
 	CPlant* plant = dynamic_cast<CPlant*>(e->obj);
-
-	bool isTailAttack = false;
-	CMarioRacoon* racoon = dynamic_cast<CMarioRacoon*>(currentForm);
-	if (racoon)
-	{
-		if (racoon->IsTailAttacking())
-		{
-			plant->TakeTailAttackDamage(e->nx);
-			return;
-		}
-	}
-
 	if(plant->isDamagable() && untouchable == 0)
 		TakeDamage();
 }
@@ -183,19 +190,11 @@ void CMario::OnCollisionWithBlock(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e)
 {
-	if (GetLevel() == MARIO_LEVEL_SMALL)
-	{
-		CMarioSmall* marioSmall = dynamic_cast<CMarioSmall*>(currentForm);
-		marioSmall->ChangeToBig(this);
-		e->obj->Delete();
-		return;
-	}
-
+	e->obj->Delete();
 	int nextForm = currentForm->GetLevel() + 1;
-	if (nextForm > MARIO_LEVEL_RACOON) nextForm = MARIO_LEVEL_RACOON; // max level is racoon
+	if (nextForm > MARIO_LEVEL_RACOON) return; // max level is racoon, update point logic will come later
 
 	ChangeForm(nextForm, false);
-	e->obj->Delete();
 }
 
 void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
@@ -208,16 +207,6 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 	}
 	else // hit by Goomba
 	{
-		CMarioRacoon* racoon = dynamic_cast<CMarioRacoon*>(currentForm);
-		if (racoon)
-		{
-			if (racoon->IsTailAttacking())
-			{
-				enemy->TakeTailAttackDamage(e->nx);
-				return;
-			}
-		}
-
 		if (untouchable == 0)
 		{
 			if (enemy->IsDamagable())
@@ -260,14 +249,15 @@ void CMario::Render()
 	else
 		aniId = currentForm->GetAniId(this);
 
-	if (!isChangingState)
-		animations->Get(aniId)->Render(x, y);
+	if (isChangingState != -1)
+		animations->Get(aniId)->Render(x, y, 1, true);
 	else
 	{
 		float a = (GetTickCount64() - stateChange_start) % 5 == 0? 1 : 0;
-		animations->Get(aniId)->Render(x, y, a);
+		animations->Get(aniId)->Render(x, y, a, true);
 	}
 
+	tail->Render();
 	//RenderBoundingBox();
 
 	//DebugOutTitle(L"Coins: %d", coin);
@@ -301,22 +291,21 @@ void CMario::SetState(int state)
 	CGameObject::SetState(state);
 }
 
-void CMario::ChangeForm(int newLevel, bool die)
+void CMario::ChangeForm(int newLevel, bool isDown)
 {
-	if (die)
-	{
-		StartChangingState();
+	if (isDown)
+		StartChangingStateDown();
+	else
+		StartChangingStateUp();
 
-		// Pause game for a bit
-		CGame::GetInstance()->StartMarioPause();
-	}
-
+	CGame::GetInstance()->StartMarioPause();
 	switch (newLevel) {
 		case MARIO_LEVEL_SMALL:
 			y += (currentForm->GetLevel() > MARIO_LEVEL_SMALL) ? (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2 : 0;
 			currentForm = new CMarioSmall();
 			break;
 		case MARIO_LEVEL_BIG:
+			y -= (currentForm->GetLevel() < MARIO_LEVEL_BIG) ? (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2 : 0;
 			currentForm = new CMarioBig();
 			break;
 		case MARIO_LEVEL_RACOON:

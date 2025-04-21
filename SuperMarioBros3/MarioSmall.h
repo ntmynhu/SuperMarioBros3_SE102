@@ -27,8 +27,6 @@
 #define ID_ANI_SMALL_FULL_POWER_RUN_LEFT 1701
 #define ID_ANI_SMALL_FULL_POWER_RUN_RIGHT 1700
 
-#define ID_ANI_FROM_SMALL_TO_BIG_LEFT 1901
-#define ID_ANI_FROM_SMALL_TO_BIG_RIGHT 1900
 
 #pragma endregion
 
@@ -45,24 +43,17 @@
 #define MARIO_SMALL_HOLD_OFFSET_X 10
 #define MARIO_SMALL_HOLD_OFFSET_Y 3
 
-#define MARIO_SMALL_TO_BIG_DURATION 1200
-
 class CMario;
 
 class CMarioSmall : public CMarioForm
 {
-	bool isChangingToBig = false;
-	ULONGLONG changingToBig_start = 0;
-
 public:
 	void Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjects);
 	int GetAniId(CMario* mario);
 	void SetState(int state, CMario* mario);
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom, CMario* mario);
 	int GetLevel() const;
-
+	int GetUpStateChangeTime() { return 0; }
 	void GetHoldOffset(float& ox, float& oy) { ox = MARIO_SMALL_HOLD_OFFSET_X; oy = MARIO_SMALL_HOLD_OFFSET_Y; }
 	void OnTakeDamage(CMario* mario);
-	void ChangeToBig(CMario* mario);
-	bool IsChangingToBig() const { return isChangingToBig; }
 };

@@ -119,9 +119,9 @@ public:
 	void InitiateSwitchScene(int scene_id);
 
 	void _ParseSection_TEXTURES(string line);
-	void StartMarioPause();
+	void StartMarioPause() { marioPause = true; };
+	void StopMarioPause() { marioPause = false; };
 	bool IsMarioStateChangedPause() { return marioPause; }
-	ULONGLONG GetMarioPauseStart() { return marioPause_start; }
 
 	~CGame();
 };
