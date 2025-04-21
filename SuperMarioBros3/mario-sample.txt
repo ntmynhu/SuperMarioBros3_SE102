@@ -1,5 +1,5 @@
 [SETTINGS]
-start	5
+start	3
 width	320
 height	240
 
@@ -7,10 +7,10 @@ height	240
 # type: 0: intro, 1: play scene 
 [SCENES]
 0	intro.txt
-1	scene01.txt
-5	scene0005.txt
-3	world1_1.txt
-
+1	scene01.txt	1
+5	scene0005.txt	1
+3	world1_1.txt	2
+4	world1_1_hidden.txt	2
 # id	file 
 [TEXTURES]
 -100	textures\bbox.png
