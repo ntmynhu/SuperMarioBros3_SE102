@@ -1,4 +1,5 @@
 #include "SuperMushroom.h"
+#include "Mario.h"
 #include "debug.h"
 
 void CSuperMushroom::Render()
@@ -11,13 +12,13 @@ void CSuperMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (isAppearing)
 	{
-		if (y > originalY - SUPER_MUSHROOM_BBOX_HEIGHT * 1.1f)
+		if (y > init_y - SUPER_MUSHROOM_BBOX_HEIGHT * 1.1f)
 		{
 			y -= SUPER_MUSHROOM_APPEAR_SPEED * dt;
 
-			if (y <= originalY - SUPER_MUSHROOM_BBOX_HEIGHT * 1.1f)
+			if (y <= init_y - SUPER_MUSHROOM_BBOX_HEIGHT * 1.1f)
 			{
-				y = originalY - SUPER_MUSHROOM_BBOX_HEIGHT * 1.1f;
+				y = init_y - SUPER_MUSHROOM_BBOX_HEIGHT * 1.1f;
 				isAppearing = false;
 				isMoving = true;
 
@@ -45,6 +46,7 @@ void CSuperMushroom::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CSuperMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CMario*>(e->obj)) return;
 	if (e->ny != 0)
 	{
 		vy = 0;
