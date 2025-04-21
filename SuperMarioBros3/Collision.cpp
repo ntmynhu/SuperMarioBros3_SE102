@@ -62,7 +62,7 @@ LPCOLLISIONEVENT CCollision::Overlap(LPGAMEOBJECT objSrc, LPGAMEOBJECT objDest)
 	float t, nx, ny;
 
 	Overlap(sl, st, sr, sb, dl, dt, dr, db, sx, dx, sy, dt, t, nx, ny);
-	CCollisionEvent* e = new CCollisionEvent(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, objDest, objSrc);
+	CCollisionEvent* e = new CCollisionEvent(t, nx, ny, 0.0f, 0.0f, objDest, objSrc);
 	return e;
 }
 /*
