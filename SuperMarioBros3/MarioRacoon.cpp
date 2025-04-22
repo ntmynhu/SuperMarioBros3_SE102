@@ -11,11 +11,21 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 	mario->GetPosition(m_x, m_y);
 	mario->GetPhysics(vx, vy, ax, ay, nx);
 
-	if (vy > 0)
+	// Handle flying
+	if (!mario->IsOnPlatform() && isFlying)
 	{
 		if (mario->GetState() == MARIO_STATE_JUMP)
 		{
-			//mario->SetVy(-MARIO_JUMP_SPEED_Y/3);
+			// Handle flying
+			mario->SetVy(-MARIO_FLYING_SPEED);
+			mario->SetAy(MARIO_GRAVITY);
+		}
+	}
+	else if (vy > 0) // Handle Tail Floating
+	{
+		if (mario->GetState() == MARIO_STATE_JUMP)
+		{
+			// Slow fall mechanic
 			const float SLOW_FALL_GRAVITY = MARIO_GRAVITY * 0.001f;
 			const float MAX_SLOW_FALL_SPEED = 0.05f;
 
@@ -80,7 +90,16 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 			tailAttackingStartTime = 0;
 			isTailAttacking = 0;
 		}
-		
+	}
+
+	if (GetTickCount64() - flyStartTime > FLY_DURATION)
+	{
+		isFlying = false;
+		mario->SetAy(MARIO_GRAVITY);
+	}
+	else
+	{
+		mario->SetVx(MARIO_FLYING_SPEED_X * nx);
 	}
 
 	if (isTailAttacking != 0) {
@@ -251,7 +270,10 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 			if (abs(vx) == MARIO_RUNNING_SPEED)
 				mario->SetVy(-MARIO_JUMP_RUN_SPEED_Y);
 			else if (abs(vx) == MARIO_FULL_POWER_SPEED_X)
-				mario->SetVy(-MARIO_FULL_POWER_SPEED_Y);
+			{
+				mario->SetVy(-MARIO_JUMP_RUN_SPEED_Y);
+				StartFlying();
+			}
 			else
 				mario->SetVy(-MARIO_JUMP_SPEED_Y);
 		}
@@ -273,7 +295,7 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:
-		if (vy < 0 && !isFloating)
+		if (vy < 0 && !isFloating && !isFlying)
 		{
 			float newVy = vy + MARIO_JUMP_SPEED_Y / 3;
 			mario->SetVy(newVy);
