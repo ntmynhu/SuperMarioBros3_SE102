@@ -67,7 +67,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 
 
-	if (isChargingPower)
+	if (isChargingPower && IsFullSpeed())
 	{
 		if (!isFullPower) chargingPowerTime += dt;
 
@@ -121,6 +121,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//}
 
 }
+
+
 
 void CMario::OnNoCollision(DWORD dt)
 {
@@ -332,6 +334,12 @@ void CMario::ChangeForm(int newLevel, int isChanging) //-1 as down, 1 as up, 0 a
 void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	currentForm->GetBoundingBox(left, top, right, bottom, this);
+}
+
+// Check if Mario is in full speed -> to decrease the power bar when mario change his direction
+bool CMario::IsFullSpeed()
+{
+	return abs(vx) >= MARIO_RUNNING_SPEED;
 }
 
 void CMario::SetLevel(int l)

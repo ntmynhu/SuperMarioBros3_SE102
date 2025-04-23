@@ -11,11 +11,27 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 	mario->GetPosition(m_x, m_y);
 	mario->GetPhysics(vx, vy, ax, ay, nx);
 
-	if (vy > 0)
+	// Handle flying
+	if (!mario->IsOnPlatform() && isFlying)
 	{
 		if (mario->GetState() == MARIO_STATE_JUMP)
 		{
-			//mario->SetVy(-MARIO_JUMP_SPEED_Y/3);
+			// Handle flying
+			mario->SetVy(-MARIO_FLYING_SPEED);
+			mario->SetAy(MARIO_GRAVITY);
+		}
+		else if (mario->GetState() == MARIO_STATE_TURBO_A)
+		{
+			// Handle flying
+			mario->SetVy(-MARIO_FLYING_SPEED / 2);
+			mario->SetAy(MARIO_GRAVITY);
+		}
+	}
+	else if (vy > 0) // Handle Tail Floating
+	{
+		if (mario->GetState() == MARIO_STATE_JUMP)
+		{
+			// Slow fall mechanic
 			const float SLOW_FALL_GRAVITY = MARIO_GRAVITY * 0.001f;
 			const float MAX_SLOW_FALL_SPEED = 0.05f;
 
@@ -80,7 +96,16 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 			tailAttackingStartTime = 0;
 			isTailAttacking = 0;
 		}
-		
+	}
+
+	if (GetTickCount64() - flyStartTime > FLY_DURATION)
+	{
+		isFlying = false;
+		mario->SetAy(MARIO_GRAVITY);
+	}
+	else
+	{
+		if (!mario->IsOnPlatform()) mario->SetVx(MARIO_FLYING_SPEED_X * nx);
 	}
 
 	if (isTailAttacking != 0) {
@@ -102,6 +127,7 @@ int CMarioRacoon::GetAniId(CMario* mario)
 	{
 		return ID_ANI_FROM_BIG_TO_RACOON;
 	}
+
 	if (!mario->IsOnPlatform())
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
@@ -109,16 +135,16 @@ int CMarioRacoon::GetAniId(CMario* mario)
 			if (vy < 0)
 			{
 				if (nx >= 0)
-					aniId = ID_ANI_MARIO_RACOON_JUMP_RUN_RIGHT;
+					aniId = (mario->IsFullPower()) ? ID_ANI_RACOON_FLY_TAIL_DOWN_RIGHT : ID_ANI_MARIO_RACOON_JUMP_RUN_RIGHT;
 				else
-					aniId = ID_ANI_MARIO_RACOON_JUMP_RUN_LEFT;
+					aniId = (mario->IsFullPower()) ? ID_ANI_RACOON_FLY_TAIL_DOWN_LEFT : ID_ANI_MARIO_RACOON_JUMP_RUN_LEFT;
 			}
 			else
 			{
 				if (nx >= 0)
-					aniId = ID_ANI_MARIO_RACOON_FALL_RIGHT;
+					aniId = isFlying? ID_ANI_RACOON_FLY_TAIL_UP_RIGHT : ID_ANI_MARIO_RACOON_FALL_RIGHT;
 				else
-					aniId = ID_ANI_MARIO_RACOON_FALL_LEFT;
+					aniId = isFlying ? ID_ANI_RACOON_FLY_TAIL_UP_LEFT : ID_ANI_MARIO_RACOON_FALL_LEFT;
 			}
 		}
 		else
@@ -126,16 +152,16 @@ int CMarioRacoon::GetAniId(CMario* mario)
 			if (vy < 0)
 			{
 				if (nx >= 0)
-					aniId = ID_ANI_MARIO_RACOON_JUMP_WALK_RIGHT;
+					aniId = isFlying ? ID_ANI_RACOON_FLY_RIGHT : ID_ANI_MARIO_RACOON_JUMP_WALK_RIGHT;
 				else
-					aniId = ID_ANI_MARIO_RACOON_JUMP_WALK_LEFT;
+					aniId = isFlying ? ID_ANI_RACOON_FLY_LEFT : ID_ANI_MARIO_RACOON_JUMP_WALK_LEFT;
 			}
 			else
 			{
 				if (nx >= 0)
-					aniId = ID_ANI_MARIO_RACOON_FALL_RIGHT;
+					aniId = isFlying ? ID_ANI_RACOON_FLY_TAIL_UP_RIGHT : ID_ANI_MARIO_RACOON_FALL_RIGHT;
 				else
-					aniId = ID_ANI_MARIO_RACOON_FALL_LEFT;
+					aniId = isFlying ? ID_ANI_RACOON_FLY_TAIL_UP_LEFT : ID_ANI_MARIO_RACOON_FALL_LEFT;
 			}
 		}
 	}
@@ -188,7 +214,10 @@ int CMarioRacoon::GetAniId(CMario* mario)
 	}
 	else if (mario->GetState() == MARIO_STATE_TURBO_A && !mario->IsOnPlatform())
 	{
-		aniId = (nx > 0) ? ID_ANI_MARIO_RACOON_FLOATING_TURBO_RIGHT : ID_ANI_MARIO_RACOON_FLOATING_TURBO_LEFT;
+		if (!isFlying) 
+			aniId = (nx > 0) ? ID_ANI_MARIO_RACOON_FLOATING_TURBO_RIGHT : ID_ANI_MARIO_RACOON_FLOATING_TURBO_LEFT;
+		else
+			aniId = (nx > 0) ? ID_ANI_RACOON_FLY_TURBO_RIGHT : ID_ANI_RACOON_FLY_TURBO_LEFT;
 	}
 
 	if (aniId == -1)
@@ -251,7 +280,10 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 			if (abs(vx) == MARIO_RUNNING_SPEED)
 				mario->SetVy(-MARIO_JUMP_RUN_SPEED_Y);
 			else if (abs(vx) == MARIO_FULL_POWER_SPEED_X)
-				mario->SetVy(-MARIO_FULL_POWER_SPEED_Y);
+			{
+				mario->SetVy(-MARIO_JUMP_RUN_SPEED_Y);
+				StartFlying();
+			}
 			else
 				mario->SetVy(-MARIO_JUMP_SPEED_Y);
 		}
@@ -265,6 +297,12 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 		if (mario->IsOnPlatform())
 		{
 			mario->SetVy(-MARIO_JUMP_SPEED_Y/1.5);
+
+			if (abs(vx) == MARIO_FULL_POWER_SPEED_X)
+			{
+				mario->SetVy(-MARIO_JUMP_RUN_SPEED_Y);
+				StartFlying();
+			}
 		}
 		break;
 
@@ -273,7 +311,7 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:
-		if (vy < 0 && !isFloating)
+		if (vy < 0 && !isFloating && !isFlying)
 		{
 			float newVy = vy + MARIO_JUMP_SPEED_Y / 3;
 			mario->SetVy(newVy);
