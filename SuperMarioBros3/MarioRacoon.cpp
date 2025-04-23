@@ -135,9 +135,9 @@ int CMarioRacoon::GetAniId(CMario* mario)
 			if (vy < 0)
 			{
 				if (nx >= 0)
-					aniId = (mario->IsFullPower()) ? ID_ANI_RACOON_FLY_TAIL_DOWN_RIGHT : ID_ANI_MARIO_RACOON_JUMP_RUN_RIGHT;
+					aniId = (mario->IsFullPower() || isFlying) ? ID_ANI_RACOON_FLY_TAIL_DOWN_RIGHT : ID_ANI_MARIO_RACOON_JUMP_RUN_RIGHT;
 				else
-					aniId = (mario->IsFullPower()) ? ID_ANI_RACOON_FLY_TAIL_DOWN_LEFT : ID_ANI_MARIO_RACOON_JUMP_RUN_LEFT;
+					aniId = (mario->IsFullPower() || isFlying) ? ID_ANI_RACOON_FLY_TAIL_DOWN_LEFT : ID_ANI_MARIO_RACOON_JUMP_RUN_LEFT;
 			}
 			else
 			{
