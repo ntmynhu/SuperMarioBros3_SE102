@@ -105,7 +105,7 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 	}
 	else
 	{
-		mario->SetVx(MARIO_FLYING_SPEED_X * nx);
+		if (!mario->IsOnPlatform()) mario->SetVx(MARIO_FLYING_SPEED_X * nx);
 	}
 
 	if (isTailAttacking != 0) {
