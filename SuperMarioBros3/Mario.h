@@ -181,4 +181,6 @@ public:
 	{
 		isChargingPower = value;
 	}
+
+	bool IsFullSpeed();
 };
