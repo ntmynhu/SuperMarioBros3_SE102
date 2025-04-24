@@ -16,5 +16,6 @@ public:
 	{
 		this->plant = plant;
 	}
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {}
 };
 

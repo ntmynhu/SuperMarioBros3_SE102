@@ -396,10 +396,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int sprite_middle = atoi(tokens[7].c_str());
 		int sprite_end = atoi(tokens[8].c_str());
 
+		int isEnterable = 0, direction = 1;
+		if (tokens.size() == 11) {
+			isEnterable = atoi(tokens[9].c_str());
+			direction = atoi(tokens[10].c_str());
+		}
 		obj = new CTunnel(
 			x, y,
 			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end
+			sprite_begin, sprite_middle, sprite_end,
+			isEnterable, direction
 		);
 
 		break;
@@ -634,10 +640,16 @@ void CPlayScene::Update(DWORD dt)
 	float mx, my;
 	player->GetPosition(mx, my);
 	
+	if (!game->IsInCam(player)) {
+		if (my <= -CAM_MARGIN) {
+			my = -CAM_MARGIN;
+			player->SetPosition(mx, my);
+		}
+	}
 	// DebugOutTitle(L"Mario x %f y %f", mx, my);
 
 	mx -= game->GetBackBufferWidth() / 2;
-	my -= game->GetBackBufferHeight() / 4;
+	my -= game->GetBackBufferHeight() / 6;
 
 	if (limit_obj != NULL) {
 		float lim_x, lim_y;
@@ -659,6 +671,7 @@ void CPlayScene::Update(DWORD dt)
 	cy = my;
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
+	
 	
 	
 	PurgeDeletedObjects();

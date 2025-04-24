@@ -14,12 +14,20 @@
 #include "Collision.h"
 #include "Portal.h"
 #include "SuperLeaf.h"
+#include "Tunnel.h"
 
 #include "GameData.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	
+	DebugOutTitle(L"MARIO STATE %d", state);
+	if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) {
+		
+		y += vy * dt;
+		CCollision::GetInstance()->Process(this, dt, coObjects);
+		
+		return;
+	}
 	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
@@ -61,8 +69,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (nx == -1 && ax > 0 && vx > 0) vx = 0;
 
-	//DebugOutTitle(L"Vx: %d", vx);
-
 	// reset untouchable timer if untouchable time has passed
 	
 
@@ -100,9 +106,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	tail->SetPosition(x + nx * 8, y + 4);
 
 	currentForm->Update(dt, this, coObjects);
-	
-
-	
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 	HoldingUpdate(dt);
@@ -126,6 +129,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CMario::OnNoCollision(DWORD dt)
 {
+	if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) return;
+
 	x += vx * dt;
 	y += vy * dt;
 	isOnPlatform = false;
@@ -133,6 +138,14 @@ void CMario::OnNoCollision(DWORD dt)
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) {
+		if (dynamic_cast<CPortal*>(e->obj))
+			OnCollisionWithPortal(e);
+		else if (dynamic_cast<CTunnel*>(e->obj))
+			OnCollisionWithTunnel(e);
+		return;
+	}
+
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
@@ -159,8 +172,32 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithMushroomAndLeaf(e);
 	else if (dynamic_cast<CSuperLeaf*>(e->obj))
 		OnCollisionWithMushroomAndLeaf(e);
+	else if (dynamic_cast<CTunnel*>(e->obj))
+		OnCollisionWithTunnel(e);
 }
 
+void CMario::OnCollisionWithTunnel(LPCOLLISIONEVENT e) {
+	CTunnel* tunnel = dynamic_cast<CTunnel*>(e->obj);
+	if (tunnel->IsEnterable()) {
+		if (state == MARIO_STATE_SIT && tunnel->GetDirection() == 1 && e->ny < 0) {
+			SetState(MARIO_STATE_DOWN_TUNNEL);
+			DebugOut(L"MARIO ENTERING HIDDEN MAP");
+			InputLock();
+		}
+		else if (tunnel->GetDirection() == -1 && e->ny > 0) {
+			SetState(MARIO_STATE_UP_TUNNEL);
+			InputLock();
+		}
+		return;
+	}
+	else {
+		if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) {
+			SetState(MARIO_STATE_IDLE);
+			return;
+		}
+	}
+	
+}
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;
@@ -276,7 +313,10 @@ void CMario::Render()
 void CMario::SetState(int state)
 {
 	// DIE is the end state, cannot be changed! 
+	if (isInputLock) return;
 	if (this->state == MARIO_STATE_DIE) return;
+	
+	CGameObject::SetState(state);
 
 	if (state == MARIO_STATE_DIE)
 	{
@@ -292,12 +332,18 @@ void CMario::SetState(int state)
 	else if (state == MARIO_STATE_B_RELEASE) {
 		isReadyToHold = false;
 	}
-
-	int old_nx = nx;
+	else if (state == MARIO_STATE_DOWN_TUNNEL) {
+		vy = MARIO_TUNNEL_SPEED_Y;
+		vx = 0;
+		ax = 0;
+	}
+	else if (state == MARIO_STATE_UP_TUNNEL) {
+		vy = -MARIO_TUNNEL_SPEED_Y;
+		vx = 0;
+		ax = 0;
+	}
 
 	currentForm->SetState(state, this);
-
-	CGameObject::SetState(state);
 }
 
 void CMario::ChangeForm(int newLevel, int isChanging) //-1 as down, 1 as up, 0 as no need to count

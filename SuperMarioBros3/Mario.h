@@ -25,6 +25,8 @@
 #define MARIO_JUMP_RUN_SPEED_Y	0.40f
 #define MARIO_FULL_POWER_SPEED_Y	0.45f
 
+#define MARIO_TUNNEL_SPEED_Y	0.05f
+
 #define MARIO_GRAVITY			0.00095f
 
 #define MARIO_JUMP_DEFLECT_SPEED  MARIO_JUMP_SPEED_Y / 1.5f
@@ -51,6 +53,9 @@
 #define MARIO_STATE_CHANGING_UP 1000
 #define MARIO_STATE_CHANGING_DOWN 1001
 
+#define MARIO_STATE_DOWN_TUNNEL 1002
+#define MARIO_STATE_UP_TUNNEL 1003
+
 #pragma region ANIMATION_ID
 
 #define ID_ANI_MARIO_DIE 999
@@ -67,7 +72,7 @@
 
 #define MARIO_UNTOUCHABLE_TIME 2000
 
-#define MARIO_CHARGING_POWER_TIME 1500
+#define MARIO_CHARGING_POWER_TIME 600
 #define MARIO_FULL_POWER_TIME 2000
 
 class CMario : public CGameObject
@@ -96,12 +101,15 @@ class CMario : public CGameObject
 	float fullPowerTime = MARIO_FULL_POWER_TIME;
 	bool isFullPower = false;
 
+	bool isInputLock = false;
+
 	void OnCollisionWithEnemy(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithFireBall(LPCOLLISIONEVENT e);
 	void OnCollisionWithBlock(LPCOLLISIONEVENT e);
+	void OnCollisionWithTunnel(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e);
 
 public:
@@ -130,6 +138,8 @@ public:
 	void SetState(int state);
 	void ChangeForm(int newLevel, int isChanging = 0);
 	
+	void Deactivate() {}
+
 	int IsCollidable()
 	{
 		return (state != MARIO_STATE_DIE);
@@ -173,6 +183,9 @@ public:
 	void SetVy(float vy) { this->vy = vy; }
 	void SetNx(int nx) { this->nx = nx; }
 	void SetPosition(float x, float y) { this->x = x; this->y = y; }
+
+	void InputLock() { isInputLock = true; };
+	void InputUnlock() { isInputLock = false; };
 
 	bool IsChargingPower() { return isChargingPower; }
 	bool IsFullPower() { return isFullPower; }
