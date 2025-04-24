@@ -156,7 +156,7 @@ int CMarioRacoon::GetAniId(CMario* mario)
 				if (nx > 0)
 					aniId = ID_ANI_MARIO_RACOON_SIT_RIGHT;
 				else
-					aniId = ID_ANI_MARIO_RACOON_SIT_RIGHT;
+					aniId = ID_ANI_MARIO_RACOON_SIT_LEFT;
 			}
 			else if (vy < 0)
 			{
@@ -219,13 +219,19 @@ int CMarioRacoon::GetAniId(CMario* mario)
 
 	if (isFloating)
 	{
-		if (nx > 0) aniId = ID_ANI_MARIO_RACOON_FLOATING_RIGHT;
-		else aniId = ID_ANI_MARIO_RACOON_FLOATING_LEFT;
+		if (isSitting)
+			aniId = (nx > 0) ? ID_ANI_MARIO_RACOON_SIT_RIGHT : ID_ANI_MARIO_RACOON_SIT_LEFT;
+		else
+			if (nx > 0) aniId = ID_ANI_MARIO_RACOON_FLOATING_RIGHT;
+			else aniId = ID_ANI_MARIO_RACOON_FLOATING_LEFT;
 	}
 	else if (mario->GetState() == MARIO_STATE_TURBO_A && !mario->IsOnPlatform())
 	{
 		if (!isFlying) 
-			aniId = (nx > 0) ? ID_ANI_MARIO_RACOON_FLOATING_TURBO_RIGHT : ID_ANI_MARIO_RACOON_FLOATING_TURBO_LEFT;
+			if (isSitting)
+				aniId = (nx > 0) ? ID_ANI_MARIO_RACOON_SIT_RIGHT : ID_ANI_MARIO_RACOON_SIT_LEFT;
+			else
+				aniId = (nx > 0) ? ID_ANI_MARIO_RACOON_FLOATING_TURBO_RIGHT : ID_ANI_MARIO_RACOON_FLOATING_TURBO_LEFT;
 		else
 			aniId = (nx > 0) ? ID_ANI_RACOON_FLY_TURBO_RIGHT : ID_ANI_RACOON_FLY_TURBO_LEFT;
 	}
