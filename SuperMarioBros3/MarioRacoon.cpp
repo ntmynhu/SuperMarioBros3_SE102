@@ -77,7 +77,7 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 		isFloating = false;
 	}
 
-	if ((mario->GetState() == MARIO_STATE_B || mario->GetState() == MARIO_STATE_TURBO_B) && !isTailAttacking)
+	if ((mario->GetState() == MARIO_STATE_B || mario->GetState() == MARIO_STATE_TURBO_B) && !isTailAttacking && !isSitting)
 	{
 		StartTailAttacking(nx);
 	}
@@ -154,9 +154,9 @@ int CMarioRacoon::GetAniId(CMario* mario)
 			if (isSitting && !isFlying)
 			{
 				if (nx > 0)
-					aniId = ID_ANI_MARIO_SIT_RIGHT;
+					aniId = ID_ANI_MARIO_RACOON_SIT_RIGHT;
 				else
-					aniId = ID_ANI_MARIO_SIT_LEFT;
+					aniId = ID_ANI_MARIO_RACOON_SIT_RIGHT;
 			}
 			else if (vy < 0)
 			{
