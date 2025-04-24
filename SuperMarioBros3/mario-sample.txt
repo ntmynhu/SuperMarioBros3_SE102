@@ -21,3 +21,4 @@ height	240
 30	textures\tiles.png
 40	textures\world1_1_tiles.png
 50	textures\full_texture.png
+60	textures\HUD.png

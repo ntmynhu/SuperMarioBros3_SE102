@@ -33,6 +33,7 @@
 #include "SuperMushroom.h"
 #include "SuperLeaf.h"
 
+#include "HUD.h"
 #include "SampleKeyEventHandler.h"
 
 using namespace std;
@@ -590,7 +591,8 @@ void CPlayScene::Load()
 	}
 
 	f.close();
-
+	
+	
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
 
@@ -600,6 +602,7 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: Set a max camY
 	CGame* game = CGame::GetInstance();
 
+	HUD::GetInstance()->SetPosition(game->GetBackBufferWidth()/2, game->GetBackBufferHeight());
 
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
@@ -682,6 +685,8 @@ void CPlayScene::Render()
 	for (int i = 0; i < objects.size(); i++)
 		if (objects[i] -> IsActive())
 			objects[i]->Render();
+
+	HUD::GetInstance()->Render();
 }
 
 /*

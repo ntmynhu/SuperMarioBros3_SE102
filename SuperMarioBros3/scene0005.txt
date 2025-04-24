@@ -9,6 +9,7 @@ brick.txt
 block.txt
 mushroom.txt
 leaf.txt
+hud.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type

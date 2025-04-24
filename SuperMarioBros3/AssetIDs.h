@@ -46,6 +46,7 @@
 #define OBJECT_TYPE_QUESTION_BLOCK 61
 
 #define OBJECT_TYPE_BACKGROUND 100
+#define OBJECT_TYPE_HUD 101
 
 #pragma region MARIO 
 
@@ -187,3 +188,6 @@
 
 //From 20: Background
 #define ID_SPRITE_BG_WORLD_1_1 200000
+
+//From 30: HUD
+#define ID_SPRITE_HUD 300000
