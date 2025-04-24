@@ -17,7 +17,7 @@ int CMarioBig::GetAniId(CMario* mario)
 	{
 		return (nx > 0) ? ID_ANI_FROM_SMALL_TO_BIG_RIGHT : ID_ANI_FROM_SMALL_TO_BIG_LEFT;
 	}
-
+	if (mario->GetState() == MARIO_STATE_DOWN_TUNNEL || mario->GetState() == MARIO_STATE_UP_TUNNEL) return ID_ANI_MARIO_PIPE;
 	if (!mario->IsOnPlatform())
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
@@ -31,10 +31,19 @@ int CMarioBig::GetAniId(CMario* mario)
 		}
 		else
 		{
-			if (nx >= 0)
-				aniId = ID_ANI_MARIO_JUMP_WALK_RIGHT;
-			else
-				aniId = ID_ANI_MARIO_JUMP_WALK_LEFT;
+			if (isSitting)
+			{
+				if (nx > 0)
+					aniId = ID_ANI_MARIO_SIT_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_SIT_LEFT;
+			}
+			else {
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_JUMP_WALK_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_JUMP_WALK_LEFT;
+			}
 		}
 	}
 	else
@@ -162,10 +171,15 @@ void CMarioBig::SetState(int state, CMario* mario)
 		break;
 
 	case MARIO_STATE_SIT:
+		if (abs(ax) == MARIO_ACCEL_RUN_X) break;
+
 		if (!isSitting && mario->IsOnPlatform())
 		{
 			isSitting = true;
-
+			if (nx > 0)
+				mario->SetAx(MARIO_DECEL_WALK_X);
+			else
+				mario->SetAx(-MARIO_DECEL_WALK_X);
 			float x, y;
 			mario->GetPosition(x, y);
 			mario->SetPosition(x, y + MARIO_SIT_HEIGHT_ADJUST);

@@ -122,6 +122,8 @@ int CMarioSmall::GetAniId(CMario* mario)
 	float vx, vy, ax, ay, nx;
 	mario->GetPhysics(vx, vy, ax, ay, nx);
 
+	if (mario->GetState() == MARIO_STATE_DOWN_TUNNEL || mario->GetState() == MARIO_STATE_UP_TUNNEL) return ID_ANI_MARIO_SMALL_PIPE;
+
 	if (!mario->IsOnPlatform())
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
