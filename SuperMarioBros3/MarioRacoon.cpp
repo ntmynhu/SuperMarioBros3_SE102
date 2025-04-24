@@ -334,10 +334,6 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 		if (!isSitting && mario->IsOnPlatform())
 		{
 			isSitting = true;
-			if (nx > 0)
-				mario->SetAx(MARIO_DECEL_WALK_X);
-			else
-				mario->SetAx(-MARIO_DECEL_WALK_X);
 			float x, y;
 			mario->GetPosition(x, y);
 			mario->SetPosition(x, y + MARIO_SIT_HEIGHT_ADJUST);
