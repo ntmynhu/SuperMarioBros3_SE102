@@ -14,6 +14,7 @@
 
 class CQuestionBlock : public CBlock
 {
+protected:
 	bool isEmpty;
 	int itemId;
 	int itemId2 = -1; // For the case of store multiple items
@@ -39,6 +40,6 @@ public:
 	void StartBouncing() { isBouncing = true; vy = -1;}
 	void SpawnItem();
 
-	void TriggerAction() { if (!isEmpty && !isBouncing) StartBouncing(); }
+	virtual void TriggerAction() { if (!isEmpty && !isBouncing) StartBouncing(); }
 };
 

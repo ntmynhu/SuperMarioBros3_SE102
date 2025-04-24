@@ -30,6 +30,7 @@
 #include "TunnelPlant.h"
 #include "Block.h"
 #include "QuestionBlock.h"
+#include "GoldenBrick.h"
 #include "SuperMushroom.h"
 #include "SuperLeaf.h"
 
@@ -253,6 +254,24 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				obj = new CQuestionBlock(x, y, itemID, mushroom, ID_ITEM_SUPER_LEAF, leaf);
 				objects.push_back(mushroom);
 				objects.push_back(leaf);
+				break;
+			}
+		}
+
+		break;
+	}
+
+	case OBJECT_TYPE_GOLDEN_BRICK:
+	{
+		int itemID = atoi(tokens[3].c_str());
+
+		switch (itemID)
+		{
+			case ID_ITEM_COIN:
+			{
+				CCoin* coin = new CCoin(x, y);
+				obj = new CGoldenBrick(x, y, itemID, coin);
+				objects.push_back(coin);
 				break;
 			}
 		}
