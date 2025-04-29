@@ -33,6 +33,8 @@
 #include "GoldenBrick.h"
 #include "SuperMushroom.h"
 #include "SuperLeaf.h"
+#include "Particle.h"
+#include "BrokenBrick_Particle.h"
 
 #include "HUD.h"
 #include "SampleKeyEventHandler.h"
@@ -270,7 +272,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			case ID_ITEM_COIN:
 			{
 				CCoin* coin = new CCoin(x, y);
-				obj = new CGoldenBrick(x, y, itemID, coin);
+				
+				vector<CBrick_Particle*> particles;
+				for (int i = 0; i < 4; i++)
+				{
+					CBrick_Particle* particle = new CBrick_Particle(x, y);
+					particle->Deactivate();
+					particles.push_back(particle);
+					objects.push_back(particle);
+				}
+
+				BrokenBrick_Particle* broken_particle = new BrokenBrick_Particle(x, y, particles);
+
+				obj = new CGoldenBrick(x, y, itemID, coin, broken_particle);
 				objects.push_back(coin);
 				break;
 			}

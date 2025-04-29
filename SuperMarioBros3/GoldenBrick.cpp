@@ -19,4 +19,11 @@ void CGoldenBrick::Render()
 
 void CGoldenBrick::TriggerAction()
 {
+	switch (itemId)
+	{
+	case ID_ITEM_COIN:
+		particle->SetTrigger();
+		this->Delete();
+		break;
+	}
 }

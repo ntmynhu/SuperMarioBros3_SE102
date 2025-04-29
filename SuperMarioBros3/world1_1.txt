@@ -14,6 +14,7 @@ block.txt
 mushroom.txt
 leaf.txt
 hud.txt
+particle.txt
 
 # Background: First line as x, y, w, h, base_id. Next y lines, each have y number as asset of each type
 [BACKGROUND]
@@ -202,7 +203,7 @@ hud.txt
 32	2263	312	16	16	2	80002	80002	80002
 
 #Golden brick
-70	50	350	0
+70	50	409	0
 
 #Platform
 37	0	0	16	16	36	-1	-1	-1
