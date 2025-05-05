@@ -283,6 +283,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				}
 
 				BrokenBrick_Particle* broken_particle = new BrokenBrick_Particle(x, y, particles);
+				objects.push_back(broken_particle);
 
 				obj = new CGoldenBrick(x, y, itemID, coin, broken_particle);
 				objects.push_back(coin);

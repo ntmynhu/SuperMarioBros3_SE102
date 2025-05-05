@@ -5,7 +5,7 @@
 
 using namespace std;
 
-#define BROKEN_TIME 1500
+#define BROKEN_TIME 1000
 
 class BrokenBrick_Particle : public CGameObject
 {
@@ -21,13 +21,7 @@ public:
 
 	virtual void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
-	virtual void SetTrigger()
-	{ 
-		isBroken = true; broken_start = GetTickCount64(); 
-		for (int i = 0; i < particles.size(); i++)
-		{
-			particles[i]->Activate();
-		}
-	}
-	virtual void GetBoundingBox(float& l, float& t, float& r, float& b) {};
+	virtual void SetTrigger();
+	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
+	int IsBlocking() { return 0; }
 };
