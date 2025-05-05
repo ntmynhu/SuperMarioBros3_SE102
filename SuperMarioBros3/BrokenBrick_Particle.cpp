@@ -44,10 +44,10 @@ void BrokenBrick_Particle::SetTrigger()
 		particles[i]->SetStart();
 	}
 
-	particles[0]->SetSpeed(0.05f, -0.15f);
-	particles[1]->SetSpeed(0.05f, -0.25f);
-	particles[2]->SetSpeed(-0.05f, -0.15f);
-	particles[3]->SetSpeed(-0.05f, -0.25f);
+	particles[0]->SetSpeed(0.1f, -0.35f);
+	particles[1]->SetSpeed(0.1f, -0.45f);
+	particles[2]->SetSpeed(-0.1f, -0.35f);
+	particles[3]->SetSpeed(-0.1f, -0.45f);
 }
 
 void BrokenBrick_Particle::GetBoundingBox(float& l, float& t, float& r, float& b)
