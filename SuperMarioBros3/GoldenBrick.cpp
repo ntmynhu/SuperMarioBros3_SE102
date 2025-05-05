@@ -24,6 +24,7 @@ void CGoldenBrick::TriggerAction()
 	case ID_ITEM_COIN:
 		particle->SetTrigger();
 		this->Delete();
+		item->Delete();
 		break;
 	}
 }
