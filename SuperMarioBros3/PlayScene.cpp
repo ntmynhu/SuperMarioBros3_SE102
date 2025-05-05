@@ -35,6 +35,7 @@
 #include "SuperLeaf.h"
 #include "Particle.h"
 #include "BrokenBrick_Particle.h"
+#include "BlueButton.h"
 
 #include "HUD.h"
 #include "SampleKeyEventHandler.h"
@@ -290,6 +291,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				break;
 			}
 		}
+
+		break;
+	}
+
+	case OBJECT_TYPE_BLUE_BUTTON:
+	{
+		obj = new CBlueButton(x, y);
 
 		break;
 	}

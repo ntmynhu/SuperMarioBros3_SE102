@@ -15,6 +15,7 @@ mushroom.txt
 leaf.txt
 hud.txt
 particle.txt
+bluebutton.txt
 
 # Background: First line as x, y, w, h, base_id. Next y lines, each have y number as asset of each type
 [BACKGROUND]
@@ -227,6 +228,8 @@ particle.txt
 70	2023	377	0
 70	2007	377	0
 70	1991	377	0
+
+71	2039	361
 
 #Platform
 37	0	0	16	16	36	-1	-1	-1
