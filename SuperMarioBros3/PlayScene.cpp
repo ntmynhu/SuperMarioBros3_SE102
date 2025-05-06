@@ -30,8 +30,12 @@
 #include "TunnelPlant.h"
 #include "Block.h"
 #include "QuestionBlock.h"
+#include "GoldenBrick.h"
 #include "SuperMushroom.h"
 #include "SuperLeaf.h"
+#include "Particle.h"
+#include "BrokenBrick_Particle.h"
+#include "BlueButton.h"
 
 #include "HUD.h"
 #include "SampleKeyEventHandler.h"
@@ -256,6 +260,44 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				break;
 			}
 		}
+
+		break;
+	}
+
+	case OBJECT_TYPE_GOLDEN_BRICK:
+	{
+		int itemID = atoi(tokens[3].c_str());
+
+		switch (itemID)
+		{
+			case ID_ITEM_COIN:
+			{
+				CCoin* coin = new CCoin(x, y);
+				
+				vector<CBrick_Particle*> particles;
+				for (int i = 0; i < 4; i++)
+				{
+					CBrick_Particle* particle = new CBrick_Particle(x, y);
+					particle->Deactivate();
+					particles.push_back(particle);
+					objects.push_back(particle);
+				}
+
+				BrokenBrick_Particle* broken_particle = new BrokenBrick_Particle(x, y, particles);
+				objects.push_back(broken_particle);
+
+				obj = new CGoldenBrick(x, y, itemID, coin, broken_particle);
+				objects.push_back(coin);
+				break;
+			}
+		}
+
+		break;
+	}
+
+	case OBJECT_TYPE_BLUE_BUTTON:
+	{
+		obj = new CBlueButton(x, y);
 
 		break;
 	}
