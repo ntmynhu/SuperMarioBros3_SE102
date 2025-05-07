@@ -15,6 +15,7 @@
 #include "Portal.h"
 #include "SuperLeaf.h"
 #include "Tunnel.h"
+#include "BlueButton.h"
 
 #include "GameData.h"
 
@@ -125,8 +126,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 }
 
-
-
 void CMario::OnNoCollision(DWORD dt)
 {
 	if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) return;
@@ -174,6 +173,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithMushroomAndLeaf(e);
 	else if (dynamic_cast<CTunnel*>(e->obj))
 		OnCollisionWithTunnel(e);
+	else if (dynamic_cast<CBlueButton*>(e->obj))
+		OnCollisionWithBlueButton(e);
 }
 
 void CMario::OnCollisionWithTunnel(LPCOLLISIONEVENT e) {
@@ -241,6 +242,15 @@ void CMario::OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e)
 	if (nextForm > MARIO_LEVEL_RACOON) return; // max level is racoon, update point logic will come later
 
 	ChangeForm(nextForm, 1);
+}
+
+void CMario::OnCollisionWithBlueButton(LPCOLLISIONEVENT e)
+{
+	if (e->ny < 0)
+	{
+		CBlueButton* button = dynamic_cast<CBlueButton*>(e->obj);
+		button->SetTrigger();
+	}
 }
 
 void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)

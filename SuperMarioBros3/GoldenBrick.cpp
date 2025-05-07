@@ -1,4 +1,6 @@
 #include "GoldenBrick.h"
+#include "Coin.h"
+#include "BlueButton.h"
 
 void CGoldenBrick::Render()
 {
@@ -19,6 +21,8 @@ void CGoldenBrick::Render()
 
 void CGoldenBrick::TriggerAction()
 {
+	if (isEmpty) return;
+
 	switch (itemId)
 	{
 	case ID_ITEM_COIN:
@@ -26,5 +30,57 @@ void CGoldenBrick::TriggerAction()
 		this->Delete();
 		item->Delete();
 		break;
+	case ID_ITEM_BLUE_BUTTON:
+		this->StartBouncing();
+		break;
 	}
 }
+
+void CGoldenBrick::TurnToCoin()
+{
+	switch (itemId)
+	{
+	case ID_ITEM_COIN:
+		CCoin* coin = dynamic_cast<CCoin*>(item);
+		if (coin) coin->Activate();
+		particle->RemoveParticle();
+		break;
+	}
+
+	isEmpty = true;
+	this->Delete();
+}
+
+void CGoldenBrick::SpawnItem()
+{
+	if (!item || item->IsDeleted()) {
+		item = NULL;
+		return;
+	}
+
+	if (itemId2 != -1)
+	{
+		if (!item2 || item2->IsDeleted()) {
+			item2 = NULL;
+			return;
+		}
+	}
+
+	switch (itemId)
+	{
+		case ID_ITEM_BLUE_BUTTON:
+		{
+			CBlueButton* blueButton = dynamic_cast<CBlueButton*>(item);
+			if (blueButton != NULL)
+			{
+				blueButton->StartAppearing();
+			}
+			break;
+		}
+	}
+
+	isEmpty = true;
+}
+
+
+

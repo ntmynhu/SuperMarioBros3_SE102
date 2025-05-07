@@ -64,6 +64,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath, int sceneGroup):
 
 #define MAX_Y_OFFSET 30
 
+vector<LPGAMEOBJECT> goldenBricks;
+
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
 	vector<string> tokens = split(line);
@@ -268,26 +270,28 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		int itemID = atoi(tokens[3].c_str());
 
+		vector<CBrick_Particle*> particles;
+		for (int i = 0; i < 4; i++)
+		{
+			CBrick_Particle* particle = new CBrick_Particle(x, y);
+			particle->Deactivate();
+			particles.push_back(particle);
+			objects.push_back(particle);
+		}
+
+		BrokenBrick_Particle* broken_particle = new BrokenBrick_Particle(x, y, particles);
+		objects.push_back(broken_particle);
+
 		switch (itemID)
 		{
 			case ID_ITEM_COIN:
 			{
 				CCoin* coin = new CCoin(x, y);
-				
-				vector<CBrick_Particle*> particles;
-				for (int i = 0; i < 4; i++)
-				{
-					CBrick_Particle* particle = new CBrick_Particle(x, y);
-					particle->Deactivate();
-					particles.push_back(particle);
-					objects.push_back(particle);
-				}
-
-				BrokenBrick_Particle* broken_particle = new BrokenBrick_Particle(x, y, particles);
-				objects.push_back(broken_particle);
-
 				obj = new CGoldenBrick(x, y, itemID, coin, broken_particle);
 				objects.push_back(coin);
+
+				goldenBricks.push_back(obj);
+
 				break;
 			}
 		}
@@ -297,8 +301,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case OBJECT_TYPE_BLUE_BUTTON:
 	{
-		obj = new CBlueButton(x, y);
+		CBlueButton* button = new CBlueButton(x, y - BLUE_BUTTON_BBOX_HEIGHT, goldenBricks);
+		button->Deactivate();
+		objects.push_back(button);
 
+		obj = new CGoldenBrick(x, y, ID_ITEM_BLUE_BUTTON, button, NULL);
 		break;
 	}
 
