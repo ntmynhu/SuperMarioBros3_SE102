@@ -25,7 +25,10 @@ void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!isEmpty && item)
 	{
-		item->Deactivate();
+		if (!item->IsDeleted())
+			item->Deactivate();
+		else
+			item = nullptr;
 		
 		if (item2)
 		{

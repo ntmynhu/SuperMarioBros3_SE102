@@ -8,6 +8,7 @@
 #define ID_ITEM_SUPER_MUSHROOM 1
 #define ID_ITEM_SUPER_LEAF 2
 #define ID_ITEM_SUPER_MUSHROOM_AND_LEAF 3
+#define ID_ITEM_BLUE_BUTTON 4
 
 #define BLOCK_BOUNCING_SPEED 0.2f
 #define BLOCK_BOUNCING_HEIGHT 20
@@ -38,7 +39,7 @@ public:
 
 	bool IsEmpty() { return isEmpty; }
 	void StartBouncing() { isBouncing = true; vy = -1;}
-	void SpawnItem();
+	virtual void SpawnItem();
 
 	virtual void TriggerAction() { if (!isEmpty && !isBouncing) StartBouncing(); }
 };
