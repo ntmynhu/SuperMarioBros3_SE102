@@ -23,5 +23,6 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void SetTrigger();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
+	virtual void RemoveParticle();
 	int IsBlocking() { return 0; }
 };

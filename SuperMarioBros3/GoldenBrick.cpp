@@ -1,4 +1,5 @@
 #include "GoldenBrick.h"
+#include "Coin.h"
 
 void CGoldenBrick::Render()
 {
@@ -28,3 +29,19 @@ void CGoldenBrick::TriggerAction()
 		break;
 	}
 }
+
+void CGoldenBrick::TurnToCoin()
+{
+	switch (itemId)
+	{
+	case ID_ITEM_COIN:
+		CCoin* coin = dynamic_cast<CCoin*>(item);
+		coin->Activate();
+		particle->RemoveParticle();
+		break;
+	}
+
+	isEmpty = true;
+	this->Delete();
+}
+

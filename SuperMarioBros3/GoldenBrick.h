@@ -15,5 +15,6 @@ public:
 
 	virtual void Render();
 	virtual void TriggerAction();
+	virtual void TurnToCoin();
 };
 

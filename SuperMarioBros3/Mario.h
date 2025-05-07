@@ -111,6 +111,7 @@ class CMario : public CGameObject
 	void OnCollisionWithBlock(LPCOLLISIONEVENT e);
 	void OnCollisionWithTunnel(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e);
+	void OnCollisionWithBlueButton(LPCOLLISIONEVENT e);
 
 public:
 	CMario(float x, float y) : CGameObject(x, y)

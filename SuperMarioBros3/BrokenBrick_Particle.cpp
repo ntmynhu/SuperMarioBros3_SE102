@@ -57,3 +57,11 @@ void BrokenBrick_Particle::GetBoundingBox(float& l, float& t, float& r, float& b
 	r = l + BRICK_PARTICLE_BBOX_WIDTH;
 	b = t + BRICK_PARTICLE_BBOX_HEIGHT;
 }
+
+void BrokenBrick_Particle::RemoveParticle()
+{
+	for (auto i : particles)
+	{
+		i->Delete();
+	}
+}

@@ -64,6 +64,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath, int sceneGroup):
 
 #define MAX_Y_OFFSET 30
 
+vector<LPGAMEOBJECT> goldenBricks;
+
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
 	vector<string> tokens = split(line);
@@ -288,6 +290,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 				obj = new CGoldenBrick(x, y, itemID, coin, broken_particle);
 				objects.push_back(coin);
+
+				goldenBricks.push_back(obj);
+
 				break;
 			}
 		}
@@ -297,7 +302,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case OBJECT_TYPE_BLUE_BUTTON:
 	{
-		obj = new CBlueButton(x, y);
+		obj = new CBlueButton(x, y, goldenBricks);
 
 		break;
 	}
