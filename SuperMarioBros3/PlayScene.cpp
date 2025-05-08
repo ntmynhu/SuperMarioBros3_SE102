@@ -45,8 +45,11 @@ using namespace std;
 CPlayScene::CPlayScene(int id, LPCWSTR filePath, int sceneGroup):
 	CScene(id, filePath, sceneGroup)
 {
+	cam_mode = CAMERA_MODE_NORMAL;
 	player = NULL;
 	limit_obj = NULL;
+	stop_mario_l = NULL;
+	stop_mario_r = NULL;
 	key_handler = new CSampleKeyHandler(this);
 }
 
@@ -55,6 +58,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath, int sceneGroup):
 #define SCENE_SECTION_ASSETS	1
 #define SCENE_SECTION_OBJECTS	2
 #define SCENE_SECTION_BACKGROUND	3
+#define SCENE_SECTION_SETTING	4
 
 #define ASSETS_SECTION_UNKNOWN -1
 #define ASSETS_SECTION_SPRITES 1
@@ -119,6 +123,28 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	}
 
 	CAnimations::GetInstance()->Add(ani_id, ani);
+}
+
+/*
+	Parse a line in section [SETTING]
+*/
+void CPlayScene::_ParseSection_SETTING(string line)
+{
+	vector<string> tokens = split(line);
+	// skip invalid lines - an object set must have at least id, x, y
+	if (tokens.size() < 2) return;
+
+	if (tokens[0] == "mode") {
+		int mode = atoi(tokens[1].c_str());
+		switch (mode) {
+		case CAMERA_MODE_NORMAL:
+			cam_mode = CAMERA_MODE_NORMAL;
+			break;
+		case CAMERA_MODE_SCROLL_X:
+			cam_mode = CAMERA_MODE_SCROLL_X;
+			break;
+		}
+	}
 }
 
 /*
@@ -206,7 +232,35 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Limit object has been created!\n");
 		break;
+	case OBJECT_TYPE_ONLY_MARIO_COLLIDE_WALL:
+	{
+		if (stop_mario_l != NULL && stop_mario_r != NULL)
+		{
+			DebugOut(L"[ERROR] STOP object was created before!\n");
+			return;
+		}
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int side = atoi(tokens[6].c_str());
 
+		obj = new CWallMario(
+			x, y,
+			cell_width, cell_height, length,
+			side
+		);
+		if (stop_mario_l == NULL && side == -1) {
+			x = 0;
+			stop_mario_l = (CWallMario*)obj;
+			DebugOut(L"[INFO] Stop left object has been created!\n");
+		}
+		else if (stop_mario_r == NULL && side == 1) {
+			x = CGame::GetInstance()->GetBackBufferWidth();
+			stop_mario_r = (CWallMario*)obj;
+			DebugOut(L"[INFO] Stop right object has been created!\n");
+		}
+		break;
+	}
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_PARAGOOMBA: obj = new CParagoomba(x, y); break;
 	case OBJECT_TYPE_KOOPA: obj = new CKoopa(x, y); break;
@@ -372,24 +426,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int sprite_end = atoi(tokens[8].c_str());
 
 		obj = new CWall(
-			x, y,
-			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end
-		);
-
-		break;
-	}
-	case OBJECT_TYPE_ONLY_MARIO_COLLIDE_WALL:
-	{
-
-		float cell_width = (float)atof(tokens[3].c_str());
-		float cell_height = (float)atof(tokens[4].c_str());
-		int length = atoi(tokens[5].c_str());
-		int sprite_begin = atoi(tokens[6].c_str());
-		int sprite_middle = atoi(tokens[7].c_str());
-		int sprite_end = atoi(tokens[8].c_str());
-
-		obj = new CWallMario(
 			x, y,
 			cell_width, cell_height, length,
 			sprite_begin, sprite_middle, sprite_end
@@ -613,7 +649,7 @@ void CPlayScene::Load()
 
 	ifstream f;
 	f.open(sceneFilePath);
-
+	CGame::GetInstance()->SetCamPos(0, 0);
 	// current resource section flag
 	int section = SCENE_SECTION_UNKNOWN;					
 
@@ -626,6 +662,7 @@ void CPlayScene::Load()
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
 		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
 		if (line == "[BACKGROUND]") { section = SCENE_SECTION_BACKGROUND; continue; };
+		if (line == "[SETTING]") { section = SCENE_SECTION_SETTING; continue; };
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		//
@@ -636,6 +673,7 @@ void CPlayScene::Load()
 			case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
 			case SCENE_SECTION_BACKGROUND: _ParseSection_BACKGROUND(line); break;
+			case SCENE_SECTION_SETTING: _ParseSection_SETTING(line); break;
 		}
 	}
 
@@ -688,43 +726,73 @@ void CPlayScene::Update(DWORD dt)
 	float cx, cy;
 	game->GetCamPos(cx, cy); //Get current cam pos
 
-	// Update camera to follow mario
 	float mx, my;
 	player->GetPosition(mx, my);
-	
+
 	if (!game->IsInCam(player)) {
 		if (my <= -CAM_MARGIN) {
 			my = -CAM_MARGIN;
 			player->SetPosition(mx, my);
 		}
 	}
-	// DebugOutTitle(L"Mario x %f y %f", mx, my);
 
-	mx -= game->GetBackBufferWidth() / 2;
-	my -= game->GetBackBufferHeight() / 6;
+	if (cam_mode == CAMERA_MODE_NORMAL) {
+		// Update camera to follow mario
+		// DebugOutTitle(L"Mario x %f y %f", mx, my);
 
-	if (limit_obj != NULL) {
-		float lim_x, lim_y;
-		limit_obj->GetPosition(lim_x, lim_y);
+		mx -= game->GetBackBufferWidth() / 2;
+		my -= game->GetBackBufferHeight() / 6;
 
-		//Cam lim is in the right bottom
-		lim_x -= game->GetBackBufferWidth();
-		lim_y -= game->GetBackBufferHeight();
+		if (limit_obj != NULL) {
+			float lim_x, lim_y;
+			limit_obj->GetPosition(lim_x, lim_y);
 
-		if (mx > lim_x) mx = lim_x;
-		if (my > lim_y) my = lim_y;
+			//Cam lim is in the right bottom
+			lim_x -= game->GetBackBufferWidth();
+			lim_y -= game->GetBackBufferHeight();
+
+			if (mx > lim_x) mx = lim_x;
+			if (my > lim_y) my = lim_y;
+		}
+		//Prevent camera from moving out of world range
+		if (mx < 0) mx = 0;
+		if (my < 0) my = 0;
+
+		cx = mx;
+		cy = my;
 	}
-	//Prevent camera from moving out of world range
-	if (mx < 0) mx = 0;
-	if (my < 0) my = 0;
+	else if (cam_mode == CAMERA_MODE_SCROLL_X) {
+		cx += CAMERA_SCROLL_VX * dt;
+		if (limit_obj != NULL) {
+			float lim_x, lim_y;
+			limit_obj->GetPosition(lim_x, lim_y);
 
-	cx = mx;
-	//Only update y if y offset is large enough
-	cy = my;
+			lim_x -= game->GetBackBufferWidth();
+			lim_y -= game->GetBackBufferHeight();
+			if (cx > lim_x) cx = lim_x;
+			cy = lim_y;
+		}
+		if (cx < 0) cx = 0;
+		if (cy < 0) cy = 0;
+	}
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
+
+	float m_vx, m_vy;
 	
-	
+	if (stop_mario_l != NULL) {
+		if (cam_mode == CAMERA_MODE_SCROLL_X)
+			stop_mario_l->SetSpeed(CAMERA_SCROLL_VX, 0);
+		else if (cam_mode == CAMERA_MODE_NORMAL)
+			stop_mario_l->SetPosition(cx, 0);
+
+	}
+	if (stop_mario_r != NULL) {
+		if (cam_mode == CAMERA_MODE_SCROLL_X)
+			stop_mario_r->SetSpeed(CAMERA_SCROLL_VX, 0);
+		else if (cam_mode == CAMERA_MODE_NORMAL)
+			stop_mario_r->SetPosition(cx + game->GetBackBufferWidth(), 0);
+	}
 	
 	PurgeDeletedObjects();
 }
@@ -765,7 +833,8 @@ void CPlayScene::Unload()
 	objects.clear();
 	player = NULL;
 	limit_obj = NULL;
-
+	stop_mario_l = NULL;
+	stop_mario_r = NULL;
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }
 

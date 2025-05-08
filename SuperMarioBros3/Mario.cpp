@@ -16,6 +16,7 @@
 #include "SuperLeaf.h"
 #include "Tunnel.h"
 #include "BlueButton.h"
+#include "WallMario.h"
 
 #include "GameData.h"
 
@@ -71,8 +72,20 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (nx == -1 && ax > 0 && vx > 0) vx = 0;
 
 	// reset untouchable timer if untouchable time has passed
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	if (scene) {
+		CWallMario* stop_left = (CWallMario*)scene->GetStopLeft();
+		if (stop_left) {
+			float w_x, w_vx, w_vy;
+			stop_left->GetBoundX(w_x);
+			stop_left->GetSpeed(w_vx, w_vy);
+			if (w_vx > 0 && x < w_x && vx < w_vx) {
+				vx = (w_x - x) / dt;
+				if (nx == 1) ax = 0;
+			}
+		}
+	}
 	
-
 
 	if (isChargingPower && IsFullSpeed())
 	{
@@ -136,7 +149,7 @@ void CMario::OnNoCollision(DWORD dt)
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
-{
+{		
 	if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) {
 		if (dynamic_cast<CPortal*>(e->obj))
 			OnCollisionWithPortal(e);
@@ -152,6 +165,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (e->nx != 0 && e->obj->IsBlocking())
 	{
+		
 		vx = 0;
 	}
 
@@ -175,6 +189,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithTunnel(e);
 	else if (dynamic_cast<CBlueButton*>(e->obj))
 		OnCollisionWithBlueButton(e);
+	
 }
 
 void CMario::OnCollisionWithTunnel(LPCOLLISIONEVENT e) {
