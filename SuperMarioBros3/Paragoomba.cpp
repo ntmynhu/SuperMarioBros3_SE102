@@ -53,10 +53,12 @@ void CParagoomba::ResetPos() {
 		jumpCount = 0;
 		isFlying = false;
 		walk_start = -1;
+		chase_start = -1;
 	}
 }
 void CParagoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (chase_start == -1) chase_start = GetTickCount64();
 	if (HasWing()) {
 		if (GetTickCount64() - walk_start >= PARA_GOOMBA_WALK_TIMEOUT && !isFlying)
 		{
@@ -82,7 +84,8 @@ void CParagoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (ay != GOOMBA_GRAVITY && isOnPlatform) { //Check direction once when first touch the platform after flying
 			jumpCount = 0;
 			ay = GOOMBA_GRAVITY;
-			vx = abs(vx) * CheckXDirection();
+			if (GetTickCount64() - chase_start < PARA_GOOMBA_CHASE_TIMEOUT)
+				vx = abs(vx) * CheckXDirection();
 		}
 
 

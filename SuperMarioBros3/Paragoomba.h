@@ -12,6 +12,7 @@
 #define PARA_GOOMBA_SMALL_JUMP_SPEED_Y 0.2f
 #define PARA_GOOMBA_SMALL_JUMP_LIMIT 3
 #define PARA_GOOMBA_WALK_TIMEOUT 1000
+#define PARA_GOOMBA_CHASE_TIMEOUT 15000
 
 #define PARA_GOOMBA_STATE_HASWING 300
 
@@ -22,6 +23,7 @@ class CParagoomba : public CGoomba
 {
 protected:
 	ULONGLONG walk_start;
+	ULONGLONG chase_start;
 	bool isFlying;
 	int jumpCount;
 	
@@ -36,6 +38,7 @@ public:
 		jumpCount = 0;
 		isFlying = false;
 		walk_start = -1;
+		chase_start = -1;
 	};
 	bool HasWing() { return (state == PARA_GOOMBA_STATE_HASWING); }
 	virtual void TakeJumpDamage();
