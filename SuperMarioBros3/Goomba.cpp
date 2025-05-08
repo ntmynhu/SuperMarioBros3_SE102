@@ -1,4 +1,5 @@
 #include "Goomba.h"
+#include "Paragoomba.h"
 #include "Mario.h"
 #include "Enemy.h"
 #include "debug.h"
@@ -28,11 +29,22 @@ void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& botto
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (this->state == ENEMY_STATE_DIE) return;
 	if (dynamic_cast<CMario*>(e->obj)) return;
-	if (!e->obj->IsBlocking()) return;
+	if (dynamic_cast<CParagoomba*>(e->obj)) return;
+	if (dynamic_cast<CGoomba*>(e->obj)) {
+		if (dynamic_cast<CParagoomba*>(this)) return;
+		CGoomba* opponent = dynamic_cast<CGoomba*>(e->obj);
+		if (opponent->GetState() == ENEMY_STATE_DIE) return;
 
+		this->vx = -vx;
+		
+		float o_vx, o_vy;
+		opponent->GetSpeed(o_vx, o_vy);
+		opponent->SetSpeed(-o_vx, o_vy);
+	}
 	if (dynamic_cast<CEnemy*>(e->obj)) return;
-
+	if (!e->obj->IsBlocking()) return;
 
 	if (e->ny != 0)
 	{
