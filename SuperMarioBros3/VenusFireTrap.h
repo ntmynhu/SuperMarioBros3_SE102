@@ -2,7 +2,7 @@
 #include "Plant.h"
 #include "FireBall.h"
 #define VENUS_BBOX_WIDTH 16
-#define VENUS_BBOX_HEIGHT 20
+#define VENUS_BBOX_HEIGHT 22
 
 #define VENUS_DOWN_TIME_OUT 1500
 #define VENUS_UP_TIME_OUT 1500
