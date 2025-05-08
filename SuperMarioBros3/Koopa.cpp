@@ -117,7 +117,7 @@ void CKoopa::OnCollisionWithBlock(LPCOLLISIONEVENT e)
 {
 	CBlock* block = dynamic_cast<CBlock*>(e->obj);
 
-	if (state == KOOPA_STATE_DEFEND_SLIDING) {
+	if (state == KOOPA_STATE_DEFEND_SLIDING && e->nx != 0) {
 		block->TriggerAction();
 	}
 }
