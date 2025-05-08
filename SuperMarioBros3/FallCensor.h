@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "debug.h"
 #define FALL_CENSOR_GRAVITY 0.2f
-#define CENSOR_BBOX_WIDTH 6.0f
+#define CENSOR_BBOX_WIDTH 16.0f
 #define CENSOR_BBOX_HEIGHT 24.0f
 class CKoopa;
 class CFallCensor :
