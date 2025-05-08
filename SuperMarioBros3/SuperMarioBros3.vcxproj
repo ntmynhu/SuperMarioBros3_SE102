@@ -176,6 +176,7 @@
     <ClCompile Include="MarioRacoon.cpp" />
     <ClCompile Include="MarioSmall.cpp" />
     <ClCompile Include="NoCollideWall.cpp" />
+    <ClCompile Include="OneUpMushroom.cpp" />
     <ClCompile Include="Paragoomba.cpp" />
     <ClCompile Include="Parakoopa.cpp" />
     <ClCompile Include="Particle.cpp" />
@@ -234,6 +235,7 @@
     <ClInclude Include="MarioSmall.h" />
     <ClInclude Include="NoCollidePlatform.h" />
     <ClInclude Include="NoCollideWall.h" />
+    <ClInclude Include="OneUpMushroom.h" />
     <ClInclude Include="Paragoomba.h" />
     <ClInclude Include="Parakoopa.h" />
     <ClInclude Include="Particle.h" />
