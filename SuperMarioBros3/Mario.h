@@ -148,6 +148,7 @@ public:
 
 	bool IsReadyToHold() { return isReadyToHold; }
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
+	bool IsHolding() { return holdingObj != NULL; }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);

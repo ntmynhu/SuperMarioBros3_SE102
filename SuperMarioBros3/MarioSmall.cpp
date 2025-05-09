@@ -146,8 +146,8 @@ int CMarioSmall::GetAniId(CMario* mario)
 	else
 		if (vx == 0)
 		{
-			if (nx > 0) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
-			else aniId = ID_ANI_MARIO_SMALL_IDLE_LEFT;
+			if (nx > 0) aniId = mario->IsHolding() ? ID_ANI_MARIO_SMALL_IDLE_HOLDING_RIGHT : ID_ANI_MARIO_SMALL_IDLE_RIGHT;
+			else aniId = mario->IsHolding() ? ID_ANI_MARIO_SMALL_IDLE_HOLDING_LEFT : ID_ANI_MARIO_SMALL_IDLE_LEFT;
 		}
 		else if (vx > 0)
 		{
@@ -174,8 +174,8 @@ int CMarioSmall::GetAniId(CMario* mario)
 
 	if (aniId == -1)
 	{
-		if (nx > 0) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
-		else aniId = ID_ANI_MARIO_SMALL_IDLE_LEFT;
+		if (nx > 0) aniId = mario->IsHolding()? ID_ANI_MARIO_SMALL_IDLE_HOLDING_RIGHT : ID_ANI_MARIO_SMALL_IDLE_RIGHT;
+		else aniId = mario->IsHolding()? ID_ANI_MARIO_SMALL_IDLE_HOLDING_LEFT : ID_ANI_MARIO_SMALL_IDLE_LEFT;
 	}
 
 	return aniId;
