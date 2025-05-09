@@ -129,18 +129,18 @@ int CMarioSmall::GetAniId(CMario* mario)
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
 			if (nx >= 0)
-				if (!mario->IsFullPower()) aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT;
-				else aniId = ID_ANI_MARIO_SMALL_FULL_POWER_JUMP_RIGHT;
+				if (!mario->IsFullPower()) aniId = mario->IsHolding() ? ID_ANI_MARIO_SMALL_JUMP_HOLDING_RIGHT : ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT;
+				else aniId = mario->IsHolding() ? ID_ANI_MARIO_SMALL_FULL_POWER_JUMP_HOLDING_RIGHT : ID_ANI_MARIO_SMALL_FULL_POWER_JUMP_RIGHT;
 			else
-				if (!mario->IsFullPower()) aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT;
-				else aniId = ID_ANI_MARIO_SMALL_FULL_POWER_JUMP_LEFT;
+				if (!mario->IsFullPower()) aniId = mario->IsHolding()? ID_ANI_MARIO_SMALL_JUMP_HOLDING_LEFT : ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT;
+				else aniId = mario->IsHolding() ? ID_ANI_MARIO_SMALL_FULL_POWER_JUMP_HOLDING_LEFT : ID_ANI_MARIO_SMALL_FULL_POWER_JUMP_LEFT;
 		}
 		else
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_MARIO_SMALL_JUMP_WALK_RIGHT;
+				aniId = mario->IsHolding() ? ID_ANI_MARIO_SMALL_JUMP_HOLDING_RIGHT : ID_ANI_MARIO_SMALL_JUMP_WALK_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_SMALL_JUMP_WALK_LEFT;
+				aniId = mario->IsHolding() ? ID_ANI_MARIO_SMALL_JUMP_HOLDING_LEFT : ID_ANI_MARIO_SMALL_JUMP_WALK_LEFT;
 		}
 	}
 	else
@@ -151,25 +151,25 @@ int CMarioSmall::GetAniId(CMario* mario)
 		}
 		else if (vx > 0)
 		{
-			if (ax < 0 && (mario->GetState() == MARIO_STATE_WALKING_LEFT || mario->GetState() == MARIO_STATE_RUNNING_LEFT))
+			if (ax < 0 && (mario->GetState() == MARIO_STATE_WALKING_LEFT || mario->GetState() == MARIO_STATE_RUNNING_LEFT) && !mario->IsHolding())
 				aniId = ID_ANI_MARIO_SMALL_BRACE_RIGHT;
 			else if (mario->IsFullPower() && mario->GetState() == MARIO_STATE_RUNNING_RIGHT)
-				aniId = ID_ANI_SMALL_FULL_POWER_RUN_RIGHT;
+				aniId = mario->IsHolding() ? ID_ANI_MARIO_SMALL_FULL_POWER_RUN_HOLDING_RIGHT : ID_ANI_SMALL_FULL_POWER_RUN_RIGHT;
 			else if (ax == MARIO_ACCEL_RUN_X || ax == MARIO_DECEL_RUN_X)
-				aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
+				aniId = mario->IsHolding() ? ID_ANI_MARIO_SMALL_FULL_POWER_RUN_HOLDING_RIGHT : ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
 			else if (ax == MARIO_ACCEL_WALK_X || ax == MARIO_DECEL_WALK_X)
-				aniId = ID_ANI_MARIO_SMALL_WALKING_RIGHT;
+				aniId = mario->IsHolding() ? ID_ANI_MARIO_SMALL_WALKING_HOLDING_RIGHT : ID_ANI_MARIO_SMALL_WALKING_RIGHT;
 		}
 		else // vx < 0
 		{
-			if (ax > 0 && (mario->GetState() == MARIO_STATE_WALKING_RIGHT || mario->GetState() == MARIO_STATE_RUNNING_RIGHT))
+			if (ax > 0 && (mario->GetState() == MARIO_STATE_WALKING_RIGHT || mario->GetState() == MARIO_STATE_RUNNING_RIGHT) && !mario->IsHolding())
 				aniId = ID_ANI_MARIO_SMALL_BRACE_LEFT;
 			else if (mario->IsFullPower() && mario->GetState() == MARIO_STATE_RUNNING_LEFT)
-				aniId = ID_ANI_SMALL_FULL_POWER_RUN_LEFT;
+				aniId = mario->IsHolding() ? ID_ANI_MARIO_SMALL_FULL_POWER_JUMP_HOLDING_LEFT : ID_ANI_SMALL_FULL_POWER_RUN_LEFT;
 			else if (ax == -MARIO_ACCEL_RUN_X || ax == -MARIO_DECEL_RUN_X)
-				aniId = ID_ANI_MARIO_SMALL_RUNNING_LEFT;
+				aniId = mario->IsHolding() ? ID_ANI_MARIO_SMALL_RUNNING_HOLDING_LEFT : ID_ANI_MARIO_SMALL_RUNNING_LEFT;
 			else if (ax == -MARIO_ACCEL_WALK_X || ax == -MARIO_DECEL_WALK_X)
-				aniId = ID_ANI_MARIO_SMALL_WALKING_LEFT;
+				aniId = mario->IsHolding() ? ID_ANI_MARIO_SMALL_WALKING_HOLDING_LEFT : ID_ANI_MARIO_SMALL_WALKING_LEFT;
 		}
 
 	if (aniId == -1)
