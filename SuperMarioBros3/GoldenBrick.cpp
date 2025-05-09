@@ -20,19 +20,21 @@ void CGoldenBrick::Render()
 	{
 		aniId = ID_ANI_BLOCK_EMPTY;
 	}
-
-	animations->Get(aniId)->Render(x, y);
+	if (isBrick)
+		animations->Get(aniId)->Render(x, y);
 }
 
 void CGoldenBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!isEmpty)
 	{
-		if (item) {
-			if (!item->IsDeleted())
-				item->Deactivate();
-			else
-				item = NULL;
+		if (isBrick) {
+			if (item) {
+				if (!item->IsDeleted())
+					item->Deactivate();
+				else
+					item = NULL;
+			}
 		}
 		if (particle) {
 			if (!particle->IsDeleted())
@@ -40,6 +42,11 @@ void CGoldenBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else
 				particle = NULL;
 		}
+	}
+
+	if (GetTickCount64() - to_coin_start > BRICK_COIN_TURN_TIMEOUT && !isBrick)
+	{
+		BackToBrick();
 	}
 
 	if (isBouncing)
@@ -99,9 +106,10 @@ void CGoldenBrick::TurnToCoin()
 	case ID_ITEM_COIN:
 		CCoin* coin = dynamic_cast<CCoin*>(item);
 		if (coin) coin->Activate();
+		to_coin_start = GetTickCount64();
+		isBrick = 0;
 		break;
 	}
-	this->Deactivate();
 }
 
 void CGoldenBrick::SpawnItem()
