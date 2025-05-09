@@ -172,6 +172,7 @@ void CMarioBig::SetState(int state, CMario* mario)
 
 	case MARIO_STATE_SIT:
 		if (abs(ax) == MARIO_ACCEL_RUN_X) break;
+		if (mario->IsHolding()) break;
 
 		if (!isSitting && mario->IsOnPlatform())
 		{
