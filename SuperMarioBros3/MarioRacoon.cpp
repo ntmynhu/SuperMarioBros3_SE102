@@ -137,16 +137,28 @@ int CMarioRacoon::GetAniId(CMario* mario)
 			if (vy < 0)
 			{
 				if (nx >= 0)
+				{
 					aniId = (mario->IsFullPower() || isFlying) ? ID_ANI_RACOON_FLY_TAIL_DOWN_RIGHT : ID_ANI_MARIO_RACOON_JUMP_RUN_RIGHT;
+					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_JUMP_HOLDING_RIGHT;
+				}
 				else
+				{
 					aniId = (mario->IsFullPower() || isFlying) ? ID_ANI_RACOON_FLY_TAIL_DOWN_LEFT : ID_ANI_MARIO_RACOON_JUMP_RUN_LEFT;
+					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_JUMP_HOLDING_LEFT;
+				}
 			}
 			else
 			{
 				if (nx >= 0)
-					aniId = isFlying? ID_ANI_RACOON_FLY_TAIL_UP_RIGHT : ID_ANI_MARIO_RACOON_FALL_RIGHT;
+				{
+					aniId = isFlying ? ID_ANI_RACOON_FLY_TAIL_UP_RIGHT : ID_ANI_MARIO_RACOON_FALL_RIGHT;
+					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_JUMP_HOLDING_RIGHT;
+				}
 				else
+				{
 					aniId = isFlying ? ID_ANI_RACOON_FLY_TAIL_UP_LEFT : ID_ANI_MARIO_RACOON_FALL_LEFT;
+					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_JUMP_HOLDING_LEFT;
+				}
 			}
 		}
 		else
@@ -161,17 +173,29 @@ int CMarioRacoon::GetAniId(CMario* mario)
 			else if (vy < 0)
 			{
 				if (nx >= 0)
+				{
 					aniId = isFlying ? ID_ANI_RACOON_FLY_RIGHT : ID_ANI_MARIO_RACOON_JUMP_WALK_RIGHT;
+					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_JUMP_HOLDING_RIGHT;
+				}
 				else
+				{
 					aniId = isFlying ? ID_ANI_RACOON_FLY_LEFT : ID_ANI_MARIO_RACOON_JUMP_WALK_LEFT;
+					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_JUMP_HOLDING_LEFT;
+				}
 
 			}
 			else
 			{
 				if (nx >= 0)
+				{
 					aniId = isFlying ? ID_ANI_RACOON_FLY_TAIL_UP_RIGHT : ID_ANI_MARIO_RACOON_FALL_RIGHT;
+					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_JUMP_HOLDING_RIGHT;
+				}
 				else
+				{
 					aniId = isFlying ? ID_ANI_RACOON_FLY_TAIL_UP_LEFT : ID_ANI_MARIO_RACOON_FALL_LEFT;
+					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_JUMP_HOLDING_LEFT;
+				}
 			}
 		}
 	}
@@ -186,30 +210,56 @@ int CMarioRacoon::GetAniId(CMario* mario)
 		else
 			if (vx == 0)
 			{
-				if (nx > 0) aniId = ID_ANI_MARIO_RACOON_IDLE_RIGHT;
-				else aniId = ID_ANI_MARIO_RACOON_IDLE_LEFT;
+				if (nx > 0)
+				{
+					aniId = ID_ANI_MARIO_RACOON_IDLE_RIGHT;
+					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_IDLE_HOLDING_RIGHT;
+				}
+				else
+				{
+					aniId = ID_ANI_MARIO_RACOON_IDLE_LEFT;
+					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_IDLE_HOLDING_LEFT;
+				}
 			}
 			else if (vx > 0)
 			{
-				if (ax < 0 && (mario->GetState() == MARIO_STATE_WALKING_LEFT || mario->GetState() == MARIO_STATE_RUNNING_LEFT))
+				if (ax < 0 && (mario->GetState() == MARIO_STATE_WALKING_LEFT || mario->GetState() == MARIO_STATE_RUNNING_LEFT) && !mario->IsHolding())
 					aniId = ID_ANI_MARIO_RACOON_BRACE_RIGHT;
 				else if (mario->IsFullPower() && mario->GetState() == MARIO_STATE_RUNNING_RIGHT)
+				{
 					aniId = ID_ANI_MARIO_RACOON_FULL_POWER_RUN_RIGHT;
+					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_FULL_POWER_RUN_HOLDING_RIGHT;
+				}
 				else if (ax == MARIO_ACCEL_RUN_X || ax == MARIO_DECEL_RUN_X)
+				{
 					aniId = ID_ANI_MARIO_RACOON_RUNNING_RIGHT;
+					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_RUNNING_HOLDING_RIGHT;
+				}
 				else if (ax == MARIO_ACCEL_WALK_X || ax == MARIO_DECEL_WALK_X)
+				{
 					aniId = ID_ANI_MARIO_RACOON_WALKING_RIGHT;
+					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_WALKING_HOLDING_RIGHT;
+				}
 			}
 			else // vx < 0
 			{
-				if (ax > 0 && (mario->GetState() == MARIO_STATE_WALKING_RIGHT || mario->GetState() == MARIO_STATE_RUNNING_RIGHT))
+				if (ax > 0 && (mario->GetState() == MARIO_STATE_WALKING_RIGHT || mario->GetState() == MARIO_STATE_RUNNING_RIGHT) && !mario->IsHolding())
 					aniId = ID_ANI_MARIO_RACOON_BRACE_LEFT;
 				else if (mario->IsFullPower() && mario->GetState() == MARIO_STATE_RUNNING_LEFT)
+				{
 					aniId = ID_ANI_MARIO_RACOON_FULL_POWER_RUN_LEFT;
+					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_FULL_POWER_RUN_HOLDING_LEFT;
+				}
 				else if (ax == -MARIO_ACCEL_RUN_X || ax == -MARIO_DECEL_RUN_X)
+				{
 					aniId = ID_ANI_MARIO_RACOON_RUNNING_LEFT;
+					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_RUNNING_HOLDING_LEFT;
+				}
 				else if (ax == -MARIO_ACCEL_WALK_X || ax == -MARIO_DECEL_WALK_X)
+				{
 					aniId = ID_ANI_MARIO_RACOON_WALKING_LEFT;
+					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_WALKING_HOLDING_LEFT;
+				}
 			}
 
 	if (isTailAttacking)
@@ -222,8 +272,16 @@ int CMarioRacoon::GetAniId(CMario* mario)
 		if (isSitting)
 			aniId = (nx > 0) ? ID_ANI_MARIO_RACOON_SIT_RIGHT : ID_ANI_MARIO_RACOON_SIT_LEFT;
 		else
-			if (nx > 0) aniId = ID_ANI_MARIO_RACOON_FLOATING_RIGHT;
-			else aniId = ID_ANI_MARIO_RACOON_FLOATING_LEFT;
+			if (nx > 0)
+			{
+				aniId = ID_ANI_MARIO_RACOON_FLOATING_RIGHT;
+				if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_JUMP_HOLDING_RIGHT;
+			}
+			else
+			{
+				aniId = ID_ANI_MARIO_RACOON_FLOATING_LEFT;
+				if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_JUMP_HOLDING_LEFT;
+			}
 	}
 	else if (mario->GetState() == MARIO_STATE_TURBO_A && !mario->IsOnPlatform())
 	{
@@ -234,12 +292,24 @@ int CMarioRacoon::GetAniId(CMario* mario)
 				aniId = (nx > 0) ? ID_ANI_MARIO_RACOON_FLOATING_TURBO_RIGHT : ID_ANI_MARIO_RACOON_FLOATING_TURBO_LEFT;
 		else
 			aniId = (nx > 0) ? ID_ANI_RACOON_FLY_TURBO_RIGHT : ID_ANI_RACOON_FLY_TURBO_LEFT;
+
+		if (mario->IsHolding())
+		{
+			if (nx > 0) aniId = ID_ANI_MARIO_RACOON_JUMP_HOLDING_RIGHT;
+			else aniId = ID_ANI_MARIO_RACOON_JUMP_HOLDING_LEFT;
+		}
 	}
 
 	if (aniId == -1)
 	{
 		if (nx > 0) aniId = ID_ANI_MARIO_RACOON_IDLE_RIGHT;
 		else aniId = ID_ANI_MARIO_RACOON_IDLE_LEFT;
+
+		if (mario->IsHolding())
+		{
+			if (nx > 0) aniId = ID_ANI_MARIO_RACOON_IDLE_HOLDING_RIGHT;
+			else aniId = ID_ANI_MARIO_RACOON_IDLE_HOLDING_LEFT;
+		}
 	}
 
 	return aniId;
@@ -336,6 +406,7 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 
 	case MARIO_STATE_SIT:
 		if (abs(ax) == MARIO_ACCEL_RUN_X) break;
+		if (mario->IsHolding()) break;
 
 		if (!isSitting && mario->IsOnPlatform())
 		{
