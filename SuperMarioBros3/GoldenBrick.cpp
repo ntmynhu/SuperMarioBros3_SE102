@@ -1,6 +1,7 @@
 #include "GoldenBrick.h"
 #include "Coin.h"
 #include "BlueButton.h"
+#include "OneUpMushroom.h"
 
 void CGoldenBrick::Render()
 {
@@ -31,6 +32,9 @@ void CGoldenBrick::TriggerAction()
 		item->Delete();
 		break;
 	case ID_ITEM_BLUE_BUTTON:
+		this->StartBouncing();
+		break;
+	case ID_ITEM_ONE_UP_MUSHROOM:
 		this->StartBouncing();
 		break;
 	}
@@ -75,6 +79,18 @@ void CGoldenBrick::SpawnItem()
 			{
 				blueButton->StartAppearing();
 			}
+			break;
+		}
+		case ID_ITEM_ONE_UP_MUSHROOM:
+		{
+			OneUpMushroom* oneUpMushroom = dynamic_cast<OneUpMushroom*>(item);
+			if (oneUpMushroom != NULL)
+			{
+				float marioX, marioY;
+				mario->GetPosition(marioX, marioY);
+				oneUpMushroom->AppearFromQuestionBlock(marioX, y);
+			}
+
 			break;
 		}
 	}

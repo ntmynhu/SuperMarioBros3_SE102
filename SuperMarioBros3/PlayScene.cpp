@@ -39,6 +39,7 @@
 
 #include "HUD.h"
 #include "SampleKeyEventHandler.h"
+#include "OneUpMushroom.h"
 
 using namespace std;
 
@@ -324,25 +325,35 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		int itemID = atoi(tokens[3].c_str());
 
-		vector<CBrick_Particle*> particles;
-		for (int i = 0; i < 4; i++)
-		{
-			CBrick_Particle* particle = new CBrick_Particle(x, y);
-			particle->Deactivate();
-			particles.push_back(particle);
-			objects.push_back(particle);
-		}
-
-		BrokenBrick_Particle* broken_particle = new BrokenBrick_Particle(x, y, particles);
-		objects.push_back(broken_particle);
-
 		switch (itemID)
 		{
 			case ID_ITEM_COIN:
 			{
+				vector<CBrick_Particle*> particles;
+				for (int i = 0; i < 4; i++)
+				{
+					CBrick_Particle* particle = new CBrick_Particle(x, y);
+					particle->Deactivate();
+					particles.push_back(particle);
+					objects.push_back(particle);
+				}
+
+				BrokenBrick_Particle* broken_particle = new BrokenBrick_Particle(x, y, particles);
+				objects.push_back(broken_particle);
+
 				CCoin* coin = new CCoin(x, y);
 				obj = new CGoldenBrick(x, y, itemID, coin, broken_particle);
 				objects.push_back(coin);
+
+				goldenBricks.push_back(obj);
+
+				break;
+			}
+			case ID_ITEM_ONE_UP_MUSHROOM:
+			{
+				OneUpMushroom* oneUpMushroom = new OneUpMushroom(x, y);
+				obj = new CGoldenBrick(x, y, itemID, oneUpMushroom, NULL);
+				objects.push_back(oneUpMushroom);
 
 				goldenBricks.push_back(obj);
 
