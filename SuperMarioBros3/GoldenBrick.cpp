@@ -2,6 +2,7 @@
 #include "Coin.h"
 #include "BlueButton.h"
 
+
 void CGoldenBrick::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
@@ -9,6 +10,9 @@ void CGoldenBrick::Render()
 
 	if (!isEmpty && !isBouncing)
 	{
+		aniId = ID_ANI_GOLDEN_BRICK;
+	}
+	else if (isBouncing && brick_stat == BRICK_STAT_NO_COLLIDE_Y) {
 		aniId = ID_ANI_GOLDEN_BRICK;
 	}
 	else
@@ -19,14 +23,62 @@ void CGoldenBrick::Render()
 	animations->Get(aniId)->Render(x, y);
 }
 
-void CGoldenBrick::TriggerAction()
+void CGoldenBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	if (!isEmpty)
+	{
+		if (item) {
+			if (!item->IsDeleted())
+				item->Deactivate();
+			else
+				item = NULL;
+		}
+		if (particle) {
+			if (!particle->IsDeleted())
+				particle->Deactivate();
+			else
+				particle = NULL;
+		}
+	}
+
+	if (isBouncing)
+	{
+		if (bouncing_start == 0) {
+			bouncing_start = 1;
+		}
+		else if (bouncing_start == 1)
+			y += vy * BLOCK_BOUNCING_SPEED * dt;
+
+		if (y <= init_y - BLOCK_BOUNCING_HEIGHT)
+		{
+			vy = 1;
+		}
+
+		if (vy == 1 && y >= init_y)
+		{
+			vy = 0;
+			isBouncing = false;
+			y = init_y;
+			bouncing_start = -1;
+			SpawnItem();
+		}
+	}
+	CBlock::Update(dt, coObjects);
+	
+}
+
+void CGoldenBrick::TriggerAction(LPCOLLISIONEVENT e)
 {
 	if (isEmpty) return;
-
+	if (e != NULL && brick_stat == BRICK_STAT_NO_COLLIDE_Y) {
+		this->StartBouncing();
+		return;
+	}
 	switch (itemId)
 	{
 	case ID_ITEM_COIN:
 		particle->SetTrigger();
+		isEmpty = true;
 		this->Delete();
 		item->Delete();
 		break;
@@ -43,12 +95,9 @@ void CGoldenBrick::TurnToCoin()
 	case ID_ITEM_COIN:
 		CCoin* coin = dynamic_cast<CCoin*>(item);
 		if (coin) coin->Activate();
-		particle->RemoveParticle();
 		break;
 	}
-
-	isEmpty = true;
-	this->Delete();
+	this->Deactivate();
 }
 
 void CGoldenBrick::SpawnItem()
@@ -74,12 +123,11 @@ void CGoldenBrick::SpawnItem()
 			if (blueButton != NULL)
 			{
 				blueButton->StartAppearing();
+				isEmpty = true;
 			}
 			break;
 		}
 	}
-
-	isEmpty = true;
 }
 
 
