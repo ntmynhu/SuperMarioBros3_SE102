@@ -65,5 +65,6 @@ public:
 	virtual void TakeJumpDamage();
 	virtual void TakeTailAttackDamage(float xMario);
 	virtual void TakeKoopaDamage(float xKoopa);
+	virtual void TakeBlockBounceDamage(float xBlock);
 };
 

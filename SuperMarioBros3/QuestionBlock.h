@@ -22,6 +22,7 @@ protected:
 	CGameObject* item = NULL;
 	CGameObject* item2 = NULL;
 	bool isBouncing = false;
+	int bouncing_start = -1;
 public:
 	CQuestionBlock(float x, float y, int itemId, CGameObject* item, int itemId2 = -1, CGameObject* item2 = NULL) : CBlock(x, y)
 	{
@@ -36,11 +37,11 @@ public:
 	virtual void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
-
+	bool IsBouncing() { return isBouncing; }
 	bool IsEmpty() { return isEmpty; }
-	void StartBouncing() { isBouncing = true; vy = -1;}
+	void StartBouncing() { isBouncing = true; vy = -1; bouncing_start = 0; }
 	virtual void SpawnItem();
 
-	virtual void TriggerAction() { if (!isEmpty && !isBouncing) StartBouncing(); }
+	virtual void TriggerAction(LPCOLLISIONEVENT e = NULL) { if (!isEmpty && !isBouncing) StartBouncing(); }
 };
 

@@ -44,7 +44,10 @@ void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			SpawnItem();
 		}
 
-		y += vy * BLOCK_BOUNCING_SPEED * dt;
+		if (bouncing_start == 0) {
+			bouncing_start = 1;
+		} else if (bouncing_start == 1)
+			y += vy * BLOCK_BOUNCING_SPEED * dt;
 
 		if (y <= init_y - BLOCK_BOUNCING_HEIGHT)
 		{
@@ -56,7 +59,7 @@ void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vy = 0;
 			isBouncing = false;
 			y = init_y;
-
+			bouncing_start = -1;
 			SpawnItem();
 		}
 	}

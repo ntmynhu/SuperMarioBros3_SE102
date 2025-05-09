@@ -54,6 +54,10 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		}
 	}
 
+	if (dynamic_cast<CBlock*>(e->obj)) {
+		OnCollisionWithBlock(e);
+	}
+
 	if (state == KOOPA_STATE_DEFEND_SLIDING || isBeingHold) {
 		if (dynamic_cast<CEnemy*>(e->obj)) {
 			OnCollisionWithEnemy(e);
@@ -61,9 +65,7 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (dynamic_cast<CPlant*>(e->obj)) {
 			OnCollisionWithPlant(e);
 		}
-		if (dynamic_cast<CBlock*>(e->obj)) {
-			OnCollisionWithBlock(e);
-		}
+		
 	}
 	else {
 		if (dynamic_cast<CKoopa*>(e->obj)) {
@@ -119,6 +121,13 @@ void CKoopa::OnCollisionWithBlock(LPCOLLISIONEVENT e)
 
 	if (state == KOOPA_STATE_DEFEND_SLIDING && e->nx != 0) {
 		block->TriggerAction();
+	}
+	else if (state != KOOPA_STATE_DEFEND_SLIDING && e->ny < 0) {
+		if (block->IsBouncing()) {
+			float b_x, b_y;
+			block->GetPosition(b_x, b_y);
+			TakeBlockBounceDamage(b_x);
+		}
 	}
 }
 
@@ -201,6 +210,20 @@ void CKoopa::TakeTailAttackDamage(float xMario)
 	vy = -KOOPA_TAIL_HIT_VY;
 	SetState(KOOPA_STATE_DEFEND);
 }
+
+void CKoopa::TakeBlockBounceDamage(float xBlock)
+{
+	isUpsideDown = true;
+	if (xBlock > x) {
+		vx = -KOOPA_TAIL_HIT_VX;
+	}
+	else {
+		vx = KOOPA_TAIL_HIT_VX;
+	}
+	vy = -KOOPA_TAIL_HIT_VY;
+	SetState(KOOPA_STATE_DEFEND);
+}
+
 
 void CKoopa::OnCollisionByMario(LPCOLLISIONEVENT e)
 {

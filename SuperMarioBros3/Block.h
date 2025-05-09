@@ -25,6 +25,8 @@ public:
 		CGameObject::Update(dt, coObjects);
 	}
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
-	virtual void TriggerAction() {}
+	virtual void TriggerAction(LPCOLLISIONEVENT e = NULL) {}
+	virtual bool IsBouncing() { return false; }
+
 };
 

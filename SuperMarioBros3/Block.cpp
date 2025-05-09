@@ -1,5 +1,6 @@
 #include "Block.h"
 #include "Brick.h"
+#include "Koopa.h"
 #include "Mario.h"
 #include "Game.h"
 #include "PlayScene.h"
@@ -27,3 +28,20 @@ void CBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 	r = l + BLOCK_BBOX_WIDTH;
 	b = t + BLOCK_BBOX_HEIGHT;
 }
+
+//void CBlock::OnCollisionWith(LPCOLLISIONEVENT e)
+//{
+//	if (!IsBouncing()) return;
+//	if (dynamic_cast<CKoopa*>(e->obj))
+//		OnCollisionWithKoopa(e);
+//}
+//void CBlock::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
+//{
+//	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+//
+//	if (koopa->GetState() != KOOPA_STATE_DEFEND_SLIDING && e->ny > 0) {
+//		if (IsBouncing()) {
+//			koopa->TakeBlockBounceDamage(x);
+//		}
+//	}
+//}
