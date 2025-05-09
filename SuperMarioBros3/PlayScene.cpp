@@ -752,7 +752,7 @@ void CPlayScene::Update(DWORD dt)
 		// DebugOutTitle(L"Mario x %f y %f", mx, my);
 
 		mx -= game->GetBackBufferWidth() / 2;
-		my -= game->GetBackBufferHeight() / 4;
+		my -= game->GetBackBufferHeight() / 2.3f;
 
 		float lim_x, lim_y = -1;
 		if (limit_obj != NULL) {
