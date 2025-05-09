@@ -71,7 +71,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (nx == -1 && ax > 0 && vx > 0) vx = 0;
 
-	// reset untouchable timer if untouchable time has passed
 	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
 	if (scene) {
 		CWallMario* stop_left = (CWallMario*)scene->GetStopLeft();
@@ -79,9 +78,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			float w_x, w_vx, w_vy;
 			stop_left->GetBoundX(w_x);
 			stop_left->GetSpeed(w_vx, w_vy);
-			if (w_vx > 0 && x < w_x && vx < w_vx) {
+			if (w_vx > 0 && x <= w_x && vx < w_vx) {
 				vx = (w_x - x) / dt;
-				if (nx == 1) ax = 0;
 			}
 		}
 	}
@@ -246,7 +244,7 @@ void CMario::OnCollisionWithBlock(LPCOLLISIONEVENT e)
 
 	if (e->ny > 0)
 	{
-		qBlock->TriggerAction();
+		qBlock->TriggerAction(e);
 	}
 }
 

@@ -19,5 +19,6 @@ public:
 	virtual int GetLevel() const = 0;
 	virtual void GetHoldOffset(float& ox, float& oy) = 0;
 	virtual void OnTakeDamage(CMario* mario) = 0;
+	virtual bool IsFlying() { return false; }
 };
 

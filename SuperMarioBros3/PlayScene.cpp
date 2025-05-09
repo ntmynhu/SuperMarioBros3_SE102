@@ -323,7 +323,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOLDEN_BRICK:
 	{
 		int itemID = atoi(tokens[3].c_str());
-
+		int stat = atoi(tokens[4].c_str());
 		vector<CBrick_Particle*> particles;
 		for (int i = 0; i < 4; i++)
 		{
@@ -341,7 +341,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			case ID_ITEM_COIN:
 			{
 				CCoin* coin = new CCoin(x, y);
-				obj = new CGoldenBrick(x, y, itemID, coin, broken_particle);
+				obj = new CGoldenBrick(x, y, itemID, coin, broken_particle, stat);
 				objects.push_back(coin);
 
 				goldenBricks.push_back(obj);
@@ -741,10 +741,11 @@ void CPlayScene::Update(DWORD dt)
 		// DebugOutTitle(L"Mario x %f y %f", mx, my);
 
 		mx -= game->GetBackBufferWidth() / 2;
-		my -= game->GetBackBufferHeight() / 6;
+		my -= game->GetBackBufferHeight() / 4;
 
+		float lim_x, lim_y = -1;
 		if (limit_obj != NULL) {
-			float lim_x, lim_y;
+			
 			limit_obj->GetPosition(lim_x, lim_y);
 
 			//Cam lim is in the right bottom
@@ -759,7 +760,11 @@ void CPlayScene::Update(DWORD dt)
 		if (my < 0) my = 0;
 
 		cx = mx;
-		cy = my;
+
+		if ((lim_y != -1 && cy != lim_y) || ((CMario*)player)->IsFlying())
+		{
+			cy = my;
+		}
 	}
 	else if (cam_mode == CAMERA_MODE_SCROLL_X) {
 		cx += CAMERA_SCROLL_VX * dt;

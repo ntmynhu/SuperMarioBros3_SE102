@@ -190,7 +190,9 @@ public:
 
 	bool IsChargingPower() { return isChargingPower; }
 	bool IsFullPower() { return isFullPower; }
-
+	bool IsFlying() { 
+		return currentForm->IsFlying();
+	}
 	void SetChargingPower(bool value)
 	{
 		isChargingPower = value;

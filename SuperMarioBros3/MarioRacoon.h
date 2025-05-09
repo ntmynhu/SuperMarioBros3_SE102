@@ -87,7 +87,7 @@ public:
     void StartFlying() { isFlying = true; flyStartTime = GetTickCount64(); }
     void StopFlying() { isFlying = false; }
     void TailAttack() { isTailAttacking = true; }
-    bool IsFlying() const { return isFlying; }
+    bool IsFlying() { return isFlying; }
     int IsTailAttacking() const { return isTailAttacking; }
 
     void StartFloating() { isFloating = true; floatingStartTime = GetTickCount64(); }
