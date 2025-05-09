@@ -52,7 +52,10 @@ void CBlueButton::SetTrigger()
 	DebugOut(L"[INFO] Blue button pressed: %d\n", goldenBricks.size());
 	for (int i = 0; i < goldenBricks.size(); i++)
 	{
-		if (!goldenBricks[i] || goldenBricks[i]->IsDeleted()) continue;
+		if (!goldenBricks[i] || goldenBricks[i]->IsDeleted()) {
+			goldenBricks[i] = NULL;
+			continue;
+		}
 		CGoldenBrick* brick = dynamic_cast<CGoldenBrick*>(goldenBricks[i]);
 		if (brick != NULL)
 		{

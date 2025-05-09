@@ -31,7 +31,7 @@ protected:
 	int state;
 
 	bool isActive = true;
-	bool isDeleted; 
+	bool isDeleted = true; 
 
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
@@ -53,7 +53,7 @@ public:
 	void RenderBoundingBox();
 
 	CGameObject();
-	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; this->init_x = x; this->init_y = y; }
+	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; this->init_x = x; this->init_y = y; this->isDeleted = false; }
 
 	virtual void ResetPos() { Activate(); };
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
