@@ -9,14 +9,21 @@
 #include "Goomba.h"
 //#include "Koopas.h"
 
+#define CAMERA_MODE_NORMAL 0
+#define CAMERA_MODE_SCROLL_X 1
 
+#define CAMERA_SCROLL_VX 0.02
 class CPlayScene: public CScene
 {
 protected: 
 	// A play scene has to have player, right? 
 	LPGAMEOBJECT player;	
-	// An object that set the limit right bottom of the scene, no obj has x > lim_x, y > lim_y
+	// An object that set the limit right bottom of the scene
 	LPGAMEOBJECT limit_obj;
+	// An object that aim to stop mario from moving out of x dir of screen, move along with camera
+	LPGAMEOBJECT stop_mario_r;
+	LPGAMEOBJECT stop_mario_l;
+	int cam_mode;
 
 	vector<LPGAMEOBJECT> objects;
 
@@ -26,6 +33,7 @@ protected:
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_BACKGROUND(string line);
+	void _ParseSection_SETTING(string line);
 
 	void LoadAssets(LPCWSTR assetFile);
 	
@@ -40,6 +48,8 @@ public:
 	virtual void SoftUnload(); //Unload scene but keep the old object list
 
 	LPGAMEOBJECT GetPlayer() { return player; }
+	LPGAMEOBJECT GetStopLeft() { return stop_mario_l; }
+	LPGAMEOBJECT GetStopRight() { return stop_mario_r; }
 
 	void Clear();
 	void PurgeDeletedObjects();

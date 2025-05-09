@@ -8,9 +8,11 @@ height	240
 [SCENES]
 0	intro.txt
 1	scene01.txt	1
-5	scene0005.txt	1
+2	scene0005.txt	1
 3	world1_1.txt	2
 4	world1_1_hidden.txt	2
+5	world1_4.txt	3
+
 # id	file 
 [TEXTURES]
 -100	textures\bbox.png
@@ -20,5 +22,6 @@ height	240
 20	textures\misc.png
 30	textures\tiles.png
 40	textures\world1_1_tiles.png
+41	textures\world1_4_tiles.png
 50	textures\full_texture.png
 60	textures\HUD.png
