@@ -23,9 +23,10 @@ public:
 	}
 
 	void ResetPos() {
-		if (item == NULL || item->IsDeleted())
+		if (item == NULL || item->IsDeleted() && !isEmpty)
 		{
-			this->particle->Delete();
+			if (particle != NULL)
+				this->particle->Delete();
 			this->Delete();
 			return;
 		}

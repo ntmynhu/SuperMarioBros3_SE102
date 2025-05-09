@@ -139,6 +139,7 @@ void CGoldenBrick::SpawnItem()
 				float marioX, marioY;
 				mario->GetPosition(marioX, marioY);
 				oneUpMushroom->AppearFromQuestionBlock(marioX, y);
+				isEmpty = true;
 			}
 
 			break;
