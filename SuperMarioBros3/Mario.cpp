@@ -22,7 +22,7 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	DebugOutTitle(L"MARIO STATE %d", state);
+	DebugOutTitle(L"MARIO POS %f %f", x, y);
 	if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) {
 		
 		y += vy * dt;

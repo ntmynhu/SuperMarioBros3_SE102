@@ -146,6 +146,15 @@ void CPlayScene::_ParseSection_SETTING(string line)
 			break;
 		}
 	}
+
+	else if (tokens[0] == "poskeycode") {
+		int keycode = atoi(tokens[1].c_str());
+		float key_x = (float)atof(tokens[2].c_str());
+		float key_y = (float)atof(tokens[3].c_str());
+		
+		PosKey* posKey = new PosKey(keycode, key_x, key_y);
+		((CSampleKeyHandler*)key_handler)->AddPosKey(posKey);
+	}
 }
 
 /*

@@ -185,6 +185,7 @@
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="PosKey.cpp" />
     <ClCompile Include="QuestionBlock.cpp" />
     <ClCompile Include="RedKoopa.cpp" />
     <ClCompile Include="RedVenusFireTrap.cpp" />
@@ -244,6 +245,7 @@
     <ClInclude Include="Platform.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Portal.h" />
+    <ClInclude Include="PosKey.h" />
     <ClInclude Include="QuestionBlock.h" />
     <ClInclude Include="RedKoopa.h" />
     <ClInclude Include="RedVenusFireTrap.h" />
