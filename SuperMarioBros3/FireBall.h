@@ -19,9 +19,11 @@ protected:
 	float xDir, yDir; 
 	float init_x, init_y;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	virtual int IsCollidable() { return 1; };
+	virtual int IsOverlappable() { return 1; };
 	virtual int IsBlocking() { return 0; }
+	virtual int IsCollidable() { return 1; };
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+
 	void Render();
 
 public:

@@ -33,13 +33,20 @@ protected:
 	int nx = 1; // Staring direction of the leaf
 	ULONGLONG oscillation_time = 0;
 	virtual int IsBlocking() { return 0; }
-
+	int IsCollidable() { return 1; }
+	int IsOverlappable() { return 1; }
 public:
 	CSuperLeaf(float x, float y) : CGameObject(x, y) {}
 
 	virtual void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
+	virtual void ResetPos() { 
+		if (isFalling || isAppearing)
+			Delete();
+		else 
+			Activate(); 
+	};
 
 	void AppearFromQuestionBlock(float x, float y);
 	void StartAppearing() { isAppearing = true; Activate(); }

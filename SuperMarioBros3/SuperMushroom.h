@@ -33,6 +33,13 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 
+	virtual void ResetPos() {
+		if (isMoving || isAppearing)
+			Delete();
+		else
+			Activate();
+	};
+
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	virtual void OnNoCollision(DWORD dt);
 

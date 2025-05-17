@@ -333,7 +333,7 @@ void CMario::Render()
 	}
 
 	tail->Render();
-	RenderBoundingBox();
+	//RenderBoundingBox();
 
 	//DebugOutTitle(L"Coins: %d", coin);
 	//DebugOutTitle(L"Mario State: %d", currentForm->GetLevel());
