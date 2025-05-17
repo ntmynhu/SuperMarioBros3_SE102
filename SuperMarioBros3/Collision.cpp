@@ -48,7 +48,7 @@ void CCollision::Overlap(
 		ny = 1.0f;  // obj1 is below obj2
 }
 
-LPCOLLISIONEVENT CCollision::Overlap(LPGAMEOBJECT objSrc, LPGAMEOBJECT objDest)
+LPCOLLISIONEVENT CCollision::Overlap(LPGAMEOBJECT objSrc, LPGAMEOBJECT objDest, bool isInverted)
 {
 	float sl, st, sr, sb; //source obj
 	float dl, dt, dr, db; //dest obj
@@ -62,7 +62,10 @@ LPCOLLISIONEVENT CCollision::Overlap(LPGAMEOBJECT objSrc, LPGAMEOBJECT objDest)
 	float t, nx, ny;
 
 	Overlap(sl, st, sr, sb, dl, dt, dr, db, sx, dx, sy, dt, t, nx, ny);
-	CCollisionEvent* e = new CCollisionEvent(t, nx, ny, 0.0f, 0.0f, objDest, objSrc);
+	CCollisionEvent* e = new CCollisionEvent(t, nx, ny, 0.0f, 0.0f, objDest, objSrc, COLLISION_TYPE_OVERLAP);
+	
+	if (isInverted)
+		e = new CCollisionEvent(t, nx, ny, 0.0f, 0.0f, objSrc, objDest, COLLISION_TYPE_OVERLAP);
 	return e;
 }
 /*
@@ -222,7 +225,7 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 			e = Overlap(objSrc, objDests->at(i));
 		}
 		else if (objDests->at(i)->IsOverlappable()) {
-			e = Overlap(objDests->at(i), objSrc);
+			e = Overlap(objDests->at(i), objSrc, true);
 		}
 		else {
 			e = SweptAABB(objSrc, dt, objDests->at(i));

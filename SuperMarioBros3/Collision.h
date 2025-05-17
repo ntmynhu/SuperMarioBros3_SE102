@@ -12,19 +12,23 @@ typedef CGameObject* LPGAMEOBJECT;
 struct CCollisionEvent;
 typedef CCollisionEvent* LPCOLLISIONEVENT;
 
+#define COLLISION_TYPE_NORMAL 0
+#define COLLISION_TYPE_OVERLAP 1
 struct CCollisionEvent 
 {
 	LPGAMEOBJECT src_obj;		// source object : the object from which to calculate collision
 	LPGAMEOBJECT obj;			// the target object
 	
+	int collision_type;
 	float t, nx, ny;
 
 	float dx, dy;				// *RELATIVE* movement distance between this object and obj
 	bool isDeleted;		
 
 	CCollisionEvent(float t, float nx, float ny, float dx = 0, float dy = 0, 
-		LPGAMEOBJECT obj = NULL, LPGAMEOBJECT src_obj = NULL)
+		LPGAMEOBJECT obj = NULL, LPGAMEOBJECT src_obj = NULL, int collision_type = COLLISION_TYPE_NORMAL)
 	{
+		this->collision_type = collision_type;
 		this->t = t;
 		this->nx = nx;
 		this->ny = ny;
@@ -41,6 +45,8 @@ struct CCollisionEvent
 	{
 		return a->t < b->t;
 	}
+public:
+	int GetCollisionType() { return collision_type; }
 };
 
 class CCollision
@@ -75,7 +81,8 @@ public:
 
 	LPCOLLISIONEVENT Overlap(
 		LPGAMEOBJECT objSrc,
-		LPGAMEOBJECT objDest);
+		LPGAMEOBJECT objDest,
+		bool isInverted = false);
 
 	void Scan(
 		LPGAMEOBJECT objSrc, 
