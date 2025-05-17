@@ -13,10 +13,11 @@ class CMario;
 class CBlock : public CGameObject
 {
 protected:
+	int active_ani_id;
 	CMario* mario = NULL;
 	virtual void SetMario();
 public:
-	CBlock(float x, float y) : CGameObject(x, y) {}
+	CBlock(float x, float y, int active_ani_id) : CGameObject(x, y) { this->active_ani_id = active_ani_id; }
 	virtual void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 		if (!mario) {

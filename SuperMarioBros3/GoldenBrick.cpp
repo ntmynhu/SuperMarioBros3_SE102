@@ -11,10 +11,10 @@ void CGoldenBrick::Render()
 
 	if (!isEmpty && !isBouncing)
 	{
-		aniId = ID_ANI_GOLDEN_BRICK;
+		aniId = active_ani_id;
 	}
 	else if (isBouncing && brick_stat == BRICK_STAT_NO_COLLIDE_Y) {
-		aniId = ID_ANI_GOLDEN_BRICK;
+		aniId = active_ani_id;
 	}
 	else
 	{

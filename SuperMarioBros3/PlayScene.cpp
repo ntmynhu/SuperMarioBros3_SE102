@@ -294,34 +294,37 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case OBJECT_TYPE_BLOCK:
 	{
-		obj = new CBlock(x, y);
+		obj = new CBlock(x, y, ID_ANI_BLOCK_EMPTY);
 		break;
 	}
 
 	case OBJECT_TYPE_QUESTION_BLOCK:
 	{
 		int itemID = atoi(tokens[3].c_str());
-
+		int ani_id = ID_ANI_QUESTION_BLOCK;
+		if (tokens.size() > 4) {
+			ani_id = atoi(tokens[4].c_str());
+		}
 		switch (itemID)
 		{
 			case ID_ITEM_COIN:
 			{
 				CCoin* coin = new CCoin(x, y - COIN_APPEARING_HEIGHT);
-				obj = new CQuestionBlock(x, y, itemID, coin);
+				obj = new CQuestionBlock(x, y, itemID, coin, -1, NULL, ani_id);
 				objects.push_back(coin);
 				break;
 			}
 			case ID_ITEM_SUPER_MUSHROOM:
 			{
 				CSuperMushroom* mushroom = new CSuperMushroom(x, y);
-				obj = new CQuestionBlock(x, y, itemID, mushroom);
+				obj = new CQuestionBlock(x, y, itemID, mushroom, -1, NULL, ani_id);
 				objects.push_back(mushroom);
 				break;
 			}
 			case ID_ITEM_SUPER_LEAF:
 			{
 				CSuperLeaf* leaf = new CSuperLeaf(x, y);
-				obj = new CQuestionBlock(x, y, itemID, leaf);
+				obj = new CQuestionBlock(x, y, itemID, leaf, -1, NULL, ani_id);
 				objects.push_back(leaf);
 				break;
 			}
@@ -329,7 +332,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			{
 				CSuperMushroom* mushroom = new CSuperMushroom(x, y);
 				CSuperLeaf* leaf = new CSuperLeaf(x, y);
-				obj = new CQuestionBlock(x, y, itemID, mushroom, ID_ITEM_SUPER_LEAF, leaf);
+				obj = new CQuestionBlock(x, y, itemID, mushroom, ID_ITEM_SUPER_LEAF, leaf, ani_id);
 				objects.push_back(mushroom);
 				objects.push_back(leaf);
 				break;
@@ -342,6 +345,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOLDEN_BRICK:
 	{
 		int itemID = atoi(tokens[3].c_str());
+		int ani_id = ID_ANI_GOLDEN_BRICK;
+		if (tokens.size() > 5) {
+			ani_id = atoi(tokens[5].c_str());
+		}
 		switch (itemID)
 		{
 		case ID_ITEM_COIN:
@@ -360,7 +367,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			objects.push_back(broken_particle);
 
 			CCoin* coin = new CCoin(x, y);
-			obj = new CGoldenBrick(x, y, itemID, coin, broken_particle, stat);
+			obj = new CGoldenBrick(x, y, itemID, coin, broken_particle, stat, ani_id);
 			objects.push_back(coin);
 
 			goldenBricks.push_back(obj);
@@ -370,7 +377,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		case ID_ITEM_ONE_UP_MUSHROOM:
 		{
 			OneUpMushroom* oneUpMushroom = new OneUpMushroom(x, y);
-			obj = new CGoldenBrick(x, y, itemID, oneUpMushroom, NULL);
+			obj = new CGoldenBrick(x, y, itemID, oneUpMushroom, NULL, 0, ani_id);
 			objects.push_back(oneUpMushroom);
 
 			goldenBricks.push_back(obj);
@@ -384,6 +391,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case OBJECT_TYPE_GOLDEN_N_BRICK:
 	{
+		int ani_id = ID_ANI_GOLDEN_BRICK;
+		if (tokens.size() > 4) {
+			ani_id = atoi(tokens[4].c_str());
+		}
 		int num_coins = atoi(tokens[3].c_str());
 		vector<CCoin*> coins;
 		for (int i = 0; i < num_coins; i++) {
@@ -391,7 +402,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			coins.push_back(coin);
 			objects.push_back(coin);
 		}
-		obj = new CGoldenNBrick(x, y, coins);
+		obj = new CGoldenNBrick(x, y, coins, ani_id);
 		break;
 	}
 

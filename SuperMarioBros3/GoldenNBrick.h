@@ -13,7 +13,7 @@ protected:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void CleanList();
 public:
-	CGoldenNBrick(float x, float y, vector<CCoin*> coins) : CQuestionBlock(x, y, -1, NULL)
+	CGoldenNBrick(float x, float y, vector<CCoin*> coins, int active_ani_id = ID_ANI_GOLDEN_BRICK) : CQuestionBlock(x, y, -1, NULL, -1, NULL, active_ani_id)
 	{
 		this->coins = coins;
 	}
