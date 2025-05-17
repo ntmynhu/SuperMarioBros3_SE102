@@ -777,6 +777,7 @@ void CPlayScene::Update(DWORD dt)
 
 	
 	float cx, cy;
+	float cam_vx = 0;
 	game->GetCamPos(cx, cy); //Get current cam pos
 
 	float mx, my;
@@ -820,6 +821,7 @@ void CPlayScene::Update(DWORD dt)
 		}
 	}
 	else if (cam_mode == CAMERA_MODE_SCROLL_X) {
+		cam_vx = CAMERA_SCROLL_VX;
 		cx += CAMERA_SCROLL_VX * dt;
 		if (limit_obj != NULL) {
 			float lim_x, lim_y;
@@ -827,7 +829,10 @@ void CPlayScene::Update(DWORD dt)
 
 			lim_x -= game->GetBackBufferWidth();
 			lim_y -= game->GetBackBufferHeight();
-			if (cx > lim_x) cx = lim_x;
+			if (cx > lim_x) {
+				cx = lim_x;
+				cam_vx = 0;
+			}
 			cy = lim_y;
 		}
 		if (cx < 0) cx = 0;
@@ -839,15 +844,24 @@ void CPlayScene::Update(DWORD dt)
 	float m_vx, m_vy;
 	
 	if (stop_mario_l != NULL) {
-		if (cam_mode == CAMERA_MODE_SCROLL_X)
-			stop_mario_l->SetSpeed(CAMERA_SCROLL_VX, 0);
+		if (cam_mode == CAMERA_MODE_SCROLL_X) {
+			if (cam_vx == 0) {
+				stop_mario_l->SetPosition(cx, 0);
+			}
+			stop_mario_l->SetSpeed(cam_vx, 0);
+		}
 		else if (cam_mode == CAMERA_MODE_NORMAL)
 			stop_mario_l->SetPosition(cx, 0);
 
 	}
 	if (stop_mario_r != NULL) {
-		if (cam_mode == CAMERA_MODE_SCROLL_X)
-			stop_mario_r->SetSpeed(CAMERA_SCROLL_VX, 0);
+		if (cam_mode == CAMERA_MODE_SCROLL_X) 
+		{
+			if (cam_vx == 0) {
+				stop_mario_r->SetPosition(cx + game->GetBackBufferWidth(), 0);
+			}
+			stop_mario_r->SetSpeed(cam_vx, 0);
+		}
 		else if (cam_mode == CAMERA_MODE_NORMAL)
 			stop_mario_r->SetPosition(cx + game->GetBackBufferWidth(), 0);
 	}
