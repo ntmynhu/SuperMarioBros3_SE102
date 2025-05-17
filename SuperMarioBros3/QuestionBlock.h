@@ -27,7 +27,6 @@ protected:
 public:
 	CQuestionBlock(float x, float y, int itemId, CGameObject* item, int itemId2 = -1, CGameObject* item2 = NULL) : CBlock(x, y)
 	{
-		item->Deactivate();
 		this->item = item;
 		isEmpty = false;	
 		this->itemId = itemId;

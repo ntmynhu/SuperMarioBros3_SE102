@@ -32,6 +32,7 @@
 #include "Block.h"
 #include "QuestionBlock.h"
 #include "GoldenBrick.h"
+#include "GoldenNBrick.h"
 #include "SuperMushroom.h"
 #include "SuperLeaf.h"
 #include "Particle.h"
@@ -277,12 +278,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_KOOPA: obj = new CKoopa(x, y); break;
 	case OBJECT_TYPE_RED_KOOPA: obj = new CRedKoopa(x, y); break;
 	case OBJECT_TYPE_PARAKOOPA: obj = new CParakoopa(x, y); break;
-	case OBJECT_TYPE_RED_PARAKOOPA: 
+	case OBJECT_TYPE_RED_PARAKOOPA:
+	{
 		float range = RED_PARA_KOOPA_FLY_RANGE;
 		if (tokens.size() > 3)
 			range = (float)atof(tokens[3].c_str());
-		obj = new CRedParakoopa(x, y, range); 
+		obj = new CRedParakoopa(x, y, range);
 		break;
+	}
 	case OBJECT_TYPE_BRICK:
 	{
 		obj = new CBrick(x, y);
@@ -376,6 +379,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		}
 
+		break;
+	}
+
+	case OBJECT_TYPE_GOLDEN_N_BRICK:
+	{
+		int num_coins = atoi(tokens[3].c_str());
+		vector<CCoin*> coins;
+		for (int i = 0; i < num_coins; i++) {
+			CCoin* coin = new CCoin(x, y);
+			coins.push_back(coin);
+			objects.push_back(coin);
+		}
+		obj = new CGoldenNBrick(x, y, coins);
 		break;
 	}
 
