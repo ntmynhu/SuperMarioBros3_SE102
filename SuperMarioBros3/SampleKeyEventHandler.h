@@ -18,5 +18,10 @@ public:
 	virtual void AddPosKey(PosKey* KeyCode) {
 		PosKeyBind.push_back(KeyCode);
 	};
+	virtual void ClearKey() {
+		for (int i = 0; i < PosKeyBind.size(); i++)
+			delete(PosKeyBind[i]);
+		PosKeyBind.clear();
+	}
 	CSampleKeyHandler(LPSCENE s) :CSceneKeyHandler(s) {};
 };

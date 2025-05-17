@@ -11,13 +11,13 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
 
-	DebugOut(L"%d typed", KeyCode);
+	DebugOut(L"%d typed\n", KeyCode);
 	for (int i = 0; i < PosKeyBind.size(); i++) {
 		PosKey* posKey = PosKeyBind[i];
 		if (KeyCode == posKey->keyCode) {
 			mario->SetPosition(posKey->x, posKey->y);
 			CGame::GetInstance()->SetCamPos(posKey->x, posKey->y);
-			DebugOut(L"Mario to...%f %f", posKey->x, posKey->y);
+			DebugOut(L"Mario to...%f %f\n", posKey->x, posKey->y);
 			return;
 		}
 	}
