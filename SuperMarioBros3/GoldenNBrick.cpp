@@ -53,7 +53,7 @@ void CGoldenNBrick :: Render() {
 
 	if (!isEmpty)
 	{
-		aniId = ID_ANI_GOLDEN_BRICK;
+		aniId = active_ani_id;
 	}
 	else
 	{

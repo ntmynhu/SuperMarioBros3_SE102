@@ -9,14 +9,26 @@
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
-	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
+	CGame* game = CGame::GetInstance();
+	LPPLAYSCENE scene = (LPPLAYSCENE) game->GetCurrentScene();
+	CMario* mario = (CMario *)scene->GetPlayer(); 
 
 	DebugOut(L"%d typed\n", KeyCode);
 	for (int i = 0; i < PosKeyBind.size(); i++) {
 		PosKey* posKey = PosKeyBind[i];
 		if (KeyCode == posKey->keyCode) {
 			mario->SetPosition(posKey->x, posKey->y);
-			CGame::GetInstance()->SetCamPos(posKey->x, posKey->y);
+
+			float cx = posKey->x - game->GetBackBufferWidth() / 2;
+			game->SetCamPos(cx, posKey->y);
+			if (scene->GetStopLeft() != NULL) {
+				scene->GetStopLeft()->SetPosition(cx, 0);
+
+			}
+			if (scene->GetStopRight() != NULL) {
+				scene->GetStopRight()->SetPosition(cx + game->GetBackBufferWidth(), 0);
+			}
+
 			DebugOut(L"Mario to...%f %f\n", posKey->x, posKey->y);
 			return;
 		}

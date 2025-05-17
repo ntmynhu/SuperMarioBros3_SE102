@@ -11,7 +11,7 @@ void CQuestionBlock::Render()
 
 	if (!isEmpty && !isBouncing)
 	{
-		aniId = ID_ANI_QUESTION_BLOCK;
+		aniId = active_ani_id;
 	}
 	else
 	{

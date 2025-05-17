@@ -19,7 +19,7 @@ protected:
 
 public:
 	CGoldenBrick(float x, float y, int itemId, 
-		CGameObject* item, BrokenBrick_Particle* particle, int brick_stat = 0) : CQuestionBlock(x, y, itemId, item)
+		CGameObject* item, BrokenBrick_Particle* particle, int brick_stat = 0, int active_ani_id = ID_ANI_GOLDEN_BRICK) : CQuestionBlock(x, y, itemId, item, -1, NULL, active_ani_id)
 	{
 		this->particle = particle;
 		this->brick_stat = brick_stat;

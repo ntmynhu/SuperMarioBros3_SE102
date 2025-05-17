@@ -23,9 +23,14 @@ protected:
 	CGameObject* item = NULL;
 	CGameObject* item2 = NULL;
 	bool isBouncing = false;
+
+
+
 	int bouncing_start = -1;
 public:
-	CQuestionBlock(float x, float y, int itemId, CGameObject* item, int itemId2 = -1, CGameObject* item2 = NULL) : CBlock(x, y)
+	CQuestionBlock(float x, float y, int itemId, CGameObject* item, 
+		int itemId2 = -1, CGameObject* item2 = NULL, 
+		int active_ani_id = ID_ANI_QUESTION_BLOCK) : CBlock(x, y, active_ani_id)
 	{
 		this->item = item;
 		isEmpty = false;	
