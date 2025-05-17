@@ -318,16 +318,22 @@ void CMario::Render()
 	else
 		aniId = currentForm->GetAniId(this);
 
+	float x_offset = 0;
+	if (currentForm->GetLevel() == MARIO_LEVEL_RACOON) {
+		if (nx < 0) x_offset = 4;
+		else x_offset = -4;
+	}
+
 	if (isChangingState != -1)
-		animations->Get(aniId)->Render(x, y, 1, true);
+		animations->Get(aniId)->Render(x + x_offset, y, 1, true);
 	else
 	{
 		float a = (GetTickCount64() - stateChange_start) % 5 == 0? 1 : 0;
-		animations->Get(aniId)->Render(x, y, a, true);
+		animations->Get(aniId)->Render(x + x_offset, y, a, true);
 	}
 
 	tail->Render();
-	//RenderBoundingBox();
+	RenderBoundingBox();
 
 	//DebugOutTitle(L"Coins: %d", coin);
 	//DebugOutTitle(L"Mario State: %d", currentForm->GetLevel());
@@ -394,7 +400,7 @@ void CMario::ChangeForm(int newLevel, int isChanging) //-1 as down, 1 as up, 0 a
 			currentForm = new CMarioRacoon();
 			break;
 	}
-
+	
 	CGameData::GetInstance()->SetLevel(newLevel);
 	DebugOut(L"[INFO] Mario changed to level %d\n", newLevel);
 	DebugOut(L"[INFO] CurrentForm %d\n", currentForm->GetLevel());

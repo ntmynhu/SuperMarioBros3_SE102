@@ -166,6 +166,8 @@ public:
 	bool IsOnPlatform() { return isOnPlatform; }
 	void GetPhysics(float& vx, float& vy, float& ax, float& ay, float& nx) { vx = this->vx; vy = this->vy; ax = this->ax; ay = this->ay; nx = this->nx; }
 	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }
+	bool IsUntouchable() { return untouchable == 1; }
+
 	int GetLevel() { return currentForm->GetLevel(); }
 	CMarioForm* GetCurrentForm() { return currentForm; }
 	void GetHoldOffset(float &ox, float &oy) { 

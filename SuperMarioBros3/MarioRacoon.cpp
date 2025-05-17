@@ -442,20 +442,16 @@ void CMarioRacoon::GetBoundingBox(float& left, float& top, float& right, float& 
 {
 	float x, y;
 	mario->GetPosition(x, y);
-
-	float vx, vy, ax, ay, nx;
-	mario->GetPhysics(vx, vy, ax, ay, nx);
-
 	if (isSitting)
 	{
-		left = x - MARIO_BIG_SITTING_BBOX_WIDTH / 2 + nx * 4;
+		left = x - MARIO_BIG_SITTING_BBOX_WIDTH / 2;
 		top = y - MARIO_BIG_SITTING_BBOX_HEIGHT / 2;
 		right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
 		bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
 	}
 	else
 	{
-		left = x - MARIO_BIG_BBOX_WIDTH / 2 + nx * 4;
+		left = x - MARIO_BIG_BBOX_WIDTH / 2;
 		top = y - MARIO_BIG_BBOX_HEIGHT / 2;
 		right = left + MARIO_BIG_BBOX_WIDTH;
 		bottom = top + MARIO_BIG_BBOX_HEIGHT;
