@@ -82,6 +82,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				vx = (w_x - x) / dt;
 			}
 		}
+
+		CWallMario* stop_right = (CWallMario*)scene->GetStopRight();
+		if (stop_right) {
+			float w_x, w_vx, w_vy;
+			stop_right->GetBoundX(w_x);
+			stop_right->GetSpeed(w_vx, w_vy);
+			if (w_vx > 0 && x >= w_x && vx > w_vx) {
+				vx = (w_x - x) / dt;
+			}
+		}
 	}
 	
 
