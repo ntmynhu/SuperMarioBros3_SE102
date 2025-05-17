@@ -188,6 +188,7 @@
     <ClCompile Include="PosKey.cpp" />
     <ClCompile Include="QuestionBlock.cpp" />
     <ClCompile Include="RedKoopa.cpp" />
+    <ClCompile Include="RedParakoopa.cpp" />
     <ClCompile Include="RedVenusFireTrap.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -248,6 +249,7 @@
     <ClInclude Include="PosKey.h" />
     <ClInclude Include="QuestionBlock.h" />
     <ClInclude Include="RedKoopa.h" />
+    <ClInclude Include="RedParakoopa.h" />
     <ClInclude Include="RedVenusFireTrap.h" />
     <ClInclude Include="SampleKeyEventHandler.h" />
     <ClInclude Include="Scene.h" />
