@@ -215,12 +215,12 @@ void CKoopa::TakeBlockBounceDamage(float xBlock)
 {
 	isUpsideDown = true;
 	if (xBlock > x) {
-		vx = -KOOPA_TAIL_HIT_VX;
+		vx = -KOOPA_BLOCK_HIT_VX;
 	}
 	else {
-		vx = KOOPA_TAIL_HIT_VX;
+		vx = KOOPA_BLOCK_HIT_VX;
 	}
-	vy = -KOOPA_TAIL_HIT_VY;
+	vy = -KOOPA_BLOCK_HIT_VY;
 	SetState(KOOPA_STATE_DEFEND);
 }
 
