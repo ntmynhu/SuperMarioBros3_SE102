@@ -16,6 +16,7 @@
 #include "Koopa.h"
 #include "Parakoopa.h"
 #include "RedKoopa.h"
+#include "RedParakoopa.h"
 #include "PiranhaPlant.h"
 #include "VenusFireTrap.h"
 #include "RedVenusFireTrap.h"
@@ -276,7 +277,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_KOOPA: obj = new CKoopa(x, y); break;
 	case OBJECT_TYPE_RED_KOOPA: obj = new CRedKoopa(x, y); break;
 	case OBJECT_TYPE_PARAKOOPA: obj = new CParakoopa(x, y); break;
-
+	case OBJECT_TYPE_RED_PARAKOOPA: 
+		float range = RED_PARA_KOOPA_FLY_RANGE;
+		if (tokens.size() > 3)
+			range = (float)atof(tokens[3].c_str());
+		obj = new CRedParakoopa(x, y, range); 
+		break;
 	case OBJECT_TYPE_BRICK:
 	{
 		obj = new CBrick(x, y);
