@@ -742,7 +742,9 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: Set a max camY
 	CGame* game = CGame::GetInstance();
 
-	HUD::GetInstance()->SetPosition(game->GetBackBufferWidth()/2, game->GetBackBufferHeight() + 6);
+	HUD::GetInstance()->SetPosition(game->GetBackBufferWidth()/2, game->GetBackBufferHeight());
+
+	game->ProcessTimer(dt);
 
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
