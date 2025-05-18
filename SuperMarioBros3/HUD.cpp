@@ -8,9 +8,11 @@ HUD* HUD::GetInstance()
 		__instance = new HUD(0, 0);
 	return HUD::__instance;
 }
+
 void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 }
+
 void HUD::Render() {
 	CGame* g = CGame::GetInstance();
 	CSprites* s = CSprites::GetInstance();
