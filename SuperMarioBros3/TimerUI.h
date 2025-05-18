@@ -1,5 +1,5 @@
 #pragma once
-#include "GameObject.h"
+#include "UIElement.h"
 
 #define ID_SPRITE_TIMER_0	301000
 #define ID_SPRITE_TIMER_1	301001
@@ -14,17 +14,10 @@
 
 #define NUMBER_WIDTH	7
 
-class TimerUI : public CGameObject
+class TimerUI : public CUIElement
 {
-protected:
-	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) {}
-	virtual int IsCollidable() { return 0; };
-	virtual int IsBlocking() { return 0; }
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 public:
-	TimerUI(float x, float y) :CGameObject(x, y) {}
-	void Deactivate() {}
-	void Render();
+	TimerUI(float x, float y) :CUIElement(x, y) {}
 	void Render(float x, float y);
 };
 

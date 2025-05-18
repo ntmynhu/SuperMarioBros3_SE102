@@ -201,6 +201,7 @@
     <ClCompile Include="TimerUI.cpp" />
     <ClCompile Include="Tunnel.cpp" />
     <ClCompile Include="TunnelPlant.cpp" />
+    <ClCompile Include="UIElement.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="VenusFireTrap.cpp" />
     <ClCompile Include="Wall.cpp" />
@@ -266,6 +267,7 @@
     <ClInclude Include="TimerUI.h" />
     <ClInclude Include="Tunnel.h" />
     <ClInclude Include="TunnelPlant.h" />
+    <ClInclude Include="UIElement.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VenusFireTrap.h" />
     <ClInclude Include="Wall.h" />

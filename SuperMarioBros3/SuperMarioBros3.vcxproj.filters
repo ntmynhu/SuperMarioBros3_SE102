@@ -192,6 +192,9 @@
     <ClCompile Include="TimerUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UIElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -381,6 +384,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TimerUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIElement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

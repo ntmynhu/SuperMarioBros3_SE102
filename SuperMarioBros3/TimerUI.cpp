@@ -2,10 +2,6 @@
 #include "Game.h"
 #include "debug.h"
 
-void TimerUI::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-}
-
 void TimerUI::Render(float x, float y)
 {
 	CGame* game = CGame::GetInstance();
@@ -24,8 +20,4 @@ void TimerUI::Render(float x, float y)
 	s->Get(ID_SPRITE_TIMER_0 + hundredsPlace)->DrawStatic(x - NUMBER_WIDTH, y);
 	s->Get(ID_SPRITE_TIMER_0 + tensPlace)->DrawStatic(x, y);
 	s->Get(ID_SPRITE_TIMER_0 + unitsPlace)->DrawStatic(x + NUMBER_WIDTH, y);
-}
-
-void TimerUI::Render()
-{
 }
