@@ -18,7 +18,7 @@ void TimerUI::Render(float x, float y)
 	CGame* g = CGame::GetInstance();
 	CSprites* s = CSprites::GetInstance();
 
-	x += 15;
+	x += 13;
 	y -= 6;
 
 	s->Get(ID_SPRITE_TIMER_0 + hundredsPlace)->DrawStatic(x - NUMBER_WIDTH, y);
