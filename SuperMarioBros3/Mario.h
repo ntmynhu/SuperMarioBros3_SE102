@@ -92,6 +92,8 @@ class CMario : public CGameObject
 	CTail* tail;
 	int coin;
 
+	int currentBaseScore = 100;
+
 	ULONGLONG stateChange_start;
 	int isChangingState; // -1 as down, 1 as up
 

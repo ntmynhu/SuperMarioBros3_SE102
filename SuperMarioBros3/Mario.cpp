@@ -170,11 +170,14 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
-		if (e->ny < 0) isOnPlatform = true;
+		if (e->ny < 0)
+		{
+			isOnPlatform = true;
+			currentBaseScore = 100;
+		}
 	}
 	else if (e->nx != 0 && e->obj->IsBlocking())
 	{
-		
 		vx = 0;
 	}
 
@@ -200,7 +203,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithTunnel(e);
 	else if (dynamic_cast<CBlueButton*>(e->obj))
 		OnCollisionWithBlueButton(e);
-	
 }
 
 void CMario::OnCollisionWithTunnel(LPCOLLISIONEVENT e) {
@@ -264,6 +266,10 @@ void CMario::OnCollisionWithBlock(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
+
+	CGame* game = CGame::GetInstance();
+	game->AddScore(1000);
+
 	int nextForm = currentForm->GetLevel() + 1;
 	if (nextForm > MARIO_LEVEL_RACOON) return; // max level is racoon, update point logic will come later
 
@@ -294,6 +300,16 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 	if (e->ny < 0 && enemy->GetState() != ENEMY_STATE_DIE)
 	{
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
+
+		CGame* game = CGame::GetInstance();
+		game->AddScore(currentBaseScore);
+
+		if (!isOnPlatform)
+		{
+			currentBaseScore *= 2;
+
+			if (currentBaseScore == 1600) currentBaseScore = 1000;
+		}
 	}
 	else // hit by Goomba
 	{
@@ -316,6 +332,7 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 	{
 		CGame* game = CGame::GetInstance();
 		game->AddCoin(1);
+		game->AddScore(50);
 	}
 
 	e->obj->Delete();

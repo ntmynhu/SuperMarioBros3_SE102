@@ -169,6 +169,10 @@ void CKoopa::TakeKoopaDamage(float xKoopa)
 		else {
 			vx = ENEMY_DIE_UPSIDE_DOWN_VX;
 		}
+
+		CGame* game = CGame::GetInstance();
+		game->AddScore(100);
+
 		vy = -ENEMY_DIE_UPSIDE_DOWN_VY;
 		SetState(ENEMY_STATE_DIE);
 	}
