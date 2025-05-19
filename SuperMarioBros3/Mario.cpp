@@ -10,6 +10,7 @@
 #include "Coin.h"
 #include "QuestionBlock.h"
 #include "SuperMushroom.h"
+#include "OneUpMushroom.h"
 
 #include "Collision.h"
 #include "Portal.h"
@@ -189,6 +190,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CBlock*>(e->obj))
 		OnCollisionWithBlock(e);
+	else if (dynamic_cast<OneUpMushroom*>(e->obj))
+		OnCollisionWithOneUpMushroom(e);
 	else if (dynamic_cast<CSuperMushroom*>(e->obj))
 		OnCollisionWithMushroomAndLeaf(e);
 	else if (dynamic_cast<CSuperLeaf*>(e->obj))
@@ -274,6 +277,14 @@ void CMario::OnCollisionWithBlueButton(LPCOLLISIONEVENT e)
 		CBlueButton* button = dynamic_cast<CBlueButton*>(e->obj);
 		button->SetTrigger();
 	}
+}
+
+void CMario::OnCollisionWithOneUpMushroom(LPCOLLISIONEVENT e)
+{
+	e->obj->Delete();
+
+	CGame* game = CGame::GetInstance();
+	game->UpdateLives(1);
 }
 
 void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)

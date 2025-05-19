@@ -1,18 +1,18 @@
-#include "CoinUI.h"
+#include "LivesUI.h"
 #include "Game.h"
 
-void CoinUI::Render(float x, float y)
+void LivesUI::Render(float x, float y)
 {
 	CGame* game = CGame::GetInstance();
-	int coinNumber = game->GetCoin();
+	int lives = game->GetLives();
 
-	int tensPlace = coinNumber / 10;
-	int unitsPlace = coinNumber % 10;
+	int tensPlace = lives / 10;
+	int unitsPlace = lives % 10;
 
 	CSprites* s = CSprites::GetInstance();
 
-	x += 20;
-	y -= 14;
+	x -= 84;
+	y -= 6;
 
 	if (tensPlace > 0) s->Get(ID_SPRITE_TIMER_0 + tensPlace)->DrawStatic(x - NUMBER_WIDTH, y);
 	s->Get(ID_SPRITE_TIMER_0 + unitsPlace)->DrawStatic(x, y);

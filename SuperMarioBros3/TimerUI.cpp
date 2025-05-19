@@ -11,7 +11,6 @@ void TimerUI::Render(float x, float y)
 	int tensPlace = (totalTime % 100) / 10;
 	int unitsPlace = (totalTime % 100) % 10;
 
-	CGame* g = CGame::GetInstance();
 	CSprites* s = CSprites::GetInstance();
 
 	x += 13;

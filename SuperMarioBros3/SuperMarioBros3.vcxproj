@@ -171,6 +171,7 @@
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Koopa.cpp" />
     <ClCompile Include="LimitObject.cpp" />
+    <ClCompile Include="LivesUI.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="MarioBig.cpp" />
@@ -236,6 +237,7 @@
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Koopa.h" />
     <ClInclude Include="LimitObject.h" />
+    <ClInclude Include="LivesUI.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="MarioBig.h" />
     <ClInclude Include="MarioForm.h" />

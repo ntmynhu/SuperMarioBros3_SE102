@@ -13,6 +13,9 @@ HUD* HUD::GetInstance()
 
 		if (__instance->coin == NULL)
 			__instance->coin = new CoinUI(0, 0);
+
+		if (__instance->lives == NULL)
+			__instance->lives = new LivesUI(0, 0);
 	}
 	return HUD::__instance;
 }
@@ -22,7 +25,6 @@ void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 }
 
 void HUD::Render() {
-	CGame* g = CGame::GetInstance();
 	CSprites* s = CSprites::GetInstance();
 
 	float targetX = x;
@@ -32,4 +34,5 @@ void HUD::Render() {
 
 	timer->Render(targetX, targetY);
 	coin->Render(targetX, targetY);
+	lives->Render(targetX, targetY);
 }

@@ -1,10 +1,11 @@
 #pragma once
 #include "UIElement.h"
 
-class TimerUI : public CUIElement
+class LivesUI : public CUIElement
 {
 public:
-	TimerUI(float x, float y) :CUIElement(x, y) {}
+	LivesUI(float x, float y) :CUIElement(x, y) {}
 	void Render(float x, float y);
 };
+
 

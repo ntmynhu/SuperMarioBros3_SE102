@@ -1,6 +1,5 @@
 #pragma once
 #include "UIElement.h"
-#include "TimerUI.h"
 
 class CoinUI : public CUIElement
 {
