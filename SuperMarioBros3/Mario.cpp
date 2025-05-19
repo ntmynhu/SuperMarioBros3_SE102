@@ -301,6 +301,12 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
+	if (e->obj->IsActive())
+	{
+		CGame* game = CGame::GetInstance();
+		game->AddCoin(1);
+	}
+
 	e->obj->Delete();
 	coin++;
 }

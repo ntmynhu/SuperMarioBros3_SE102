@@ -68,7 +68,7 @@ class CGame
 	ULONGLONG marioPause_start = -1;
 
 	float currentTime = GAME_TIME;
-
+	int coinNumber = 0;
 public:
 	// Init DirectX, Sprite Handler
 	void Init(HWND hWnd, HINSTANCE hInstance);
@@ -129,6 +129,8 @@ public:
 	bool IsMarioStateChangedPause() { return marioPause; }
 	void ProcessTimer(DWORD dt);
 	float GetGameCurrentTime() { return currentTime; }
+	void AddCoin(int value) { coinNumber += value; }
+	int GetCoin() { return coinNumber; }
 
 	~CGame();
 };

@@ -1,5 +1,6 @@
 #include "GameObject.h"
-#include "TimerUI.h"
+#include "CoinUI.h"
+
 
 #pragma once
 #define ID_SPRITE_HUD_BACKGROUND 300001
@@ -10,6 +11,7 @@ class HUD : public CGameObject
 {
 private:
 	TimerUI* timer;
+	CoinUI* coin;
 protected:
 	static HUD* __instance;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) {}

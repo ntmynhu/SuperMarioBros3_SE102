@@ -1,6 +1,7 @@
 #pragma once
 #include "Block.h"
 #include "Mario.h"
+#include "Game.h"
 
 #define ID_ANI_QUESTION_BLOCK 81101
 
@@ -44,9 +45,23 @@ public:
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	bool IsBouncing() { return isBouncing; }
 	bool IsEmpty() { return isEmpty; }
-	void StartBouncing() { isBouncing = true; vy = -1; bouncing_start = 0; }
+	void StartBouncing()
+	{ 
+		isBouncing = true;
+		vy = -1;
+		bouncing_start = 0;
+
+		if (itemId == ID_ITEM_COIN)
+		{
+			CGame* game = CGame::GetInstance();
+			game->AddCoin(1);
+		}
+	}
 	virtual void SpawnItem();
 
-	virtual void TriggerAction(LPCOLLISIONEVENT e = NULL) { if (!isEmpty && !isBouncing) StartBouncing(); }
+	virtual void TriggerAction(LPCOLLISIONEVENT e = NULL)
+	{
+		if (!isEmpty && !isBouncing) StartBouncing();
+	}
 };
 
