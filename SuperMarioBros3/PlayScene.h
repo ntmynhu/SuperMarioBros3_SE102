@@ -12,7 +12,7 @@
 #define CAMERA_MODE_NORMAL 0
 #define CAMERA_MODE_SCROLL_X 1
 
-#define CAMERA_SCROLL_VX 0.02
+#define CAMERA_SCROLL_VX 0.035f
 class CPlayScene: public CScene
 {
 protected: 

@@ -89,6 +89,8 @@ class CMario : public CGameObject
 	BOOLEAN isOnPlatform;
 	bool isReadyToHold;
 	CEnemy* holdingObj;
+	CGameObject* stickingObj;
+
 	CTail* tail;
 	int coin;
 
@@ -100,7 +102,7 @@ class CMario : public CGameObject
 
 	float fullPowerTime = MARIO_FULL_POWER_TIME;
 	bool isFullPower = false;
-
+	bool isStickToPlatform = false;
 	bool isInputLock = false;
 
 	void OnCollisionWithEnemy(LPCOLLISIONEVENT e);
@@ -154,6 +156,11 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void SetLevel(int l);
+	void SetIsStickToPlatform(CGameObject* stickObj) {
+		this->stickingObj = stickObj;
+		if (stickObj) isStickToPlatform = true;
+		else isStickToPlatform = false;
+	}
 	void SetHoldingObject(CEnemy* obj) { this->holdingObj = obj; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 	void StartChangingStateDown() { isChangingState = -1; stateChange_start = GetTickCount64(); }
@@ -163,6 +170,7 @@ public:
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
+	bool IsStickToPlatform() { return isStickToPlatform; }
 	bool IsOnPlatform() { return isOnPlatform; }
 	void GetPhysics(float& vx, float& vy, float& ax, float& ay, float& nx) { vx = this->vx; vy = this->vy; ax = this->ax; ay = this->ay; nx = this->nx; }
 	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }

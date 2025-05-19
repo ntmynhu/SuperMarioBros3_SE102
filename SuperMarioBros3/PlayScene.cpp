@@ -22,6 +22,7 @@
 #include "RedVenusFireTrap.h"
 #include "FireBall.h"
 #include "Platform.h"
+#include "PlatformMoveFall.h"
 #include "FullPlatform.h"
 #include "Wall.h"
 #include "WallMario.h"
@@ -463,6 +464,29 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			x, y,
 			cell_width, cell_height, length,
 			sprite_begin, sprite_middle, sprite_end
+		);
+
+		break;
+	}
+
+	case OBJECT_TYPE_PLATFORM_MOVE_FALL:
+	{
+
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int sprite_begin = atoi(tokens[6].c_str());
+		int sprite_middle = atoi(tokens[7].c_str());
+		int sprite_end = atoi(tokens[8].c_str());
+
+		int XDir = atoi(tokens[9].c_str());
+		int YDir = atoi(tokens[10].c_str());
+
+		obj = new CPlatformMoveFall(
+			x, y,
+			cell_width, cell_height, length,
+			sprite_begin, sprite_middle, sprite_end,
+			XDir, YDir
 		);
 
 		break;
@@ -932,6 +956,7 @@ void CPlayScene::PurgeDeletedObjects()
 		}
 	}
 
+	if (player->IsDeleted()) player = NULL;
 	// NOTE: remove_if will swap all deleted items to the end of the vector
 	// then simply trim the vector, this is much more efficient than deleting individual items
 	objects.erase(
