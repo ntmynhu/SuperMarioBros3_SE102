@@ -21,6 +21,13 @@ void CBlock::SetMario() {
 	}
 }
 
+void CBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	if (!mario) {
+		SetMario();
+	}
+	if (mario->IsDeleted()) mario = NULL;
+	CGameObject::Update(dt, coObjects);
+}
 void CBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x - BLOCK_BBOX_WIDTH / 2;

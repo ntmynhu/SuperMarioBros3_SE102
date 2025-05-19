@@ -4,6 +4,7 @@ void CPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		SetMario();
 		return;
 	}
+	if (mario->IsDeleted()) mario = NULL;
 
 	CheckAbleToUp();
 

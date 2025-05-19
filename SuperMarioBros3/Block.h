@@ -19,12 +19,7 @@ protected:
 public:
 	CBlock(float x, float y, int active_ani_id) : CGameObject(x, y) { this->active_ani_id = active_ani_id; }
 	virtual void Render();
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
-		if (!mario) {
-			SetMario();
-		}
-		CGameObject::Update(dt, coObjects);
-	}
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void TriggerAction(LPCOLLISIONEVENT e = NULL) {}
 	virtual bool IsBouncing() { return false; }
