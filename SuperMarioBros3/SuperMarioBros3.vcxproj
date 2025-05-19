@@ -194,6 +194,7 @@
     <ClCompile Include="RedParakoopa.cpp" />
     <ClCompile Include="RedVenusFireTrap.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
+    <ClCompile Include="ScoreUI.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="SuperLeaf.cpp" />
@@ -261,6 +262,7 @@
     <ClInclude Include="RedVenusFireTrap.h" />
     <ClInclude Include="SampleKeyEventHandler.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="ScoreUI.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="SuperLeaf.h" />

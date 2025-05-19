@@ -1,4 +1,5 @@
 #include "Coin.h"
+#include "Game.h"
 #include "debug.h"
 
 void CCoin::Render()
@@ -33,6 +34,9 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else
 		{
 			Delete();
+
+			CGame* game = CGame::GetInstance();
+			game->AddScore(100);
 		}
 	}
 }

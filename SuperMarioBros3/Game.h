@@ -71,6 +71,7 @@ class CGame
 	int coinNumber = 0;
 	int marioLives = 4;
 	int world = 1;
+	int score = 0;
 public:
 	// Init DirectX, Sprite Handler
 	void Init(HWND hWnd, HINSTANCE hInstance);
@@ -139,6 +140,9 @@ public:
 	int GetLives() { return this->marioLives; }
 
 	int GetWorld() { return this->world; }
+
+	void AddScore(int value) { this->score += value; }
+	int GetScore() { return this->score; }
 
 	~CGame();
 };

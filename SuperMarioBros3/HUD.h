@@ -2,6 +2,7 @@
 #include "CoinUI.h"
 #include "TimerUI.h"
 #include "LivesUI.h"
+#include "ScoreUI.h"
 
 #pragma once
 #define ID_SPRITE_HUD_BACKGROUND 300001
@@ -15,6 +16,7 @@ private:
 	CoinUI* coin;
 	LivesUI* lives;
 	WorldUI* world;
+	ScoreUI* score;
 protected:
 	static HUD* __instance;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) {}

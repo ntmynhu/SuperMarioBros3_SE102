@@ -19,6 +19,9 @@ HUD* HUD::GetInstance()
 
 		if (__instance->world == NULL)
 			__instance->world = new WorldUI(0, 0);
+
+		if (__instance->score == NULL)
+			__instance->score = new ScoreUI(0, 0);
 	}
 	return HUD::__instance;
 }
@@ -39,4 +42,5 @@ void HUD::Render() {
 	coin->Render(targetX, targetY);
 	lives->Render(targetX, targetY);
 	world->Render(targetX, targetY);
+	score->Render(targetX, targetY);
 }

@@ -11,7 +11,7 @@ void CoinUI::Render(float x, float y)
 
 	CSprites* s = CSprites::GetInstance();
 
-	x += 20;
+	x += 22;
 	y -= 14;
 
 	if (tensPlace > 0) s->Get(ID_SPRITE_NUMBER_0 + tensPlace)->DrawStatic(x - NUMBER_WIDTH, y);

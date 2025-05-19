@@ -12,7 +12,7 @@
 #define ID_SPRITE_NUMBER_8	301008
 #define ID_SPRITE_NUMBER_9	301009
 
-#define NUMBER_WIDTH	7
+#define NUMBER_WIDTH	8
 
 class CUIElement : public CGameObject
 {

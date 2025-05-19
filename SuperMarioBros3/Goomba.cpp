@@ -3,6 +3,8 @@
 #include "Mario.h"
 #include "Enemy.h"
 #include "debug.h"
+#include "Game.h"
+
 CGoomba::CGoomba(float x, float y) :CEnemy(x, y)
 {
 	this->ay = GOOMBA_GRAVITY;
@@ -102,6 +104,10 @@ void CGoomba::TakeKoopaDamage(float xKoopa) {
 		else {
 			vx = ENEMY_DIE_UPSIDE_DOWN_VX;
 		}
+
+		CGame* game = CGame::GetInstance();
+		game->AddScore(100);
+
 		vy = -ENEMY_DIE_UPSIDE_DOWN_VY;
 		SetState(ENEMY_STATE_DIE);
 	}

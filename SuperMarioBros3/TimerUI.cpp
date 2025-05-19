@@ -13,7 +13,7 @@ void TimerUI::Render(float x, float y)
 
 	CSprites* s = CSprites::GetInstance();
 
-	x += 13;
+	x += 14;
 	y -= 6;
 
 	s->Get(ID_SPRITE_NUMBER_0 + hundredsPlace)->DrawStatic(x - NUMBER_WIDTH, y);
