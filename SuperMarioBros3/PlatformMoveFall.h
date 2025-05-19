@@ -5,7 +5,7 @@
 #define PLATFORM_MOVE_VY 0.1f
 
 #define PLATFORM_FALL_VY 0.02f
-#define PLATFORM_GRAVITY 0.0003f
+#define PLATFORM_GRAVITY 0.00025f
 
 class CMario;
 class CPlatformMoveFall :

@@ -17,6 +17,7 @@
 #include "Tunnel.h"
 #include "BlueButton.h"
 #include "WallMario.h"
+#include "PlatformKill.h"
 
 #include "GameData.h"
 
@@ -171,6 +172,9 @@ void CMario::OnNoCollision(DWORD dt)
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {		
+	if (dynamic_cast<CPlatformKill*>(e->obj))
+		OnCollisionWithPlatformKill(e);
+
 	if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) {
 		if (dynamic_cast<CPortal*>(e->obj))
 			OnCollisionWithPortal(e);
@@ -209,6 +213,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithTunnel(e);
 	else if (dynamic_cast<CBlueButton*>(e->obj))
 		OnCollisionWithBlueButton(e);
+	
 	
 }
 
@@ -290,6 +295,9 @@ void CMario::OnCollisionWithBlueButton(LPCOLLISIONEVENT e)
 	}
 }
 
+void CMario::OnCollisionWithPlatformKill(LPCOLLISIONEVENT e) {
+	SetState(MARIO_STATE_DIE);
+}
 void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 {
 	CEnemy* enemy = dynamic_cast<CEnemy*>(e->obj);
@@ -373,6 +381,7 @@ void CMario::SetState(int state)
 
 	if (state == MARIO_STATE_DIE)
 	{
+		die_start = GetTickCount64();
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		vx = 0;
 		ax = 0;

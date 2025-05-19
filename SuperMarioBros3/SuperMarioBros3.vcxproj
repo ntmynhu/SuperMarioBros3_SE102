@@ -184,6 +184,7 @@
     <ClCompile Include="PiranhaPlant.cpp" />
     <ClCompile Include="Plant.cpp" />
     <ClCompile Include="Platform.cpp" />
+    <ClCompile Include="PlatformKill.cpp" />
     <ClCompile Include="PlatformMoveFall.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Portal.cpp" />
@@ -247,6 +248,7 @@
     <ClInclude Include="PiranhaPlant.h" />
     <ClInclude Include="Plant.h" />
     <ClInclude Include="Platform.h" />
+    <ClInclude Include="PlatformKill.h" />
     <ClInclude Include="PlatformMoveFall.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Portal.h" />

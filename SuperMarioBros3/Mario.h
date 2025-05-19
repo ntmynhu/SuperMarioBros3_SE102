@@ -71,6 +71,7 @@
 #define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
 
 #define MARIO_UNTOUCHABLE_TIME 2000
+#define MARIO_DIE_TIME 2000
 
 #define MARIO_CHARGING_POWER_TIME 900
 #define MARIO_FULL_POWER_TIME 2000
@@ -86,6 +87,8 @@ class CMario : public CGameObject
 	int level;
 	int untouchable;
 	ULONGLONG untouchable_start;
+	ULONGLONG die_start;
+
 	BOOLEAN isOnPlatform;
 	bool isReadyToHold;
 	CEnemy* holdingObj;
@@ -114,6 +117,7 @@ class CMario : public CGameObject
 	void OnCollisionWithTunnel(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithBlueButton(LPCOLLISIONEVENT e);
+	void OnCollisionWithPlatformKill(LPCOLLISIONEVENT e);
 
 public:
 	CMario(float x, float y) : CGameObject(x, y)
@@ -128,6 +132,8 @@ public:
 
 		untouchable = 0;
 		untouchable_start = -1;
+
+		die_start = -1;
 
 		isChangingState = 0;
 		stateChange_start = -1;
