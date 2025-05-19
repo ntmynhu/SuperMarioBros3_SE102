@@ -14,6 +14,7 @@ private:
 	TimerUI* timer;
 	CoinUI* coin;
 	LivesUI* lives;
+	WorldUI* world;
 protected:
 	static HUD* __instance;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) {}

@@ -16,6 +16,9 @@ HUD* HUD::GetInstance()
 
 		if (__instance->lives == NULL)
 			__instance->lives = new LivesUI(0, 0);
+
+		if (__instance->world == NULL)
+			__instance->world = new WorldUI(0, 0);
 	}
 	return HUD::__instance;
 }
@@ -35,4 +38,5 @@ void HUD::Render() {
 	timer->Render(targetX, targetY);
 	coin->Render(targetX, targetY);
 	lives->Render(targetX, targetY);
+	world->Render(targetX, targetY);
 }

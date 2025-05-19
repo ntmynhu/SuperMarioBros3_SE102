@@ -70,6 +70,7 @@ class CGame
 	float currentTime = GAME_TIME;
 	int coinNumber = 0;
 	int marioLives = 4;
+	int world = 1;
 public:
 	// Init DirectX, Sprite Handler
 	void Init(HWND hWnd, HINSTANCE hInstance);
@@ -136,6 +137,8 @@ public:
 
 	void UpdateLives(int value) { this->marioLives += value; }
 	int GetLives() { return this->marioLives; }
+
+	int GetWorld() { return this->world; }
 
 	~CGame();
 };

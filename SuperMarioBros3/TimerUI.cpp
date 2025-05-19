@@ -16,7 +16,7 @@ void TimerUI::Render(float x, float y)
 	x += 13;
 	y -= 6;
 
-	s->Get(ID_SPRITE_TIMER_0 + hundredsPlace)->DrawStatic(x - NUMBER_WIDTH, y);
-	s->Get(ID_SPRITE_TIMER_0 + tensPlace)->DrawStatic(x, y);
-	s->Get(ID_SPRITE_TIMER_0 + unitsPlace)->DrawStatic(x + NUMBER_WIDTH, y);
+	s->Get(ID_SPRITE_NUMBER_0 + hundredsPlace)->DrawStatic(x - NUMBER_WIDTH, y);
+	s->Get(ID_SPRITE_NUMBER_0 + tensPlace)->DrawStatic(x, y);
+	s->Get(ID_SPRITE_NUMBER_0 + unitsPlace)->DrawStatic(x + NUMBER_WIDTH, y);
 }
