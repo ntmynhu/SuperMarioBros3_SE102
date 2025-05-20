@@ -22,6 +22,9 @@ HUD* HUD::GetInstance()
 
 		if (__instance->score == NULL)
 			__instance->score = new ScoreUI(0, 0);
+
+		if (__instance->power == NULL)
+			__instance->power = new PowerUI(0, 0);
 	}
 	return HUD::__instance;
 }
@@ -43,4 +46,5 @@ void HUD::Render() {
 	lives->Render(targetX, targetY);
 	world->Render(targetX, targetY);
 	score->Render(targetX, targetY);
+	power->Render(targetX, targetY);
 }

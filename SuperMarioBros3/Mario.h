@@ -163,6 +163,7 @@ public:
 	void StartChangingStateUp() { isChangingState = 1; stateChange_start = GetTickCount64(); }
 
 	int GetChangingState() { return isChangingState; }
+	float GetChargingPowerTime() { return chargingPowerTime; }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
