@@ -8,7 +8,6 @@ class CWallMario :
     public CWall
 {
 protected:
-    CMario* mario;
     int side; // -1 as left, 1 as right
     virtual int IsBlocking() { return 0; }
     virtual int IsBlocking(LPGAMEOBJECT objSrc);
@@ -22,7 +21,6 @@ public:
         int side = 0) :CWall(x, y,
             cell_width, cell_height, length,
             -1, -1, -1) {
-        mario = NULL;
         this->side = side;
         this->vx = 0;
     };

@@ -21,6 +21,7 @@ void CEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (mario == NULL) {
 		SetMario();
 	}
+	if (mario->IsDeleted()) mario = NULL;
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -48,6 +49,7 @@ int CEnemy::CheckXDirection() {
 	if (mario == NULL) {
 		SetMario();
 	}
+	if (mario->IsDeleted()) mario = NULL;
 	if (mario != NULL) {
 		float mx, my;
 		mario->GetPosition(mx, my);

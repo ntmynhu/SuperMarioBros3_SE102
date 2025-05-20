@@ -97,8 +97,9 @@ void CKoopa::HoldingUpdate(DWORD dt) {
 		m_x += m_vx * dt;
 		m_y += m_ay * dt;
 
-
-		float targetX = (m_nx >= 0) ? (m_x + m_ox) : (m_x - m_ox);
+		
+		float targetX = (m_nx > 0) ? (m_x + m_ox) : (m_x - m_ox);
+		if (m_nx == 0) targetX = m_x;
 		float targetY = m_y - m_oy;
 
 		float dx = targetX - x;

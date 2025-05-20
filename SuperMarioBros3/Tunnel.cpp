@@ -9,6 +9,7 @@ void CTunnel::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (mario == NULL) {
 		SetMario();
 	}
+	if (mario->IsDeleted()) mario = NULL;
 	if (mario) {
 		if (CCollision::GetInstance()->Overlap(this, mario)->WasCollided()) {
 			hasMarioInside = true;

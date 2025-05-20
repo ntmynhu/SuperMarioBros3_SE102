@@ -29,21 +29,38 @@ void CRedParakoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (y <= top_bound)
 		{
-			vy = RED_PARA_KOOPA_FLY_SPEED_Y;
+			if (switch_start == -1)
+			{
+				vy = -RED_PARA_KOOPA_FLY_SMALL_SPEED_Y;
+				switch_start = GetTickCount64();
+			}
+			if (GetTickCount64() - switch_start > RED_PARA_KOOPA_SWITCH_DELAY) {
+				vy = RED_PARA_KOOPA_FLY_SPEED_Y;
+				switch_start = -1;
+			}
+			
 		}
 		else if (y >= bot_bound) {
-			vy = -RED_PARA_KOOPA_FLY_SPEED_Y;
+			if (switch_start == -1)
+			{
+				vy = RED_PARA_KOOPA_FLY_SMALL_SPEED_Y;
+				switch_start = GetTickCount64();
+			}
+			if (GetTickCount64() - switch_start > RED_PARA_KOOPA_SWITCH_DELAY) {
+				vy = -RED_PARA_KOOPA_FLY_SPEED_Y;
+				switch_start = -1;
+			}
 		}
 	}
 	CRedKoopa::Update(dt, coObjects);
 }
 void CRedParakoopa::Render()
 {
-	int aniId = ID_ANI_PARA_KOOPA_FLY;
+	int aniId = ID_ANI_RED_PARA_KOOPA_FLY;
 	switch (state) {
 	case (PARA_KOOPA_STATE_HASWING):
 		if (vx > 0) {
-			aniId = ID_ANI_PARA_KOOPA_FLY_RIGHT;
+			aniId = ID_ANI_RED_PARA_KOOPA_FLY_RIGHT;
 		}
 		break;
 	case (KOOPA_STATE_DEFEND):

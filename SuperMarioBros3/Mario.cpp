@@ -18,6 +18,7 @@
 #include "Tunnel.h"
 #include "BlueButton.h"
 #include "WallMario.h"
+#include "PlatformKill.h"
 
 #include "GameData.h"
 
@@ -26,6 +27,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	DebugOutTitle(L"MARIO POS %f %f", x, y);
 	if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) {
 		
+		nx = 0;
 		y += vy * dt;
 		CCollision::GetInstance()->Process(this, dt, coObjects);
 		
@@ -68,9 +70,21 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
-	if (nx == 1 && ax < 0 && vx < 0) vx = 0;
+	if (nx == 1 && ax < 0 && vx < 0) 
+		vx = 0;
 
-	if (nx == -1 && ax > 0 && vx > 0) vx = 0;
+	if (nx == -1 && ax > 0 && vx > 0) 
+		vx = 0;
+
+	if (stickingObj) {
+		float w_vx, w_vy;
+		stickingObj->GetSpeed(w_vx, w_vy);
+		if (w_vx < 0 && vx > w_vx) {
+			vx = w_vx;
+		} else if (w_vx > 0 && vx < w_vx) {
+			vx = w_vx;
+		}
+	}
 
 	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
 	if (scene) {
@@ -149,7 +163,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//}
 	//else
 	//{
-	//	DebugOutTitle(L"Normal Power");
+	DebugOutTitle(L"IsOnPlatform %d\n", isOnPlatform);
 	//}
 
 }
@@ -160,11 +174,15 @@ void CMario::OnNoCollision(DWORD dt)
 
 	x += vx * dt;
 	y += vy * dt;
-	isOnPlatform = false;
+	if (!isStickToPlatform)
+		isOnPlatform = false;
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {		
+	if (dynamic_cast<CPlatformKill*>(e->obj))
+		OnCollisionWithPlatformKill(e);
+
 	if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) {
 		if (dynamic_cast<CPortal*>(e->obj))
 			OnCollisionWithPortal(e);
@@ -173,7 +191,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		return;
 	}
 
-	if (e->ny != 0 && e->obj->IsBlocking())
+	if (e->ny != 0 && (e->obj->IsBlocking() || e->obj->IsBlocking(this)))
 	{
 		vy = 0;
 		if (e->ny < 0)
@@ -182,7 +200,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			currentBaseScore = 100;
 		}
 	}
-	else if (e->nx != 0 && e->obj->IsBlocking())
+	else if (e->nx != 0 && (e->obj->IsBlocking() || e->obj->IsBlocking(this)))
 	{
 		vx = 0;
 	}
@@ -209,7 +227,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithTunnel(e);
 	else if (dynamic_cast<CBlueButton*>(e->obj))
 		OnCollisionWithBlueButton(e);
-}
 
 void CMario::OnCollisionWithTunnel(LPCOLLISIONEVENT e) {
 	CTunnel* tunnel = dynamic_cast<CTunnel*>(e->obj);
@@ -241,6 +258,8 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 	if (out_x >= 0 && out_y >= 0) {
 		SetPosition(out_x, out_y);
 	}
+
+	holdingObj = NULL;
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
 }
 
@@ -299,6 +318,10 @@ void CMario::OnCollisionWithOneUpMushroom(LPCOLLISIONEVENT e)
 	game->UpdateLives(1);
 }
 
+void CMario::OnCollisionWithPlatformKill(LPCOLLISIONEVENT e) {
+	SetState(MARIO_STATE_DIE);
+}
+  
 void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 {
 	CEnemy* enemy = dynamic_cast<CEnemy*>(e->obj);
@@ -399,6 +422,7 @@ void CMario::SetState(int state)
 
 	if (state == MARIO_STATE_DIE)
 	{
+		die_start = GetTickCount64();
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		vx = 0;
 		ax = 0;
