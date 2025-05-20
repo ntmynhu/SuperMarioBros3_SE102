@@ -110,7 +110,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	else
 	{
-		if (currentForm->GetLevel() != MARIO_LEVEL_RACOON || (currentForm->GetLevel() == MARIO_LEVEL_RACOON && !isFullPower))
+		if (currentForm->GetLevel() != MARIO_LEVEL_RACOON || (currentForm->GetLevel() == MARIO_LEVEL_RACOON && !currentForm->IsFlying()))
 		{
 			isFullPower = false;
 
