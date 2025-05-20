@@ -788,6 +788,8 @@ void CPlayScene::Update(DWORD dt)
 
 	HUD::GetInstance()->SetPosition(game->GetBackBufferWidth()/2, game->GetBackBufferHeight());
 
+	game->ProcessTimer(dt);
+
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
 	{

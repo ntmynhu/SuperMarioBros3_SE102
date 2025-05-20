@@ -74,7 +74,7 @@
 #define MARIO_DIE_TIME 2000
 
 #define MARIO_CHARGING_POWER_TIME 900
-#define MARIO_FULL_POWER_TIME 2000
+#define MARIO_FULL_POWER_TIME 5000
 
 class CMario : public CGameObject
 {
@@ -97,6 +97,8 @@ class CMario : public CGameObject
 	CTail* tail;
 	int coin;
 
+	int currentBaseScore = 100;
+
 	ULONGLONG stateChange_start;
 	int isChangingState; // -1 as down, 1 as up
 
@@ -117,6 +119,7 @@ class CMario : public CGameObject
 	void OnCollisionWithTunnel(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithBlueButton(LPCOLLISIONEVENT e);
+	void OnCollisionWithOneUpMushroom(LPCOLLISIONEVENT e);
 	void OnCollisionWithPlatformKill(LPCOLLISIONEVENT e);
 
 public:
@@ -173,6 +176,8 @@ public:
 	void StartChangingStateUp() { isChangingState = 1; stateChange_start = GetTickCount64(); }
 
 	int GetChangingState() { return isChangingState; }
+	float GetChargingPowerTime() { return chargingPowerTime; }
+	float GetFullPowerTime() { return fullPowerTime; }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 

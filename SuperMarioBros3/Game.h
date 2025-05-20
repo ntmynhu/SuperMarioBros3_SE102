@@ -21,6 +21,8 @@ using namespace std;
 
 #define CAM_MARGIN 50.0f
 #define MARIO_STATE_CHANGE_PAUSE_TIME 500
+
+#define	GAME_TIME	300000
 /*
 	Our simple game framework
 */
@@ -65,6 +67,11 @@ class CGame
 	bool marioPause = false;
 	ULONGLONG marioPause_start = -1;
 
+	float currentTime = GAME_TIME;
+	int coinNumber = 0;
+	int marioLives = 4;
+	int world = 1;
+	int score = 0;
 public:
 	// Init DirectX, Sprite Handler
 	void Init(HWND hWnd, HINSTANCE hInstance);
@@ -123,6 +130,19 @@ public:
 	void StartMarioPause() { marioPause = true; };
 	void StopMarioPause() { marioPause = false; };
 	bool IsMarioStateChangedPause() { return marioPause; }
+	void ProcessTimer(DWORD dt);
+	float GetGameCurrentTime() { return currentTime; }
+
+	void AddCoin(int value) { coinNumber += value; }
+	int GetCoin() { return coinNumber; }
+
+	void UpdateLives(int value) { this->marioLives += value; }
+	int GetLives() { return this->marioLives; }
+
+	int GetWorld() { return this->world; }
+
+	void AddScore(int value) { this->score += value; }
+	int GetScore() { return this->score; }
 
 	~CGame();
 };

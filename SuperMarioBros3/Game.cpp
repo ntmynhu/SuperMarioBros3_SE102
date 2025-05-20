@@ -599,6 +599,12 @@ bool CGame::IsInCam(float t, float l, float r, float b) {
 		t > camBottom);
 }
 
+void CGame::ProcessTimer(DWORD dt)
+{
+	currentTime -= dt;
+	if (currentTime < 0) currentTime = 0;
+}
+
 CGame::~CGame()
 {
 	pBlendStateAlpha->Release();
