@@ -73,7 +73,7 @@
 #define MARIO_UNTOUCHABLE_TIME 2000
 
 #define MARIO_CHARGING_POWER_TIME 900
-#define MARIO_FULL_POWER_TIME 2000
+#define MARIO_FULL_POWER_TIME 5000
 
 class CMario : public CGameObject
 {
@@ -164,6 +164,7 @@ public:
 
 	int GetChangingState() { return isChangingState; }
 	float GetChargingPowerTime() { return chargingPowerTime; }
+	float GetFullPowerTime() { return fullPowerTime; }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 

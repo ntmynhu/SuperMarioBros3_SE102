@@ -94,25 +94,30 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
-	
 
 	if (isChargingPower && IsFullSpeed())
 	{
-		if (!isFullPower) chargingPowerTime += dt;
-
-		if (chargingPowerTime > MARIO_CHARGING_POWER_TIME)
+		if (!isFullPower)
 		{
-			isFullPower = true;
-			fullPowerTime = MARIO_FULL_POWER_TIME;
+			chargingPowerTime += dt;
+
+			if (chargingPowerTime > MARIO_CHARGING_POWER_TIME)
+			{
+				isFullPower = true;
+				fullPowerTime = MARIO_FULL_POWER_TIME;
+			}
 		}
 	}
 	else
 	{
-		isFullPower = false;
+		if (currentForm->GetLevel() != MARIO_LEVEL_RACOON || (currentForm->GetLevel() == MARIO_LEVEL_RACOON && !isFullPower))
+		{
+			isFullPower = false;
 
-		chargingPowerTime -= dt;
-		if (chargingPowerTime < 0)
-			chargingPowerTime = 0;
+			chargingPowerTime -= dt;
+			if (chargingPowerTime < 0)
+				chargingPowerTime = 0;
+		}
 	}
 
 	if (isFullPower)
@@ -123,6 +128,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			isFullPower = false;
 			isChargingPower = false;
+			fullPowerTime = MARIO_FULL_POWER_TIME;
 		}
 	}
 

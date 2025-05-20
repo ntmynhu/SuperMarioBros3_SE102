@@ -23,11 +23,11 @@ int CMarioBig::GetAniId(CMario* mario)
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
 			if (nx >= 0)
-				if (!mario->IsFullPower()) aniId = mario->IsHolding() ? ID_ANI_MARIO_BIG_JUMP_HOLDING_RIGHT : ID_ANI_MARIO_JUMP_RUN_RIGHT;
-				else aniId = mario->IsHolding() ? ID_ANI_MARIO_BIG_JUMP_HOLDING_RIGHT : ID_ANI_MARIO_BIG_FULL_POWER_JUMP_RIGHT;
+				if (!mario->IsFullPower()) aniId = mario->IsHolding() ? ID_ANI_MARIO_BIG_JUMP_HOLDING_RIGHT : ID_ANI_MARIO_JUMP_WALK_RIGHT;
+				else aniId = mario->IsHolding() ? ID_ANI_MARIO_BIG_JUMP_HOLDING_RIGHT : ID_ANI_MARIO_JUMP_RUN_RIGHT;
 			else
-				if (!mario->IsFullPower()) aniId = mario->IsHolding() ? ID_ANI_MARIO_BIG_JUMP_HOLDING_LEFT : ID_ANI_MARIO_JUMP_RUN_LEFT;
-				else aniId = mario->IsHolding() ? ID_ANI_MARIO_BIG_JUMP_HOLDING_LEFT : ID_ANI_MARIO_BIG_FULL_POWER_JUMP_LEFT;
+				if (!mario->IsFullPower()) aniId = mario->IsHolding() ? ID_ANI_MARIO_BIG_JUMP_HOLDING_LEFT : ID_ANI_MARIO_JUMP_WALK_LEFT;
+				else aniId = mario->IsHolding() ? ID_ANI_MARIO_BIG_JUMP_HOLDING_LEFT : ID_ANI_MARIO_JUMP_RUN_LEFT;
 		}
 		else
 		{
