@@ -76,6 +76,8 @@
 #define MARIO_CHARGING_POWER_TIME 900
 #define MARIO_FULL_POWER_TIME 5000
 
+#define MARIO_KICKING_TIME 200
+
 class CMario : public CGameObject
 {
 	CMarioForm* currentForm = nullptr;
@@ -109,6 +111,9 @@ class CMario : public CGameObject
 	bool isFullPower = false;
 	bool isStickToPlatform = false;
 	bool isInputLock = false;
+
+	bool isKicking = false;
+	ULONGLONG kick_start = -1;
 
 	void OnCollisionWithEnemy(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -205,6 +210,7 @@ public:
 	void SetVx(float vx) { this->vx = vx; }
 	void SetVy(float vy) { this->vy = vy; }
 	void SetNx(int nx) { this->nx = nx; }
+	int GetNx() { return nx; }
 	void SetPosition(float x, float y) { this->x = x; this->y = y; }
 
 	void InputLock() { isInputLock = true; };
@@ -221,4 +227,6 @@ public:
 	}
 
 	bool IsFullSpeed();
+	void TriggerKick() { isKicking = true; kick_start = GetTickCount64(); }
+	bool IsKicking() { return isKicking; }
 };

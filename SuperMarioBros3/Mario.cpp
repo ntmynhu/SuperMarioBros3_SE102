@@ -86,6 +86,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
+	if (isKicking)
+	{
+		if (GetTickCount64() - kick_start > MARIO_KICKING_TIME)
+		{
+			kick_start = 0;
+			isKicking = false;
+		}
+	}
+
+
 	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
 	if (scene) {
 		CWallMario* stop_left = (CWallMario*)scene->GetStopLeft();
@@ -389,6 +399,10 @@ void CMario::Render()
 
 	if (state == MARIO_STATE_DIE)
 		aniId = ID_ANI_MARIO_DIE;
+	else if (isKicking)
+	{
+		aniId = currentForm->GetKickAniId(this);
+	}
 	else
 		aniId = currentForm->GetAniId(this);
 

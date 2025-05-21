@@ -186,6 +186,7 @@ void CKoopa::HandleMarioRelease(float nx) {
 		SetState(KOOPA_STATE_DEFEND_SLIDING);
 		if (nx >= 0) vx = KOOPA_SLIDING_SPEED;
 		else vx = -KOOPA_SLIDING_SPEED;
+		mario->TriggerKick();
 		DebugOut(L"Release DEFEND\n");
 	}
 	else {
