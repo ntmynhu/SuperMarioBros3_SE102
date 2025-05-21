@@ -18,6 +18,9 @@
 #define ID_ANI_MARIO_SMALL_BRACE_RIGHT 1400
 #define ID_ANI_MARIO_SMALL_BRACE_LEFT 1401
 
+#define ID_ANI_MARIO_SMALL_KICK_RIGHT 1450
+#define ID_ANI_MARIO_SMALL_KICK_LEFT 1451
+
 #define ID_ANI_MARIO_SMALL_JUMP_WALK_RIGHT 1500
 #define ID_ANI_MARIO_SMALL_JUMP_WALK_LEFT 1501
 
@@ -77,4 +80,5 @@ public:
 	int GetUpStateChangeTime() { return 0; }
 	void GetHoldOffset(float& ox, float& oy) { ox = MARIO_SMALL_HOLD_OFFSET_X; oy = MARIO_SMALL_HOLD_OFFSET_Y; }
 	void OnTakeDamage(CMario* mario);
+	int GetKickAniId(CMario* mario);
 };

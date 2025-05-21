@@ -24,6 +24,9 @@
 #define ID_ANI_MARIO_BRACE_RIGHT 1000
 #define ID_ANI_MARIO_BRACE_LEFT 1001
 
+#define ID_ANI_MARIO_BIG_KICK_RIGHT 1050
+#define ID_ANI_MARIO_BIG_KICK_LEFT 1051
+
 #define ID_ANI_MARIO_BIG_FULL_POWER_JUMP_RIGHT 850
 #define ID_ANI_MARIO_BIG_FULL_POWER_JUMP_LEFT 851
 
@@ -74,5 +77,6 @@ public:
 	void GetHoldOffset(float& ox, float& oy) { ox = MARIO_BIG_HOLD_OFFSET_X; oy = MARIO_BIG_HOLD_OFFSET_Y; }
 	void OnTakeDamage(CMario* mario);
 	void OnSitRelease(int state, CMario* mario);
+	int GetKickAniId(CMario* mario);
 };
 

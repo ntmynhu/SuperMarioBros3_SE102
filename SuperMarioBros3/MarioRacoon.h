@@ -28,6 +28,9 @@
 #define ID_ANI_MARIO_RACOON_BRACE_RIGHT 2600
 #define ID_ANI_MARIO_RACOON_BRACE_LEFT 2601
 
+#define ID_ANI_MARIO_RACOON_KICK_RIGHT 2650
+#define ID_ANI_MARIO_RACOON_KICK_LEFT 2651
+
 #define ID_ANI_MARIO_RACOON_TAIL_ATTACK_RIGHT 2700
 #define ID_ANI_MARIO_RACOON_TAIL_ATTACK_LEFT 2701
 
@@ -107,5 +110,6 @@ public:
 
     void StartFloating() { isFloating = true; floatingStartTime = GetTickCount64(); }
     void StartTailAttacking(int nx) { isTailAttacking = nx; tailAttackingStartTime = GetTickCount64(); }
+	int GetKickAniId(CMario* mario);
 };
 

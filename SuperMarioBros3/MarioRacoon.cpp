@@ -470,3 +470,8 @@ void CMarioRacoon::OnTakeDamage(CMario* mario)
 	mario->ChangeForm(MARIO_LEVEL_BIG, -1);
 	mario->StartUntouchable();
 }
+
+int CMarioRacoon::GetKickAniId(CMario* mario)
+{
+	return (mario->GetNx() > 0) ? ID_ANI_MARIO_RACOON_KICK_RIGHT : ID_ANI_MARIO_RACOON_KICK_LEFT;
+}

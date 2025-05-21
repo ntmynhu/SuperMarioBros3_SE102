@@ -20,5 +20,6 @@ public:
 	virtual void GetHoldOffset(float& ox, float& oy) = 0;
 	virtual void OnTakeDamage(CMario* mario) = 0;
 	virtual bool IsFlying() { return false; }
+	virtual int GetKickAniId(CMario* mario) { return -1; };
 };
 

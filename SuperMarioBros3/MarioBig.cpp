@@ -243,3 +243,13 @@ void CMarioBig::OnSitRelease(int state, CMario* mario)
 		mario->SetPosition(x, y - MARIO_SIT_HEIGHT_ADJUST);
 	}
 }
+
+int CMarioBig::GetKickAniId(CMario* mario)
+{
+	int nx = mario->GetNx();
+
+	if (nx > 0)
+		return ID_ANI_MARIO_BIG_KICK_RIGHT;
+	else
+		return ID_ANI_MARIO_BIG_KICK_LEFT;
+}
