@@ -200,3 +200,5 @@
 
 //From 30: HUD
 #define ID_SPRITE_HUD 300000
+
+#define ID_SPRITE_UI_EFFECT 400000

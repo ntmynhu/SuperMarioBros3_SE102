@@ -1,0 +1,15 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+
+#Score
+400001	1	29	12	36	70
+400002	18	29	29	36	70
+400003	35	29	46	36	70
+400004	52	29	63	36	70
+400005	69	29	84	36	70
+400006	86	29	101	36	70
+400007	103	29	118	36	70
+400008	137	29	152	36	70
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
