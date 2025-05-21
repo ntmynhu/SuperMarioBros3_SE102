@@ -113,6 +113,11 @@ void CMarioSmall::OnTakeDamage(CMario* mario)
 	mario->SetState(MARIO_STATE_DIE);
 }
 
+int CMarioSmall::GetKickAniId(CMario* mario)
+{
+	return (mario->GetNx() > 0) ? ID_ANI_MARIO_SMALL_KICK_RIGHT : ID_ANI_MARIO_SMALL_KICK_LEFT;
+}
+
 //
 // Get animation ID for small Mario
 //
