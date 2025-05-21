@@ -21,6 +21,7 @@
 #include "PlatformKill.h"
 
 #include "GameData.h"
+#include "EffectManager.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -343,6 +344,8 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 
 		CGame* game = CGame::GetInstance();
 		game->AddScore(currentBaseScore);
+
+		ScoreEffect* scoreEffect = new ScoreEffect(this->x, this->y);
 
 		if (!isOnPlatform)
 		{
