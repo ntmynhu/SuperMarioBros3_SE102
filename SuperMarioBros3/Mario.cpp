@@ -179,7 +179,7 @@ void CMario::OnNoCollision(DWORD dt)
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
-{		
+{
 	if (dynamic_cast<CPlatformKill*>(e->obj))
 		OnCollisionWithPlatformKill(e);
 
@@ -227,6 +227,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithTunnel(e);
 	else if (dynamic_cast<CBlueButton*>(e->obj))
 		OnCollisionWithBlueButton(e);
+}
 
 void CMario::OnCollisionWithTunnel(LPCOLLISIONEVENT e) {
 	CTunnel* tunnel = dynamic_cast<CTunnel*>(e->obj);
