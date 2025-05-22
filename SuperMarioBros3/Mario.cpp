@@ -345,7 +345,9 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 		CGame* game = CGame::GetInstance();
 		game->AddScore(currentBaseScore);
 
-		ScoreEffect* scoreEffect = new ScoreEffect(this->x, this->y);
+		float e_x, e_y;
+		e->obj->GetPosition(e_x, e_y);
+		ScoreEffect* scoreEffect = new ScoreEffect(currentBaseScore, e_x, y);
 
 		if (!isOnPlatform)
 		{

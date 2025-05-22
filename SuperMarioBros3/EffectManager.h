@@ -15,6 +15,8 @@ using namespace std;
 #define ID_SPRITE_SCORE_EFFECT_8000	400008
 #define ID_SPRITE_SCORE_EFFECT_1UP	400009
 
+#define SCORE_EFFECT_TIME	1100
+
 class EffectManager : public CGameObject
 {
 	vector<CUIElement*> effects;
@@ -34,10 +36,50 @@ public:
 
 class ScoreEffect : public CUIElement
 {
+private:
+	ULONGLONG startTime;
+	ULONGLONG currentTime;
+
+	float increasement = 0;
+
+	int id_sprite;
 public:
-	ScoreEffect(float x, float y) : CUIElement(x, y) {
+	ScoreEffect(int score, float x, float y) : CUIElement(x, y) {
 		EffectManager::GetInstance()->AddEffect(this);
+		this->startTime = GetTickCount64();
+		this->currentTime = startTime;
+
+		switch (score)
+		{
+		case 100:
+			this->id_sprite = ID_SPRITE_SCORE_EFFECT_100;
+			break;
+		case 200:
+			this->id_sprite = ID_SPRITE_SCORE_EFFECT_200;
+			break;
+		case 400:
+			this->id_sprite = ID_SPRITE_SCORE_EFFECT_400;
+			break;
+		case 800:
+			this->id_sprite = ID_SPRITE_SCORE_EFFECT_800;
+			break;
+		case 1000:
+			this->id_sprite = ID_SPRITE_SCORE_EFFECT_1000;
+			break;
+		case 2000:
+			this->id_sprite = ID_SPRITE_SCORE_EFFECT_2000;
+			break;
+		case 4000:
+			this->id_sprite = ID_SPRITE_SCORE_EFFECT_4000;
+			break;
+		case 8000:
+			this->id_sprite = ID_SPRITE_SCORE_EFFECT_8000;
+			break;
+		default:
+			break;
+		}
 	}
+
 	void Render();
 };
 

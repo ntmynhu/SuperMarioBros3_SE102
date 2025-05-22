@@ -28,15 +28,27 @@ EffectManager* EffectManager::GetInstance()
 
 void ScoreEffect::Render()
 {
+	if (GetTickCount64() - startTime > SCORE_EFFECT_TIME)
+	{
+		Delete();
+		return;
+	}
+
 	CSprites* s = CSprites::GetInstance();
+
 
 	float camX, camY;
 	CGame::GetInstance()->GetCamPos(camX, camY);
 
 	float targetX = x - camX;
-	float targetY = y - camY;
+	float targetY = y - camY - increasement;
 
-	DebugOut(L"x: %f, y: %f\n", x, y);
+	if (GetTickCount64() - startTime < SCORE_EFFECT_TIME / 2)
+		increasement += 0.75f;
+	else
+		increasement += 0.35f;
 
-	s->Get(ID_SPRITE_SCORE_EFFECT_100)->DrawStatic(targetX, targetY);
+	DebugOut(L"x: %f\n", GetTickCount64() - currentTime);
+
+	s->Get(id_sprite)->DrawStatic(targetX, targetY);
 }
