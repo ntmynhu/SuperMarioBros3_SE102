@@ -302,6 +302,10 @@ void CMario::OnCollisionWithBlock(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e)
 {
+	float e_x, e_y;
+	e->obj->GetPosition(e_x, e_y);
+	ScoreEffect* scoreEffect = new ScoreEffect(1000, e_x, e_y);
+
 	e->obj->Delete();
 
 	CGame* game = CGame::GetInstance();
