@@ -4,7 +4,6 @@
 #include "Enemy.h"
 #include "debug.h"
 #include "Game.h"
-#include "EffectManager.h"
 
 CGoomba::CGoomba(float x, float y) :CEnemy(x, y)
 {
@@ -107,10 +106,7 @@ void CGoomba::TakeKoopaDamage(float xKoopa) {
 		}
 
 		CGame* game = CGame::GetInstance();
-		game->AddScore(100);
-
-
-		ScoreEffect* scoreEffect = new ScoreEffect(100, x, y);
+		game->AddScore(100, x, y);
 
 		vy = -ENEMY_DIE_UPSIDE_DOWN_VY;
 		SetState(ENEMY_STATE_DIE);

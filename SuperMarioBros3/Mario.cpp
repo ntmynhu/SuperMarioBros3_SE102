@@ -21,7 +21,6 @@
 #include "PlatformKill.h"
 
 #include "GameData.h"
-#include "EffectManager.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -304,12 +303,10 @@ void CMario::OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e)
 {
 	float e_x, e_y;
 	e->obj->GetPosition(e_x, e_y);
-	ScoreEffect* scoreEffect = new ScoreEffect(1000, e_x, e_y);
-
 	e->obj->Delete();
 
 	CGame* game = CGame::GetInstance();
-	game->AddScore(1000);
+	game->AddScore(1000, e_x, e_y);
 
 	int nextForm = currentForm->GetLevel() + 1;
 	if (nextForm > MARIO_LEVEL_RACOON) return; // max level is racoon, update point logic will come later
@@ -346,12 +343,11 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 	{
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 
-		CGame* game = CGame::GetInstance();
-		game->AddScore(currentBaseScore);
-
 		float e_x, e_y;
 		e->obj->GetPosition(e_x, e_y);
-		ScoreEffect* scoreEffect = new ScoreEffect(currentBaseScore, e_x, y);
+
+		CGame* game = CGame::GetInstance();
+		game->AddScore(currentBaseScore, e_x, y);
 
 		if (!isOnPlatform)
 		{
@@ -381,7 +377,7 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 	{
 		CGame* game = CGame::GetInstance();
 		game->AddCoin(1);
-		game->AddScore(50);
+		game->AddScore(50, -1, -1);
 	}
 
 	e->obj->Delete();

@@ -141,7 +141,7 @@ public:
 
 	int GetWorld() { return this->world; }
 
-	void AddScore(int value) { this->score += value; }
+	void AddScore(int value, float x, float y);
 	int GetScore() { return this->score; }
 
 	~CGame();

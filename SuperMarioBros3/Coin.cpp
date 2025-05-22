@@ -1,7 +1,6 @@
 #include "Coin.h"
 #include "Game.h"
 #include "debug.h"
-#include "EffectManager.h"
 
 void CCoin::Render()
 {
@@ -34,12 +33,9 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		else
 		{
-			ScoreEffect* scoreEffect = new ScoreEffect(100, x, y);
-
-			Delete();
-
 			CGame* game = CGame::GetInstance();
-			game->AddScore(100);
+			game->AddScore(100, x, y);
+			Delete();
 		}
 	}
 }

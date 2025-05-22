@@ -8,6 +8,8 @@
 #include "Animations.h"
 #include "PlayScene.h"
 
+#include "EffectManager.h"
+
 CGame * CGame::__instance = NULL;
 
 /*
@@ -603,6 +605,12 @@ void CGame::ProcessTimer(DWORD dt)
 {
 	currentTime -= dt;
 	if (currentTime < 0) currentTime = 0;
+}
+
+void CGame::AddScore(int value, float x, float y)
+{
+	this->score += value;
+	ScoreEffect* scoreEffect = new ScoreEffect(value, x, y);
 }
 
 CGame::~CGame()
