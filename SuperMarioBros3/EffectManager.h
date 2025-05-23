@@ -42,7 +42,7 @@ private:
 
 	float increasement = 0;
 
-	int id_sprite;
+	int id_sprite = -1;
 public:
 	ScoreEffect(int score, float x, float y) : CUIElement(x, y) {
 		EffectManager::GetInstance()->AddEffect(this);

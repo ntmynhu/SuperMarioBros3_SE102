@@ -12,7 +12,8 @@ void EffectManager::Render()
 {
 	for (CUIElement* effect : effects)
 	{
-		effect->Render();
+		if (effect != nullptr)
+			effect->Render();
 	}
 }
 
@@ -28,7 +29,7 @@ EffectManager* EffectManager::GetInstance()
 
 void ScoreEffect::Render()
 {
-	if (GetTickCount64() - startTime > SCORE_EFFECT_TIME)
+	if (GetTickCount64() - startTime > SCORE_EFFECT_TIME || id_sprite == -1)
 	{
 		Delete();
 		return;
