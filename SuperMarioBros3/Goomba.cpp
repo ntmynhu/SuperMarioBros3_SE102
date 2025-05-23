@@ -89,6 +89,10 @@ void CGoomba::TakeTailAttackDamage(float xMario)
 		else {
 			vx = ENEMY_DIE_UPSIDE_DOWN_VX;
 		}
+
+		CGame* game = CGame::GetInstance();
+		game->AddScore(100, x, y, this);
+
 		vy = -ENEMY_DIE_UPSIDE_DOWN_VY;
 		SetState(ENEMY_STATE_DIE);
 	}
