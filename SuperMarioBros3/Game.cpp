@@ -1,4 +1,4 @@
-#include <fstream>
+﻿#include <fstream>
 
 #include "Game.h"
 #include "debug.h"
@@ -7,6 +7,8 @@
 #include "Texture.h"
 #include "Animations.h"
 #include "PlayScene.h"
+
+#include "EffectManager.h"
 
 CGame * CGame::__instance = NULL;
 
@@ -176,7 +178,7 @@ void CGame::Draw(float x, float y, LPTEXTURE tex, RECT* rect, float alpha, int s
 
 	D3DX10_SPRITE sprite;
 
-	// Set the sprite�s shader resource view
+	// Set the sprite’s shader resource view
 	sprite.pTexture = tex->getShaderResourceView();
 
 	if (rect == NULL)
@@ -226,7 +228,7 @@ void CGame::Draw(float x, float y, LPTEXTURE tex, RECT* rect, float alpha, int s
 	D3DXMATRIX matScaling;
 	D3DXMatrixScaling(&matScaling, (FLOAT)spriteWidth, (FLOAT)spriteHeight, 1.0f);
 
-	// Setting the sprite�s position and size
+	// Setting the sprite’s position and size
 	sprite.matWorld = (matScaling * matTranslation);
 
 	spriteObject->DrawSpritesImmediate(&sprite, 1, 0, 0);
@@ -603,6 +605,33 @@ void CGame::ProcessTimer(DWORD dt)
 {
 	currentTime -= dt;
 	if (currentTime < 0) currentTime = 0;
+}
+
+void CGame::UpdateLives(int value, float x, float y)
+{
+	this->marioLives += value;
+	if (value == 1) ScoreEffect* scoreEffect = new ScoreEffect(value, x, y);
+}
+
+void CGame::AddScore(int value, float x, float y, LPGAMEOBJECT enemy) // Xử lí tăng điểm khi enemy die liên tiếp
+{
+	if (enemy != NULL) {
+		if (GetTickCount64() - currentUpScoreTime < UP_SCORE_TIME)
+		{
+			value = upScore * 2;
+
+			upScore *= 2;
+			if (upScore == 1600) upScore = 1000;
+		}
+		else
+		{
+			upScore = 100;
+			currentUpScoreTime = GetTickCount64();
+		}
+	}
+
+	this->score += value;
+	ScoreEffect* scoreEffect = new ScoreEffect(value, x, y);
 }
 
 CGame::~CGame()

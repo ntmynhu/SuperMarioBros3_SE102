@@ -31,7 +31,6 @@ void PowerUI::Render(float x, float y)
 	float fullPowerTime = player->GetFullPowerTime();
 
 	int hundred = (int)(fullPowerTime / 200);
-	DebugOut(L"Full power time: %d\n", hundred);
 
 	if (player->IsFullPower()) {
 		if (hundred % 2 == 0) s->Get(ID_SPRITE_POWER_FULL)->DrawStatic(x + 5 * CHARGE_BAR_WIDTH + 11, y);

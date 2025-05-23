@@ -44,6 +44,7 @@
 #include "HUD.h"
 #include "SampleKeyEventHandler.h"
 #include "OneUpMushroom.h"
+#include "EffectManager.h"
 
 using namespace std;
 
@@ -930,6 +931,7 @@ void CPlayScene::Render()
 			objects[i]->Render();
 
 	HUD::GetInstance()->Render();
+	EffectManager::GetInstance()->Render();
 }
 
 /*

@@ -22,6 +22,8 @@ using namespace std;
 #define CAM_MARGIN 50.0f
 #define MARIO_STATE_CHANGE_PAUSE_TIME 500
 
+#define UP_SCORE_TIME 1000
+
 #define	GAME_TIME	300000
 /*
 	Our simple game framework
@@ -66,6 +68,9 @@ class CGame
 
 	bool marioPause = false;
 	ULONGLONG marioPause_start = -1;
+
+	ULONGLONG currentUpScoreTime = 0;
+	int upScore = 100;
 
 	float currentTime = GAME_TIME;
 	int coinNumber = 0;
@@ -136,12 +141,12 @@ public:
 	void AddCoin(int value) { coinNumber += value; }
 	int GetCoin() { return coinNumber; }
 
-	void UpdateLives(int value) { this->marioLives += value; }
+	void UpdateLives(int value, float x, float y);
 	int GetLives() { return this->marioLives; }
 
 	int GetWorld() { return this->world; }
 
-	void AddScore(int value) { this->score += value; }
+	void AddScore(int value, float x, float y, LPGAMEOBJECT enemy = NULL);
 	int GetScore() { return this->score; }
 
 	~CGame();

@@ -16,6 +16,7 @@ leaf.txt
 hud.txt
 particle.txt
 bluebutton.txt
+effect.txt
 
 # Background: First line as x, y, w, h, base_id. Next y lines, each have y number as asset of each type
 [BACKGROUND]

@@ -48,5 +48,10 @@ void CPlant::TakeKoopaDamage(float xKoopa) {
 void CPlant::TakeTailAttackDamage(float xMario)
 {
 	if (state != PLANT_STATE_DIE)
+	{
+		CGame* game = CGame::GetInstance();
+		game->AddScore(100, x, y, this);
+
 		SetState(PLANT_STATE_DIE);
+	}
 }

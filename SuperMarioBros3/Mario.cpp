@@ -301,10 +301,12 @@ void CMario::OnCollisionWithBlock(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e)
 {
+	float e_x, e_y;
+	e->obj->GetPosition(e_x, e_y);
 	e->obj->Delete();
 
 	CGame* game = CGame::GetInstance();
-	game->AddScore(1000);
+	game->AddScore(1000, e_x, e_y);
 
 	int nextForm = currentForm->GetLevel() + 1;
 	if (nextForm > MARIO_LEVEL_RACOON) return; // max level is racoon, update point logic will come later
@@ -325,8 +327,11 @@ void CMario::OnCollisionWithOneUpMushroom(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 
+	float e_x, e_y;
+	e->obj->GetPosition(e_x, e_y);
+
 	CGame* game = CGame::GetInstance();
-	game->UpdateLives(1);
+	game->UpdateLives(1, e_x, e_y);
 }
 
 void CMario::OnCollisionWithPlatformKill(LPCOLLISIONEVENT e) {
@@ -341,14 +346,19 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 	{
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 
+		float e_x, e_y;
+		e->obj->GetPosition(e_x, e_y);
+		
 		CGame* game = CGame::GetInstance();
-		game->AddScore(currentBaseScore);
+		if (currentBaseScore > 0) game->AddScore(currentBaseScore, e_x, y);
+		else game->UpdateLives(1, e_x, y);
 
 		if (!isOnPlatform)
 		{
 			currentBaseScore *= 2;
 
 			if (currentBaseScore == 1600) currentBaseScore = 1000;
+			if (currentBaseScore > 8000) currentBaseScore = 0;
 		}
 	}
 	else // hit by Goomba
@@ -372,7 +382,7 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 	{
 		CGame* game = CGame::GetInstance();
 		game->AddCoin(1);
-		game->AddScore(50);
+		game->AddScore(50, -1, -1);
 	}
 
 	e->obj->Delete();

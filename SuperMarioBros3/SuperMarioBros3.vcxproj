@@ -158,6 +158,7 @@
     <ClCompile Include="CoinUI.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="debug.cpp" />
+    <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FallCensor.cpp" />
     <ClCompile Include="FireBall.cpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="CoinUI.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="EffectManager.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FallCensor.h" />
     <ClInclude Include="FireBall.h" />

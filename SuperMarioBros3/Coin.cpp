@@ -33,10 +33,9 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		else
 		{
-			Delete();
-
 			CGame* game = CGame::GetInstance();
-			game->AddScore(100);
+			game->AddScore(100, x, y);
+			Delete();
 		}
 	}
 }

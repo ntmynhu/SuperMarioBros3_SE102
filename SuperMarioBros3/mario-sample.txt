@@ -26,3 +26,4 @@ height	240
 41	textures\world1_4_tiles.png
 50	textures\full_texture.png
 60	textures\HUD.png
+70	textures\font_effect.png
