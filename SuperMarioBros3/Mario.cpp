@@ -327,8 +327,11 @@ void CMario::OnCollisionWithOneUpMushroom(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 
+	float e_x, e_y;
+	e->obj->GetPosition(e_x, e_y);
+
 	CGame* game = CGame::GetInstance();
-	game->UpdateLives(1);
+	game->UpdateLives(1, e_x, e_y);
 }
 
 void CMario::OnCollisionWithPlatformKill(LPCOLLISIONEVENT e) {
@@ -345,15 +348,17 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 
 		float e_x, e_y;
 		e->obj->GetPosition(e_x, e_y);
-
+		
 		CGame* game = CGame::GetInstance();
-		game->AddScore(currentBaseScore, e_x, y);
+		if (currentBaseScore > 0) game->AddScore(currentBaseScore, e_x, y);
+		else game->UpdateLives(1, e_x, y);
 
 		if (!isOnPlatform)
 		{
 			currentBaseScore *= 2;
 
 			if (currentBaseScore == 1600) currentBaseScore = 1000;
+			if (currentBaseScore > 8000) currentBaseScore = 0;
 		}
 	}
 	else // hit by Goomba

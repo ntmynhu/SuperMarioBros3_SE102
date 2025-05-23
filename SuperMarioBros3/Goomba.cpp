@@ -106,7 +106,7 @@ void CGoomba::TakeKoopaDamage(float xKoopa) {
 		}
 
 		CGame* game = CGame::GetInstance();
-		game->AddScore(100, x, y);
+		game->AddScore(100, x, y, this);
 
 		vy = -ENEMY_DIE_UPSIDE_DOWN_VY;
 		SetState(ENEMY_STATE_DIE);

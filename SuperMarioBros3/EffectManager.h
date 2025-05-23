@@ -51,6 +51,9 @@ public:
 
 		switch (score)
 		{
+		case 1:
+			this->id_sprite = ID_SPRITE_SCORE_EFFECT_1UP;
+			break;
 		case 100:
 			this->id_sprite = ID_SPRITE_SCORE_EFFECT_100;
 			break;
