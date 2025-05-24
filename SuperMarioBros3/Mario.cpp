@@ -24,7 +24,7 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	DebugOutTitle(L"MARIO POS %f %f", x, y);
+	//DebugOutTitle(L"MARIO POS %f %f", x, y);
 	if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) {
 		
 		nx = 0;
@@ -173,7 +173,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//}
 	//else
 	//{
-	DebugOutTitle(L"IsOnPlatform %d\n", isOnPlatform);
+	//DebugOutTitle(L"IsOnPlatform %d\n", isOnPlatform);
 	//}
 
 }
@@ -350,8 +350,10 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 		e->obj->GetPosition(e_x, e_y);
 		
 		CGame* game = CGame::GetInstance();
-		if (currentBaseScore > 0) game->AddScore(currentBaseScore, e_x, y);
-		else game->UpdateLives(1, e_x, y);
+		if (!enemy->PreventDefaultScoring()) {
+			if (currentBaseScore > 0) game->AddScore(currentBaseScore, e_x, y);
+			else game->UpdateLives(1, e_x, y);
+		}
 
 		if (!isOnPlatform)
 		{

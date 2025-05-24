@@ -11,6 +11,7 @@
 #include "Coin.h"
 #include "Background.h"
 
+#include "BoomerangBros.h"
 #include "Goomba.h"
 #include "Paragoomba.h"
 #include "Koopa.h"
@@ -289,6 +290,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CRedParakoopa(x, y, range);
 		break;
 	}
+	case OBJECT_TYPE_BOOMERANG_BRO: obj = new CBoomerangBros(x, y); break;
 	case OBJECT_TYPE_BRICK:
 	{
 		obj = new CBrick(x, y);

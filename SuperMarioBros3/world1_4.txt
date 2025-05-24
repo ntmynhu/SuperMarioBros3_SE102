@@ -11,6 +11,7 @@ leaf.txt
 hud.txt
 particle.txt
 background1_4.txt
+effect.txt
 
 # Background: First line as x, y, w, h, base_id. Next y lines, each have y number as asset of each type
 [BACKGROUND]
