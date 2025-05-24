@@ -16,6 +16,13 @@ using namespace std;
 #define ID_SPRITE_SCORE_EFFECT_1UP	400009
 
 #define SCORE_EFFECT_TIME	1100
+#define VISUAL_EFFECT_TIME	225
+
+#define ID_SPRITE_TAIL_EFFECT_PINK_LEFT 400010
+#define ID_SPRITE_TAIL_EFFECT_PINK_RIGHT 400011
+#define ID_SPRITE_TAIL_EFFECT_WHITE_LEFT 400012
+#define ID_SPRITE_TAIL_EFFECT_WHITE_RIGHT 400013
+
 
 class EffectManager : public CGameObject
 {
@@ -83,6 +90,19 @@ public:
 		}
 	}
 
+	void Render();
+};
+
+class TailEffect : public CUIElement
+{
+private:
+	ULONGLONG startTime;
+public:
+	TailEffect(float x, float y) : CUIElement(x, y) {
+		EffectManager::GetInstance()->AddEffect(this);
+		this->startTime = GetTickCount64();
+	}
+	
 	void Render();
 };
 

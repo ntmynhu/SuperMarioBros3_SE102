@@ -3,6 +3,8 @@
 #include "Plant.h"
 #include "Block.h"
 #include "debug.h"
+#include "EffectManager.h"
+
 void CTail::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
     left = x - TAIL_BBOX_WIDTH / 2;
     top = y - TAIL_BBOX_HEIGHT / 2;
@@ -25,14 +27,24 @@ void CTail::OnCollisionWithPlant(LPCOLLISIONEVENT e)
 {
     CPlant* plant = dynamic_cast<CPlant*>(e->obj);
     if (plant->GetState() != PLANT_STATE_DIE)
-            plant->TakeTailAttackDamage(this->x);
+    {
+		float e_x, e_y;
+		e->obj->GetPosition(e_x, e_y);
+        TailEffect* effect = new TailEffect(e_x, e_y);
+        plant->TakeTailAttackDamage(this->x);
+    }
     DebugOut(L"Tail Collided! Plant state: %d\n", e->obj->GetState());
 }
 
 void CTail::OnCollisionWithEnemy(LPCOLLISIONEVENT e) {
     CEnemy* enemy = dynamic_cast<CEnemy*> (e->obj);
     if (enemy->GetState() != ENEMY_STATE_DIE)
+    {
+		float e_x, e_y;
+		e->obj->GetPosition(e_x, e_y);
+		TailEffect* effect = new TailEffect(e_x, e_y);
         enemy->TakeTailAttackDamage(this->x);
+    }
     
     DebugOut(L"Tail Collided! Enemy state: %d\n", e->obj->GetState());
 }

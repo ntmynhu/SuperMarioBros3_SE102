@@ -27,3 +27,4 @@ height	240
 50	textures\full_texture.png
 60	textures\HUD.png
 70	textures\font_effect.png
+80	textures\visual_effect.png

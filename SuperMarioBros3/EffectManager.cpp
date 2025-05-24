@@ -49,7 +49,55 @@ void ScoreEffect::Render()
 	else
 		increasement += 0.35f;
 
-	DebugOut(L"x: %f\n", GetTickCount64() - currentTime);
+	s->Get(id_sprite)->DrawStatic(targetX, targetY);
+}
+
+void TailEffect::Render()
+{
+	if (GetTickCount64() - startTime > VISUAL_EFFECT_TIME)
+	{
+		Delete();
+		return;
+	}
+
+	float offset = VISUAL_EFFECT_TIME / 5;
+
+	int index = (GetTickCount64() - startTime) / offset;
+	
+	int id_sprite = -1;
+
+	DebugOut(L"index: %d\n", index);
+	switch (index)
+	{
+	case 0:
+		id_sprite = ID_SPRITE_TAIL_EFFECT_PINK_LEFT;
+		break;
+	case 1:
+		id_sprite = ID_SPRITE_TAIL_EFFECT_WHITE_RIGHT;
+		break;
+	case 2:
+		id_sprite = ID_SPRITE_TAIL_EFFECT_PINK_RIGHT;
+		break;
+	case 3:
+		id_sprite = ID_SPRITE_TAIL_EFFECT_WHITE_LEFT;
+		break;
+	case 4:
+		id_sprite = ID_SPRITE_TAIL_EFFECT_PINK_LEFT;
+		break;
+	default:
+		id_sprite = ID_SPRITE_TAIL_EFFECT_PINK_LEFT;
+		break;
+	}
+
+	CSprites* s = CSprites::GetInstance();
+
+	float camX, camY;
+	CGame::GetInstance()->GetCamPos(camX, camY);
+
+	float targetX = x - camX;
+	float targetY = y - camY;
+
+	DebugOut(L"targetX: %f, targetY: %f\n", targetX, targetY);
 
 	s->Get(id_sprite)->DrawStatic(targetX, targetY);
 }
