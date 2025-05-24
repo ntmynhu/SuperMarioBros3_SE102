@@ -60,8 +60,10 @@ void CBoomerangBros::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		MakeJump();
 	}
 	if (state == BOOMERANG_BRO_STATE_WALKING && GetTickCount64() - throw_start > BOOMERANG_BRO_THROW_TIMEOUT) {
-		SetState(BOOMERANG_BRO_STATE_PREPARE_THROWING);
-		prepare_start = GetTickCount64();
+		if (Throwable() != 0) {
+			SetState(BOOMERANG_BRO_STATE_PREPARE_THROWING);
+			prepare_start = GetTickCount64();
+		}
 	}
 	if (state == BOOMERANG_BRO_STATE_PREPARE_THROWING && GetTickCount64() - prepare_start > BOOMERANG_BRO_PREPARE_TIMEOUT) {
 		switch (Throwable())
@@ -183,7 +185,7 @@ void CBoomerangBros::SetState(int state) {
 		break;
 	case BOOMERANG_BRO_STATE_WALKING:
 		if (prevState == BOOMERANG_BRO_STATE_PREPARE_THROWING)
-			y += (BOOMERANG_BRO_PREPARE_BBOX_HEIGHT - BOOMERANG_BRO_BBOX_HEIGHT) / 2;
+			y += (BOOMERANG_BRO_PREPARE_BBOX_HEIGHT - BOOMERANG_BRO_BBOX_HEIGHT) / 2 + 2;
 	case BOOMERANG_BRO_STATE_PREPARE_THROWING:
 		y -= (BOOMERANG_BRO_PREPARE_BBOX_HEIGHT - BOOMERANG_BRO_BBOX_HEIGHT) / 2;
 		break;
