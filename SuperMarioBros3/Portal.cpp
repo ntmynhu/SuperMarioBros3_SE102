@@ -49,6 +49,10 @@ void CPortal::Render()
 }
 
 void CPortal::SwitchScene() {
+	if (delay == 0) {
+		CGame::GetInstance()->InitiateSwitchScene(GetSceneId());
+		return;
+	}
 	if (switch_start == -1)
 		switch_start = GetTickCount64();
 }
