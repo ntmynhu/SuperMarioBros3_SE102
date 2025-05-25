@@ -1,5 +1,5 @@
 #pragma once
-#include "GameObject.h"
+#include "CThrowable.h"
 
 #define BOOMERANG_VX 0.07f
 #define BOOMERANG_VY 0.09f
@@ -12,38 +12,33 @@
 #define BOOMERANG_MAX_DISTANCE 112
 
 class CBoomerang :
-	public CGameObject
+	public CThrowable
 {
 protected:
 	float xDir;
 	float startX, startY;
 	float returning;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	virtual int IsOverlappable() { return 1; };
-	virtual int IsBlocking() { return 0; }
-	virtual int IsCollidable() { return 1; };
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 
 	void Render();
 
 public:
-	CBoomerang(float x, float y) : CGameObject(x, y) {
-		this->vx = 0;
-		this->vy = 0;
+	CBoomerang(float x, float y) : CThrowable(x, y) {
 		this->startX = 0;
 		this->startY = 0;
 		this->xDir = 0;
 	}
 	void Throw(float x, float y, float xDir);
+
 	virtual void Deactivate() {
 		if (returning == true) {
-			CGameObject::Deactivate();
+			CThrowable::Deactivate();
 			xDir = 0;
 			vx = 0;
 			vy = 0;
 			returning = true;
 		}
 	}
-	void ResetPos() {}
 };
 
