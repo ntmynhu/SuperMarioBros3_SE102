@@ -20,30 +20,48 @@ void CBoomerang::Throw(float x, float y, float xDir) {
 }
 
 void CBoomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+    const float GRAVITY = 0.000095f;
+    const float RETURN_ACCEL = 0.005f;  // controls how fast vx eases
+
+    x += vx * dt;
+    y += vy * dt;
     
-	x += vx * dt;
-	y += vy * dt;
 
-    float dx = x - startX;
+    float dxFromStart = x - startX;
 
-    // Check if boomerang should return
     if (!returning) {
-        if ((xDir > 0 && dx >= BOOMERANG_MAX_DISTANCE) ||
-            (xDir < 0 && dx <= -BOOMERANG_MAX_DISTANCE)) {
+        if ((xDir > 0 && dxFromStart >= BOOMERANG_MAX_DISTANCE) ||
+            (xDir < 0 && dxFromStart <= -BOOMERANG_MAX_DISTANCE)) {
             returning = true;
-            vx = -vx;
         }
     }
+    else {
+        float targetVx = -xDir * BOOMERANG_VX;
+        float deltaVx = targetVx - vx;
 
-	vy += 0.00008f * dt;
-    if (y >= startY) vy = 0;
-    
+        if (abs(deltaVx) < 0.0001f)
+            vx = targetVx;
+        else
+            vx += deltaVx * RETURN_ACCEL * dt;
+    }
+
+    vy += GRAVITY * dt;
+
+    if (y >= startY) {
+        y = startY;
+        vy = 0;
+    }
+
     CGameObject::Update(dt, coObjects);
+    
 }
 
 
 
 
+
 void CBoomerang::Render() {
-	RenderBoundingBox();
+	int aniId = ID_ANI_BOOMERANG;
+	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	//RenderBoundingBox();
 }

@@ -2,14 +2,15 @@
 #include "GameObject.h"
 
 #define BOOMERANG_VX 0.07f
-#define BOOMERANG_VY 0.077f
+#define BOOMERANG_VY 0.09f
 
-#define ID_ANI_BOOMERANG 7001
+#define ID_ANI_BOOMERANG 8007
 
 #define BOOMERANG_BBOX_WIDTH 16
 #define BOOMERANG_BBOX_HEIGHT 16
 
 #define BOOMERANG_MAX_DISTANCE 112
+
 class CBoomerang :
 	public CGameObject
 {
@@ -35,11 +36,13 @@ public:
 	}
 	void Throw(float x, float y, float xDir);
 	virtual void Deactivate() {
-		CGameObject::Deactivate();
-		xDir = 0;
-		vx = 0;
-		vy = 0;
-		returning = true;
+		if (returning == true) {
+			CGameObject::Deactivate();
+			xDir = 0;
+			vx = 0;
+			vy = 0;
+			returning = true;
+		}
 	}
 	void ResetPos() {}
 };
