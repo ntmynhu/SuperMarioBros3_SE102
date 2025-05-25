@@ -163,6 +163,11 @@ void CPlayScene::_ParseSection_SETTING(string line)
 		PosKey* posKey = new PosKey(keycode, key_x, key_y);
 		((CSampleKeyHandler*)key_handler)->AddPosKey(posKey);
 	}
+
+	else if (tokens[0] == "time") {
+		int time = atoi(tokens[1].c_str());
+		CGameData::GetInstance()->SetTimer(time);
+	}
 }
 
 /*
@@ -661,11 +666,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int scene_id = atoi(tokens[5].c_str());
 		float out_x = -1;
 		float out_y = -1;
+		int delay = 0;
 		if (tokens.size() > 6) {
 			out_x = (float)atof(tokens[6].c_str());
 			out_y = (float)atof(tokens[7].c_str());
+		} 
+		
+		if (tokens.size() > 8) {
+			delay = atoi(tokens[8].c_str());
 		}
-		obj = new CPortal(x, y, r, b, scene_id, out_x, out_y);
+		obj = new CPortal(x, y, r, b, scene_id, out_x, out_y, delay);
 	}
 	break;
 
