@@ -1,5 +1,6 @@
 #pragma once
 #include "Enemy.h"
+#include "Boomerang.h"
 #include <random>
 
 #define BOOMERANG_BRO_VX 0.028f
@@ -48,6 +49,9 @@ protected:
 	ULONGLONG prepare_start = -1;
 	ULONGLONG switch_start = -1;
 
+	CBoomerang* boomerang1;
+	CBoomerang* boomerang2;
+
 	float min_x, max_x;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -85,7 +89,18 @@ public:
 
 		min_x = random_value < 0 ? init_x : init_x - BOOMERANG_BRO_RANGE; //randomly choose
 		max_x = min_x + BOOMERANG_BRO_RANGE;
+		SetState(BOOMERANG_BRO_STATE_WALKING);
+		boomerang1->Deactivate();
+		boomerang2->Deactivate();
 	}
+
+	virtual void SetBoomerangs(CBoomerang* boomerang1, CBoomerang* boomerang2) {
+		this->boomerang1 = boomerang1;
+		this->boomerang2 = boomerang2;
+		boomerang1->Deactivate();
+		boomerang2->Deactivate();
+	}
+
 	virtual bool PreventDefaultScoring() { return true; }
 	virtual void SetState(int state);
 	virtual bool IsDamagable() { return state != ENEMY_STATE_DIE; }

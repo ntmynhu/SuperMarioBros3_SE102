@@ -81,7 +81,7 @@ void CBoomerangBros::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	FaceMario();
 	
-	DebugOutTitle(L"vy %f y %f", vy, y);
+	//DebugOutTitle(L"vy %f y %f", vy, y);
 	CEnemy::Update(dt, coObjects);
 }
 
@@ -164,11 +164,13 @@ int CBoomerangBros::Throwable() {
 }
 void CBoomerangBros::MakeThrow1() {
 	DebugOut(L"[INFO] Boomerang Throw 1\n");
+	boomerang1->Throw(x, y, nx);
 	throw_start = GetTickCount64();
 }
 
 void CBoomerangBros::MakeThrow2() {
 	DebugOut(L"[INFO] Boomerang Throw 2\n");
+	boomerang1->Throw(x, y, nx);
 	throw_start = GetTickCount64();
 }
 
