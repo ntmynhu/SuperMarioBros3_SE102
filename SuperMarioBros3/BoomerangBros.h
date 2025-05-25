@@ -24,11 +24,11 @@
 #define BOOMERANG_BRO_PREPARE_BBOX_WIDTH 24
 #define BOOMERANG_BRO_PREPARE_BBOX_HEIGHT 26
 
-#define BOOMERANG_BRO_BOOMERANG_DELAY 500
+#define BOOMERANG_BRO_BOOMERANG_DELAY 1000
 #define BOOMERANG_BRO_TURN_DELAY 150
 
-#define BOOMERANG_BRO_2_BOOMERANG_RANGE 64
-#define BOOMERANG_BRO_ATTACK_RANGE 96
+#define BOOMERANG_BRO_2_BOOMERANG_RANGE 96
+#define BOOMERANG_BRO_ATTACK_RANGE 112
 
 #define ID_ANI_BOOMERANG_BRO_WALK_LEFT 8001
 #define ID_ANI_BOOMERANG_BRO_WALK_RIGHT 8002
@@ -48,6 +48,7 @@ protected:
 	ULONGLONG throw_start = -1;
 	ULONGLONG prepare_start = -1;
 	ULONGLONG switch_start = -1;
+	ULONGLONG throw_timeout;
 
 	CBoomerang* boomerang1;
 	CBoomerang* boomerang2;
@@ -61,6 +62,7 @@ protected:
 	virtual int IsBlocking() { return 0; }
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
+	virtual void OnCollisionWithBoomerang(LPCOLLISIONEVENT e);
 
 	virtual void FaceMario();
 	virtual void MakeJump();
@@ -78,7 +80,7 @@ public:
 
 		min_x = random_value < 0 ? init_x : init_x - BOOMERANG_BRO_RANGE; //randomly choose
 		max_x = min_x + BOOMERANG_BRO_RANGE;
-
+		throw_timeout = BOOMERANG_BRO_THROW_TIMEOUT;
 		SetState(BOOMERANG_BRO_STATE_WALKING);
 	}
 	virtual void ResetPos() {
@@ -90,8 +92,6 @@ public:
 		min_x = random_value < 0 ? init_x : init_x - BOOMERANG_BRO_RANGE; //randomly choose
 		max_x = min_x + BOOMERANG_BRO_RANGE;
 		SetState(BOOMERANG_BRO_STATE_WALKING);
-		boomerang1->Deactivate();
-		boomerang2->Deactivate();
 	}
 
 	virtual void SetBoomerangs(CBoomerang* boomerang1, CBoomerang* boomerang2) {

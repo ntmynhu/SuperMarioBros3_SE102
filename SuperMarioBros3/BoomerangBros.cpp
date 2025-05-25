@@ -59,7 +59,7 @@ void CBoomerangBros::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		jump_start = GetTickCount64();
 		MakeJump();
 	}
-	if (state == BOOMERANG_BRO_STATE_WALKING && GetTickCount64() - throw_start > BOOMERANG_BRO_THROW_TIMEOUT) {
+	if (state == BOOMERANG_BRO_STATE_WALKING && GetTickCount64() - throw_start > throw_timeout) {
 		if (Throwable() != 0) {
 			SetState(BOOMERANG_BRO_STATE_PREPARE_THROWING);
 			prepare_start = GetTickCount64();
@@ -74,7 +74,10 @@ void CBoomerangBros::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			break;
 		case 2:
 			SetState(BOOMERANG_BRO_STATE_WALKING);
-			MakeThrow2();
+			if (throw_timeout == BOOMERANG_BRO_BOOMERANG_DELAY)
+				MakeThrow1();
+			else
+				MakeThrow2();
 			break;
 		}
 	}
@@ -88,6 +91,8 @@ void CBoomerangBros::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 void CBoomerangBros::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (this->state == ENEMY_STATE_DIE) return;
+	if (dynamic_cast<CBoomerang*> (e->obj))
+		OnCollisionWithBoomerang(e);
 	if (dynamic_cast<CMario*>(e->obj)) return;
 	if (dynamic_cast<CEnemy*>(e->obj)) return;
 	if (!e->obj->IsBlocking()) return;
@@ -105,7 +110,11 @@ void CBoomerangBros::OnCollisionWith(LPCOLLISIONEVENT e)
 		vx = -vx;
 	}
 }
-
+void CBoomerangBros::OnCollisionWithBoomerang(LPCOLLISIONEVENT e) {
+	if (e->obj == boomerang1 || e->obj == boomerang2) {
+		e->obj->Deactivate();
+	}
+}
 void CBoomerangBros::Render() {
 	int aniId = ID_ANI_BOOMERANG_BRO_WALK_LEFT;
 	switch (state) {
@@ -165,12 +174,14 @@ int CBoomerangBros::Throwable() {
 void CBoomerangBros::MakeThrow1() {
 	DebugOut(L"[INFO] Boomerang Throw 1\n");
 	boomerang1->Throw(x, y, nx);
+	throw_timeout = BOOMERANG_BRO_THROW_TIMEOUT;
 	throw_start = GetTickCount64();
 }
 
 void CBoomerangBros::MakeThrow2() {
 	DebugOut(L"[INFO] Boomerang Throw 2\n");
-	boomerang1->Throw(x, y, nx);
+	boomerang2->Throw(x, y, nx);
+	throw_timeout = BOOMERANG_BRO_BOOMERANG_DELAY;
 	throw_start = GetTickCount64();
 }
 
