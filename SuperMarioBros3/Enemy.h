@@ -29,6 +29,7 @@ protected:
 	virtual void ResetPos();
 public:
 	CEnemy(float x, float y);
+	virtual bool PreventDefaultScoring() { return false; }
 	virtual void OnCollisionByMario(LPCOLLISIONEVENT e) {};
 	virtual void TakeJumpDamage() {};
 	virtual void TakeTailAttackDamage(float xMario) {};

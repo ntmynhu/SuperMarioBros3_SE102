@@ -37,6 +37,7 @@ public:
         maxY = y;
         minY = maxY - HIDE_OFFSET - VENUS_BBOX_HEIGHT;
         this->fireball = fireball;
+        fireball->Deactivate();
         flowerOffsetY = VENUS_BBOX_HEIGHT / 4;
     }
     virtual void SetState(int state);
