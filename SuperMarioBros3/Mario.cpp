@@ -6,8 +6,7 @@
 
 #include "Enemy.h"
 #include "Plant.h"
-#include "FireBall.h"
-#include "Boomerang.h"
+#include "CThrowable.h"
 #include "Coin.h"
 #include "QuestionBlock.h"
 #include "SuperMushroom.h"
@@ -222,10 +221,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithEnemy(e);
 	else if (dynamic_cast<CPlant*>(e->obj))
 		OnCollisionWithPlant(e);
-	else if (dynamic_cast<CFireBall*>(e->obj))
-		OnCollisionWithFireBall(e);
-	else if (dynamic_cast<CBoomerang*>(e->obj))
-		OnCollisionWithBoomerang(e);
+	else if (dynamic_cast<CThrowable*>(e->obj))
+		OnCollisionWithThrowable(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CBlock*>(e->obj))
@@ -284,15 +281,7 @@ void CMario::OnCollisionWithPlant(LPCOLLISIONEVENT e)
 		TakeDamage();
 }
 
-
-void CMario::OnCollisionWithFireBall(LPCOLLISIONEVENT e)
-{
-	CFireBall* fireball = dynamic_cast<CFireBall*>(e->obj);
-	if (fireball->GetState() != FIRE_BALL_STATE_IDLE && untouchable == 0)
-		TakeDamage();
-}
-
-void CMario::OnCollisionWithBoomerang(LPCOLLISIONEVENT e)
+void CMario::OnCollisionWithThrowable(LPCOLLISIONEVENT e)
 {
 	if (untouchable == 0)
 		TakeDamage();
