@@ -1,10 +1,8 @@
 #include "FireBall.h"
 #include "Game.h"
 void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-	if (state == FIRE_BALL_STATE_FLY) {
-		x += abs(vx) * dt * xDir;
-		y += abs(vy) * dt * yDir;
-	}
+	x += abs(vx) * dt * xDir;
+	y += abs(vy) * dt * yDir;
 	
 	CGameObject::Update(dt, coObjects);
 }
