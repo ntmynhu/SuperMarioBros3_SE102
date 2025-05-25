@@ -25,7 +25,6 @@ void CBoomerangBros::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		if ((GetTickCount64() - die_start > BOOMERANG_BRO_DIE_TIMEOUT))
 		{
 			isDeleted = true;
-			return;
 		}
 		CEnemy::Update(dt, coObjects);
 		return;

@@ -30,6 +30,10 @@ void CEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 }
 
 void CEnemy::ResetPos() {
+	if (state == ENEMY_STATE_DIE) {
+		isDeleted = true;
+		return;
+	}
 	CGameObject::ResetPos();
 	this->x = init_x;
 	this->y = init_y;
