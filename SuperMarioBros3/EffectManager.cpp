@@ -66,7 +66,6 @@ void TailEffect::Render()
 	
 	int id_sprite = -1;
 
-	DebugOut(L"index: %d\n", index);
 	switch (index)
 	{
 	case 0:
@@ -97,8 +96,6 @@ void TailEffect::Render()
 	float targetX = x - camX;
 	float targetY = y - camY;
 
-	DebugOut(L"targetX: %f, targetY: %f\n", targetX, targetY);
-
 	s->Get(id_sprite)->DrawStatic(targetX, targetY);
 }
 
@@ -115,8 +112,6 @@ void TextEffect::Render()
 	for (int i = 0; i < text.length(); i++)
 	{
 		int index = text[i] - 'a'; // Convert char to int
-
-		DebugOut(L"index: %d\n", index);
 
 		if (index >= 0) s->Get(ID_SPRITE_LETTER_A + index)->DrawStatic(targetX + i * LETTER_WIDTH, targetY);
 		else
