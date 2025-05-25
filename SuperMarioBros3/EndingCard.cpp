@@ -1,5 +1,6 @@
-#include "EndingCard.h"
+﻿#include "EndingCard.h"
 #include "debug.h"
+#include <random>
 
 void CEndingCard::Render()
 {
@@ -11,6 +12,10 @@ void CEndingCard::Render()
 
 void CEndingCard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (card != NULL)
+	{
+		card->Update(dt, coObjects);
+	}
 }
 
 void CEndingCard::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -21,15 +26,52 @@ void CEndingCard::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = t + ENDING_CARD_BBOX_HEIGHT;
 }
 
+void CEndingCard::SetTrigger()
+{
+	if (card != NULL && !card->IsMoving())
+		card->StartMovingUp();
+}
+
 void CCard::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_CARD)->Render(x, y);
+
+	if (isMoving)
+	{
+		switch (card_id)
+		{
+		case 1:
+			animations->Get(ID_ANI_CARD_STAR)->Render(x, y);
+			break;
+		case 2:
+			animations->Get(ID_ANI_CARD_PLANT)->Render(x, y);
+			break;
+		case 3:
+			animations->Get(ID_ANI_CARD_MUSHROOM)->Render(x, y);
+			break;
+		}
+	}
+	else
+	{
+		animations->Get(ID_ANI_CARD)->Render(x, y);
+	}
 }
 
 
 void CCard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (isMoving)
+	{
+		if (GetTickCount() - moving_start < CARD_MOVING_TIME)
+		{
+			y += vy * CARD_MOVING_SPEED * dt;
+		}
+		else
+		{
+			isMoving = false;
+			Delete();
+		}
+	}
 }
 
 void CCard::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -38,4 +80,17 @@ void CCard::GetBoundingBox(float& l, float& t, float& r, float& b)
 	t = y - CARD_BBOX_HEIGHT / 2;
 	r = l + CARD_BBOX_WIDTH;
 	b = t + CARD_BBOX_HEIGHT;
+}
+
+void CCard::StartMovingUp()
+{
+	vy = -1;
+	moving_start = GetTickCount64();
+	isMoving = true;
+
+	std::random_device rd;                         // nguồn random thực
+	std::mt19937 gen(rd());                        // Mersenne Twister engine
+	std::uniform_int_distribution<> dis(1, 3);    // phân phối đều từ 0 đến 99
+
+	card_id = dis(gen);
 }
