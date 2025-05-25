@@ -4,6 +4,7 @@
 #include "LivesUI.h"
 #include "ScoreUI.h"
 #include "PowerUI.h"
+#include "CardUI.h"
 
 #pragma once
 #define ID_SPRITE_HUD_BACKGROUND 300001
@@ -19,6 +20,7 @@ private:
 	WorldUI* world;
 	ScoreUI* score;
 	PowerUI* power;
+	CardUI* cards;
 protected:
 	static HUD* __instance;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) {}
@@ -26,10 +28,10 @@ protected:
 	virtual int IsBlocking() { return 0; }
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 public:
-	
 	HUD(float x, float y):CGameObject(x, y) {}
 	void Deactivate(){}
 	void Render();
 	static HUD* GetInstance();
+	void AddCard(int id);
 };
 

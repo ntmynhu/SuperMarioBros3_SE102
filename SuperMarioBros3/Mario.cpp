@@ -19,6 +19,7 @@
 #include "BlueButton.h"
 #include "WallMario.h"
 #include "PlatformKill.h"
+#include "EndingCard.h"
 
 #include "GameData.h"
 
@@ -242,6 +243,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithTunnel(e);
 	else if (dynamic_cast<CBlueButton*>(e->obj))
 		OnCollisionWithBlueButton(e);
+	else if (dynamic_cast<CEndingCard*>(e->obj))
+		OnCollisionWithEndingCard(e);
 }
 
 void CMario::OnCollisionWithTunnel(LPCOLLISIONEVENT e) {
@@ -340,6 +343,12 @@ void CMario::OnCollisionWithOneUpMushroom(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithPlatformKill(LPCOLLISIONEVENT e) {
 	SetState(MARIO_STATE_DIE);
+}
+
+void CMario::OnCollisionWithEndingCard(LPCOLLISIONEVENT e)
+{
+	CEndingCard* card = dynamic_cast<CEndingCard*>(e->obj);
+	card->SetTrigger();
 }
   
 void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)

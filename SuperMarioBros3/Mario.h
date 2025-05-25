@@ -126,6 +126,7 @@ class CMario : public CGameObject
 	void OnCollisionWithBlueButton(LPCOLLISIONEVENT e);
 	void OnCollisionWithOneUpMushroom(LPCOLLISIONEVENT e);
 	void OnCollisionWithPlatformKill(LPCOLLISIONEVENT e);
+	void OnCollisionWithEndingCard(LPCOLLISIONEVENT e);
 
 public:
 	CMario(float x, float y) : CGameObject(x, y)
