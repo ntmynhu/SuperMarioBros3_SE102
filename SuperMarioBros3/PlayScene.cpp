@@ -45,6 +45,7 @@
 #include "SampleKeyEventHandler.h"
 #include "OneUpMushroom.h"
 #include "EffectManager.h"
+#include "EndingCard.h"
 
 using namespace std;
 
@@ -420,6 +421,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+
+	case OBJECT_TYPE_ENDING_CARD:
+	{
+		CCard* card = new CCard(x, y);
+		obj = new CEndingCard(x, y, card);
+		break;
+	}
 
 	case OBJECT_TYPE_SUPER_MUSHROOM:
 	{

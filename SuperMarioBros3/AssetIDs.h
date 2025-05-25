@@ -54,6 +54,7 @@
 
 #define OBJECT_TYPE_BACKGROUND 100
 #define OBJECT_TYPE_HUD 101
+#define OBJECT_TYPE_ENDING_CARD 102
 
 #pragma region MARIO 
 
