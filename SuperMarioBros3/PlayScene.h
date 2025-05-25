@@ -7,6 +7,7 @@
 #include "Mario.h"
 #include "LimitObject.h"
 #include "Goomba.h"
+#include "EffectManager.h"
 //#include "Koopas.h"
 
 #define CAMERA_MODE_NORMAL 0
@@ -14,7 +15,8 @@
 
 #define CAMERA_SCROLL_VX 0.035f
 
-#define PLAYER_DIE_TIMEOUT 4000
+#define EFFECT_PLAY_TIMEOUT 1000
+#define PLAYER_DIE_TIMEOUT 2000
 class CPlayScene: public CScene
 {
 protected: 
@@ -27,6 +29,10 @@ protected:
 	LPGAMEOBJECT stop_mario_l;
 
 	ULONGLONG player_die_start = -1;
+
+	float effect_play = -1;
+	float scene_start = -1;
+
 	int cam_mode;
 
 	vector<LPGAMEOBJECT> objects;

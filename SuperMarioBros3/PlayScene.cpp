@@ -49,6 +49,8 @@
 #include "EffectManager.h"
 #include "EndingCard.h"
 
+#include "EffectManager.h"
+
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath, int sceneGroup):
@@ -730,7 +732,7 @@ void CPlayScene::LoadAssets(LPCWSTR assetFile)
 void CPlayScene::SoftLoad()
 {
 	DebugOut(L"[INFO] Start soft loading scene from : %s \n", sceneFilePath);
-
+	scene_start = 1;
 	if (objects.empty())
 	{
 		Load();
@@ -774,6 +776,7 @@ void CPlayScene::SoftLoad()
 void CPlayScene::Load()
 {
 	DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
+	scene_start = 1;
 
 	ifstream f;
 	f.open(sceneFilePath);
@@ -832,10 +835,21 @@ void CPlayScene::Update(DWORD dt)
 	{
 		game->StartMarioPause();
 		player->Update(dt, &coObjects);
-		if (player_die_start == -1) player_die_start = GetTickCount64();
+
+		if (player_die_start == -1) {
+			player_die_start = GetTickCount64();
+		}
 		if (GetTickCount64() - player_die_start > PLAYER_DIE_TIMEOUT) {
-			game->StopMarioPause();
-			Reload();
+			if (effect_play == -1) {
+				FadeEffect* fade = new FadeEffect(0, 0, FADE_IN_STATE);
+				effect_play = 1;
+			}
+			if (GetTickCount64() - player_die_start > PLAYER_DIE_TIMEOUT + EFFECT_PLAY_TIMEOUT)
+			{
+				effect_play = -1;
+				game->StopMarioPause();
+				Reload();
+			}
 		}
 		return;
 	}
@@ -969,12 +983,18 @@ void CPlayScene::Reload() {
 
 void CPlayScene::Render()
 {
+	if (scene_start > 0) {
+		FadeEffect* fade = new FadeEffect(0, 0, FADE_OUT_STATE);
+		scene_start = -1;
+		return;
+	}
+
 	for (int i = 0; i < objects.size(); i++)
 		if (objects[i] -> IsActive())
 			objects[i]->Render();
 
-	HUD::GetInstance()->Render();
 	EffectManager::GetInstance()->Render();
+	HUD::GetInstance()->Render();
 }
 
 /*
@@ -1008,11 +1028,13 @@ void CPlayScene::Unload()
 	limit_obj = NULL;
 	stop_mario_l = NULL;
 	stop_mario_r = NULL;
+	EffectManager::GetInstance()->Clear();
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }
 
 void CPlayScene::SoftUnload()
 {
+	EffectManager::GetInstance()->Clear();
 	DebugOut(L"[INFO] Scene soft %d unloaded! \n", id);
 }
 
