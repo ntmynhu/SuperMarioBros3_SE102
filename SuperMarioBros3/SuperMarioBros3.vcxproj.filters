@@ -216,6 +216,12 @@
     <ClCompile Include="EffectManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EndingCard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CardUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="BoomerangBros.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -438,6 +444,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EffectManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EndingCard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CardUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BoomerangBros.h">

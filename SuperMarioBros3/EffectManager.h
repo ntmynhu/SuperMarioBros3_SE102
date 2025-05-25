@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "UIElement.h"
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -23,6 +24,14 @@ using namespace std;
 #define ID_SPRITE_TAIL_EFFECT_WHITE_LEFT 400012
 #define ID_SPRITE_TAIL_EFFECT_WHITE_RIGHT 400013
 
+#define ID_SPRITE_CARD_STAR 500101
+#define ID_SPRITE_CARD_PLANT 500102
+#define ID_SPRITE_CARD_MUSHROOM 500103
+
+#define ID_SPRITE_LETTER_A 400100 
+#define ID_SPRITE_EXCLAMATION 400126
+
+#define LETTER_WIDTH	8
 
 class EffectManager : public CGameObject
 {
@@ -103,6 +112,34 @@ public:
 		this->startTime = GetTickCount64();
 	}
 	
+	void Render();
+};
+
+class Image : public CUIElement
+{
+private:
+	int id_sprite = -1;
+public:
+	Image(int id_sprite, float x, float y) : CUIElement(x, y) {
+		this->id_sprite = id_sprite;
+		EffectManager::GetInstance()->AddEffect(this);
+	}
+
+	void Render();
+};
+
+class TextEffect : public CUIElement
+{
+private:
+	ULONGLONG startTime;
+	string text;
+public:
+	TextEffect(string text, float x, float y) : CUIElement(x, y) {
+		EffectManager::GetInstance()->AddEffect(this);
+		this->startTime = GetTickCount64();
+		this->text = text;
+	}
+
 	void Render();
 };
 

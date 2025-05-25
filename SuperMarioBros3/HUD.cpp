@@ -25,8 +25,16 @@ HUD* HUD::GetInstance()
 
 		if (__instance->power == NULL)
 			__instance->power = new PowerUI(0, 0);
+
+		if (__instance->cards == NULL)
+			__instance->cards = new CardUI(0, 0);
 	}
 	return HUD::__instance;
+}
+
+void HUD::AddCard(int id)
+{
+	cards->AddCard(id);
 }
 
 void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -47,4 +55,5 @@ void HUD::Render() {
 	world->Render(targetX, targetY);
 	score->Render(targetX, targetY);
 	power->Render(targetX, targetY);
+	cards->Render(targetX, targetY);
 }
