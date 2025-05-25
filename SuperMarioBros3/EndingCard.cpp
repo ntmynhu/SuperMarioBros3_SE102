@@ -1,6 +1,7 @@
 ﻿#include "EndingCard.h"
 #include "debug.h"
 #include <random>
+#include "HUD.h"
 
 void CEndingCard::Render()
 {
@@ -28,8 +29,11 @@ void CEndingCard::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CEndingCard::SetTrigger()
 {
-	if (card != NULL && !card->IsMoving())
-		card->StartMovingUp();
+	if (card != NULL)
+	{
+		if (!card->IsMoving())
+			card->StartMovingUp();
+	}
 }
 
 void CCard::Render()
@@ -68,7 +72,6 @@ void CCard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		else
 		{
-			isMoving = false;
 			Delete();
 		}
 	}
@@ -84,6 +87,8 @@ void CCard::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CCard::StartMovingUp()
 {
+	if (isMoving) return;
+
 	vy = -1;
 	moving_start = GetTickCount64();
 	isMoving = true;
@@ -93,4 +98,5 @@ void CCard::StartMovingUp()
 	std::uniform_int_distribution<> dis(1, 3);    // phân phối đều từ 0 đến 99
 
 	card_id = dis(gen);
+	HUD::GetInstance()->AddCard(card_id);
 }
