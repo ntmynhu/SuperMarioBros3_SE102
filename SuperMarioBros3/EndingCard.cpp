@@ -67,16 +67,18 @@ void CCard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (isMoving)
 	{
-		if (GetTickCount() - moving_start < CARD_MOVING_TIME)
+		if (GetTickCount64() - moving_start < CARD_MOVING_TIME)
 		{
 			y += vy * CARD_MOVING_SPEED * dt;
 		}
 		else
 		{
-			TextEffect* textEffect = new TextEffect("course clear !", x - 60, 275);
-			TextEffect* textEffect2 = new TextEffect("you got a card", x - 76, 300);
-			Image* image = new Image(ID_SPRITE_CARD + card_id, x - 76 + LETTER_WIDTH * 16, 300);
-
+			if (moving_start != -1) {
+				moving_start = -1;
+				TextEffect* textEffect = new TextEffect("course clear !", x - 60, 275);
+				TextEffect* textEffect2 = new TextEffect("you got a card", x - 76, 300);
+				Image* image = new Image(ID_SPRITE_CARD + card_id, x - 76 + LETTER_WIDTH * 16, 300);
+			}
 			if (!isDeleted) HUD::GetInstance()->AddCard(card_id);
 
 			Delete();
