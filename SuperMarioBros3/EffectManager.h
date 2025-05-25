@@ -6,6 +6,8 @@
 
 using namespace std;
 
+#define ID_SPRITE_BLACK_FILL	300002
+
 #define ID_SPRITE_SCORE_EFFECT_100	400001
 #define ID_SPRITE_SCORE_EFFECT_200	400002
 #define ID_SPRITE_SCORE_EFFECT_400	400003
@@ -17,6 +19,7 @@ using namespace std;
 #define ID_SPRITE_SCORE_EFFECT_1UP	400009
 
 #define SCORE_EFFECT_TIME	1100
+#define FADE_EFFECT_TIME	1000
 #define VISUAL_EFFECT_TIME	225
 
 #define ID_SPRITE_TAIL_EFFECT_PINK_LEFT 400010
@@ -33,6 +36,9 @@ using namespace std;
 
 #define LETTER_WIDTH	8
 
+#define FADE_IN_STATE -1
+#define FADE_OUT_STATE 1
+
 class EffectManager : public CGameObject
 {
 	vector<CUIElement*> effects;
@@ -46,6 +52,16 @@ public:
 	EffectManager(float x, float y) :CGameObject(x, y) {}
 	void Deactivate() {}
 	void Render();
+	void Clear() {
+		vector<CUIElement*>::iterator it;
+		for (it = effects.begin(); it != effects.end(); it++)
+		{
+			CUIElement* o = *it;
+			delete o;
+			*it = NULL;
+		}
+		effects.clear();
+	}
 	static EffectManager* GetInstance();
 	void AddEffect(CUIElement* effect) { effects.push_back(effect); }
 };
@@ -143,3 +159,21 @@ public:
 	void Render();
 };
 
+
+class FadeEffect : public CUIElement
+{
+private:
+
+	float a = 1.0f;
+	int fadeState;
+	float fadeSpeed = 0.002f;
+	ULONGLONG startTime;
+public:
+	FadeEffect(float x = 0, float y = 0, int fadeState = 0) : CUIElement(x, y) {
+		EffectManager::GetInstance()->AddEffect(this);
+		this->startTime = GetTickCount64();
+		this->fadeState = fadeState;
+		a = fadeState == FADE_OUT_STATE ? 1.0f : 0.0f;
+	}
+	void Render();
+};
