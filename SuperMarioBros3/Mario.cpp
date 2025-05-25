@@ -28,11 +28,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	//DebugOutTitle(L"MARIO POS %f %f", x, y);
 	if (isEnding) {
+		
 		if (isOnPlatform) {
 			if (vx == 0) x += MARIO_WALKING_SPEED * dt;
 
 			vx = MARIO_WALKING_SPEED;
 			ax = MARIO_ACCEL_WALK_X;
+		}
+		else {
+			vx = 0;
+			ax = 0;
 		}
 		vy += ay * dt;
 		
@@ -285,15 +290,10 @@ void CMario::OnCollisionWithTunnel(LPCOLLISIONEVENT e) {
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;
-	float out_x, out_y;
-	p->GetOutPos(out_x, out_y);
-	if (out_x >= 0 && out_y >= 0) {
-		SetPosition(out_x, out_y);
-	}
 
 	holdingObj = NULL;
 	stickingObj = NULL;
-	p->SwitchScene();
+	p->SwitchScene(this);
 }
 
 void CMario::OnCollisionWithPlant(LPCOLLISIONEVENT e)
