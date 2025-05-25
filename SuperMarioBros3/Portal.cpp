@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "Textures.h"
 
-CPortal::CPortal(float l, float t, float r, float b, int scene_id, float out_x, float out_y )
+CPortal::CPortal(float l, float t, float r, float b, int scene_id, float out_x, float out_y, int delay )
 {
 	this->scene_id = scene_id;
 	x = l; 
@@ -11,6 +11,7 @@ CPortal::CPortal(float l, float t, float r, float b, int scene_id, float out_x, 
 	height = b - t;
 	this->out_x = out_x;
 	this->out_y = out_y;
+	this->delay = delay;
 }
 
 void CPortal::RenderBoundingBox()
@@ -34,11 +35,23 @@ void CPortal::RenderBoundingBox()
 	CGame::GetInstance()->Draw(x - cx, y - cy, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom - 1);
 }
 
+void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	if (switch_start != -1) {
+		if (GetTickCount64() - switch_start > delay) {
+			CGame::GetInstance()->InitiateSwitchScene(GetSceneId());
+			switch_start = -1;
+		}
+	}
+}
 void CPortal::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
+void CPortal::SwitchScene() {
+	if (switch_start == -1)
+		switch_start = GetTickCount64();
+}
 void CPortal::GetBoundingBox(float &l, float &t, float &r, float &b)
 {
 	l = x - width/2;

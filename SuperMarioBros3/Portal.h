@@ -14,13 +14,16 @@ class CPortal : public CGameObject
 
 	float out_x;
 	float out_y;
+
+	ULONGLONG switch_start = -1;
+	int delay = 0;
 	
 public:
-	CPortal(float l, float t, float r, float b, int scene_id, float out_x = -1, float out_y = -1);
+	CPortal(float l, float t, float r, float b, int scene_id, float out_x = -1, float out_y = -1, int delay = 0);
 	virtual void Render();
 	virtual void GetBoundingBox(float &l, float &t, float &r, float &b);
-
-	
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void SwitchScene();
 	void RenderBoundingBox(void);
 	
 	void GetOutPos(float& x, float& y) {
