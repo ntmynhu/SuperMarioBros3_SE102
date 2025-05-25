@@ -1,10 +1,11 @@
 #include "LivesUI.h"
 #include "Game.h"
+#include "GameData.h"
 
 void LivesUI::Render(float x, float y)
 {
-	CGame* game = CGame::GetInstance();
-	int lives = game->GetLives();
+	CGameData* gameData = CGameData::GetInstance();
+	int lives = gameData->GetLives();
 
 	int tensPlace = lives / 10;
 	int unitsPlace = lives % 10;

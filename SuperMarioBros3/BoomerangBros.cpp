@@ -1,6 +1,7 @@
 #include "BoomerangBros.h"
 #include "Mario.h"
 #include "Game.h"
+#include "GameData.h"
 #include "debug.h"
 #include "GameObject.h"
 void CBoomerangBros::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
@@ -213,7 +214,7 @@ void CBoomerangBros::OnCollisionByMario(LPCOLLISIONEVENT e) {
 void CBoomerangBros::TakeJumpDamage() {
 	if (GetState() != ENEMY_STATE_DIE)
 	{
-		CGame* game = CGame::GetInstance();
+		CGameData* game = CGameData::GetInstance();
 		game->AddScore(1000, x, y, this);
 		SetState(ENEMY_STATE_DIE);
 	}
@@ -230,7 +231,7 @@ void CBoomerangBros::TakeTailAttackDamage(float xMario) {
 			vx = ENEMY_DIE_UPSIDE_DOWN_VX;
 		}
 
-		CGame* game = CGame::GetInstance();
+		CGameData* game = CGameData::GetInstance();
 		game->AddScore(100, x, y, this);
 
 		vy = -ENEMY_DIE_UPSIDE_DOWN_VY;
@@ -249,7 +250,7 @@ void CBoomerangBros::TakeKoopaDamage(float xKoopa) {
 			vx = ENEMY_DIE_UPSIDE_DOWN_VX;
 		}
 
-		CGame* game = CGame::GetInstance();
+		CGameData* game = CGameData::GetInstance();
 		game->AddScore(100, x, y, this);
 
 		vy = -ENEMY_DIE_UPSIDE_DOWN_VY;

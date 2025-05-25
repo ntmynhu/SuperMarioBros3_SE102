@@ -2,6 +2,8 @@
 #include "Block.h"
 #include "Mario.h"
 #include "Game.h"
+#include "GameData.h"
+
 
 #define ID_ANI_QUESTION_BLOCK 81101
 
@@ -53,7 +55,7 @@ public:
 
 		if (itemId == ID_ITEM_COIN)
 		{
-			CGame* game = CGame::GetInstance();
+			CGameData* game = CGameData::GetInstance();
 			game->AddCoin(1);
 		}
 	}

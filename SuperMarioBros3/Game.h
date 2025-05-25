@@ -22,9 +22,8 @@ using namespace std;
 #define CAM_MARGIN 50.0f
 #define MARIO_STATE_CHANGE_PAUSE_TIME 500
 
-#define UP_SCORE_TIME 1000
 
-#define	GAME_TIME	300000
+
 /*
 	Our simple game framework
 */
@@ -68,15 +67,8 @@ class CGame
 
 	bool marioPause = false;
 	ULONGLONG marioPause_start = -1;
-
-	ULONGLONG currentUpScoreTime = 0;
-	int upScore = 100;
-
-	float currentTime = GAME_TIME;
-	int coinNumber = 0;
-	int marioLives = 4;
+	
 	int world = 1;
-	int score = 0;
 public:
 	// Init DirectX, Sprite Handler
 	void Init(HWND hWnd, HINSTANCE hInstance);
@@ -130,24 +122,17 @@ public:
 	void Load(LPCWSTR gameFile);
 	void SwitchScene();
 	void InitiateSwitchScene(int scene_id);
+	void ClearScene() {
+		current_scene = 0;
+	}
 
 	void _ParseSection_TEXTURES(string line);
 	void StartMarioPause() { marioPause = true; };
 	void StopMarioPause() { marioPause = false; };
 	bool IsMarioStateChangedPause() { return marioPause; }
-	void ProcessTimer(DWORD dt);
-	float GetGameCurrentTime() { return currentTime; }
-
-	void AddCoin(int value) { coinNumber += value; }
-	int GetCoin() { return coinNumber; }
-
-	void UpdateLives(int value, float x, float y);
-	int GetLives() { return this->marioLives; }
+	
 
 	int GetWorld() { return this->world; }
-
-	void AddScore(int value, float x, float y, LPGAMEOBJECT enemy = NULL);
-	int GetScore() { return this->score; }
 
 	~CGame();
 };

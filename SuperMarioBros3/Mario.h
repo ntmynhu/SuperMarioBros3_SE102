@@ -111,7 +111,7 @@ class CMario : public CGameObject
 	bool isFullPower = false;
 	bool isStickToPlatform = false;
 	bool isInputLock = false;
-
+	bool isEnding = false;
 	bool isKicking = false;
 	ULONGLONG kick_start = -1;
 

@@ -38,6 +38,8 @@ card.txt
 mode	1
 poskeycode	5	984	100
 poskeycode	6	1932	100
+time	300000
+
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type

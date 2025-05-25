@@ -6,6 +6,7 @@
 #include "Plant.h"
 #include "Block.h"
 #include "debug.h"
+#include "GameData.h"
 
 CKoopa::CKoopa(float x, float y) :CEnemy(x, y)
 {
@@ -171,7 +172,7 @@ void CKoopa::TakeKoopaDamage(float xKoopa)
 			vx = ENEMY_DIE_UPSIDE_DOWN_VX;
 		}
 
-		CGame* game = CGame::GetInstance();
+		CGameData* game = CGameData::GetInstance();
 		game->AddScore(100, x, y, this);
 
 		vy = -ENEMY_DIE_UPSIDE_DOWN_VY;

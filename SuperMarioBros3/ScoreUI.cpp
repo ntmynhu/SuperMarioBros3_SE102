@@ -1,9 +1,10 @@
 #include "ScoreUI.h"
 #include "Game.h"
+#include "GameData.h"
 
 void ScoreUI::Render(float x, float y)
 {
-	CGame* game = CGame::GetInstance();
+	CGameData* game = CGameData::GetInstance();
 	int score = game->GetScore();
 
 	int millionsPlace = score / 1000000;

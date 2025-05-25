@@ -23,17 +23,35 @@
 
 #include "GameData.h"
 
+float prevVx;
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	//DebugOutTitle(L"MARIO POS %f %f", x, y);
+	if (isEnding) {
+		if (isOnPlatform) {
+			if (vx == 0) x += MARIO_WALKING_SPEED * dt;
+
+			vx = MARIO_WALKING_SPEED;
+			ax = MARIO_ACCEL_WALK_X;
+		}
+		vy += ay * dt;
+		
+		CCollision::GetInstance()->Process(this, dt, coObjects);
+		return;
+	}
 	if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) {
 		
 		nx = 0;
+		vx = 0;
+		ax = 0;
 		y += vy * dt;
+		
 		CCollision::GetInstance()->Process(this, dt, coObjects);
 		
 		return;
 	}
+
+	
 	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
@@ -174,7 +192,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//}
 	//else
 	//{
-	//DebugOutTitle(L"IsOnPlatform %d\n", isOnPlatform);
+	DebugOutTitle(L"MarioVX %f MarioState %d\n", vx, state);
 	//}
 
 }
@@ -182,7 +200,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CMario::OnNoCollision(DWORD dt)
 {
 	if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) return;
-
 	x += vx * dt;
 	y += vy * dt;
 	if (!isStickToPlatform)
@@ -201,7 +218,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			OnCollisionWithTunnel(e);
 		return;
 	}
-
+	
 	if (e->ny != 0 && (e->obj->IsBlocking() || e->obj->IsBlocking(this)))
 	{
 		vy = 0;
@@ -259,6 +276,7 @@ void CMario::OnCollisionWithTunnel(LPCOLLISIONEVENT e) {
 	else {
 		if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) {
 			SetState(MARIO_STATE_IDLE);
+			nx = 1;
 			return;
 		}
 	}
@@ -274,7 +292,8 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 	}
 
 	holdingObj = NULL;
-	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+	stickingObj = NULL;
+	p->SwitchScene();
 }
 
 void CMario::OnCollisionWithPlant(LPCOLLISIONEVENT e)
@@ -306,7 +325,7 @@ void CMario::OnCollisionWithMushroomAndLeaf(LPCOLLISIONEVENT e)
 	e->obj->GetPosition(e_x, e_y);
 	e->obj->Delete();
 
-	CGame* game = CGame::GetInstance();
+	CGameData* game = CGameData::GetInstance();
 	game->AddScore(1000, e_x, e_y);
 
 	int nextForm = currentForm->GetLevel() + 1;
@@ -331,7 +350,7 @@ void CMario::OnCollisionWithOneUpMushroom(LPCOLLISIONEVENT e)
 	float e_x, e_y;
 	e->obj->GetPosition(e_x, e_y);
 
-	CGame* game = CGame::GetInstance();
+	CGameData* game = CGameData::GetInstance();
 	game->UpdateLives(1, e_x, e_y);
 }
 
@@ -343,6 +362,12 @@ void CMario::OnCollisionWithEndingCard(LPCOLLISIONEVENT e)
 {
 	CEndingCard* card = dynamic_cast<CEndingCard*>(e->obj);
 	card->SetTrigger();
+	CGameData::GetInstance()->TimerToPoint();
+
+	InputLock();
+	
+	isEnding = true;
+	
 }
   
 void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
@@ -356,7 +381,7 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 		float e_x, e_y;
 		e->obj->GetPosition(e_x, e_y);
 		
-		CGame* game = CGame::GetInstance();
+		CGameData* game = CGameData::GetInstance();
 		if (!enemy->PreventDefaultScoring()) {
 			if (currentBaseScore > 0) game->AddScore(currentBaseScore, e_x, y);
 			else game->UpdateLives(1, e_x, y);
@@ -389,7 +414,7 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	if (e->obj->IsActive())
 	{
-		CGame* game = CGame::GetInstance();
+		CGameData* game = CGameData::GetInstance();
 		game->AddCoin(1);
 		game->AddScore(50, -1, -1);
 	}
@@ -428,7 +453,7 @@ void CMario::Render()
 	float x_offset = 0;
 	if (currentForm->GetLevel() == MARIO_LEVEL_RACOON) {
 		if (nx < 0) x_offset = 4;
-		else x_offset = -4;
+		else if (nx > 0) x_offset = -4;
 	}
 
 	if (isChangingState != -1)
@@ -479,7 +504,7 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 	}
-
+	
 	currentForm->SetState(state, this);
 }
 

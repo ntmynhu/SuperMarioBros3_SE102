@@ -87,6 +87,7 @@ void CGoldenBrick::TriggerAction(LPCOLLISIONEVENT e)
 	case ID_ITEM_COIN:
 		particle->SetTrigger();
 		isEmpty = true;
+		CGameData::GetInstance()->AddNoEffectScore(10);
 		this->Delete();
 		item->Delete();
 		break;

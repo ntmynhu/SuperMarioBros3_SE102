@@ -12,7 +12,7 @@ height	240
 3	world1_1.txt	2
 4	world1_1_hidden.txt	2
 5	world1_4.txt	3
-6	world1_4_next.txt	3
+6	world1_4_next.txt	4
 
 # id	file 
 [TEXTURES]

@@ -1,4 +1,5 @@
 #include "Plant.h"
+#include "GameData.h"
 void CPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (mario == NULL) {
 		SetMario();
@@ -49,7 +50,7 @@ void CPlant::TakeTailAttackDamage(float xMario)
 {
 	if (state != PLANT_STATE_DIE)
 	{
-		CGame* game = CGame::GetInstance();
+		CGameData* game = CGameData::GetInstance();
 		game->AddScore(100, x, y, this);
 
 		SetState(PLANT_STATE_DIE);

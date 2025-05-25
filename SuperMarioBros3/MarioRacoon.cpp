@@ -210,7 +210,7 @@ int CMarioRacoon::GetAniId(CMario* mario)
 		else
 			if (vx == 0)
 			{
-				if (nx > 0)
+				if (nx >= 0)
 				{
 					aniId = ID_ANI_MARIO_RACOON_IDLE_RIGHT;
 					if (mario->IsHolding()) aniId = ID_ANI_MARIO_RACOON_IDLE_HOLDING_RIGHT;
@@ -302,8 +302,10 @@ int CMarioRacoon::GetAniId(CMario* mario)
 
 	if (aniId == -1)
 	{
-		if (nx > 0) aniId = ID_ANI_MARIO_RACOON_IDLE_RIGHT;
-		else aniId = ID_ANI_MARIO_RACOON_IDLE_LEFT;
+		if (nx >= 0) 
+			aniId = ID_ANI_MARIO_RACOON_IDLE_RIGHT;
+		else 
+			aniId = ID_ANI_MARIO_RACOON_IDLE_LEFT;
 
 		if (mario->IsHolding())
 		{
@@ -430,6 +432,7 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 		break;
 
 	case MARIO_STATE_IDLE:
+		if (vx == 0) return;
 		if (nx > 0)
 			mario->SetAx(MARIO_DECEL_WALK_X);
 		else

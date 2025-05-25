@@ -57,7 +57,7 @@ int CMarioBig::GetAniId(CMario* mario)
 		else
 			if (vx == 0)
 			{
-				if (nx > 0) aniId = mario->IsHolding() ? ID_ANI_MARIO_BIG_IDLE_HOLDING_RIGHT : ID_ANI_MARIO_IDLE_RIGHT;
+				if (nx >= 0) aniId = mario->IsHolding() ? ID_ANI_MARIO_BIG_IDLE_HOLDING_RIGHT : ID_ANI_MARIO_IDLE_RIGHT;
 				else aniId = mario->IsHolding() ? ID_ANI_MARIO_BIG_IDLE_HOLDING_LEFT : ID_ANI_MARIO_IDLE_LEFT;
 			}
 			else if (vx > 0)
@@ -85,7 +85,7 @@ int CMarioBig::GetAniId(CMario* mario)
 
 	if (aniId == -1)
 	{
-		if (nx > 0) aniId = mario->IsHolding() ? ID_ANI_MARIO_BIG_IDLE_HOLDING_RIGHT : ID_ANI_MARIO_IDLE_RIGHT;
+		if (nx >= 0) aniId = mario->IsHolding() ? ID_ANI_MARIO_BIG_IDLE_HOLDING_RIGHT : ID_ANI_MARIO_IDLE_RIGHT;
 		else aniId = mario->IsHolding() ? ID_ANI_MARIO_BIG_IDLE_HOLDING_LEFT : ID_ANI_MARIO_IDLE_LEFT;
 	}
 
@@ -188,6 +188,7 @@ void CMarioBig::SetState(int state, CMario* mario)
 		break;
 
 	case MARIO_STATE_IDLE:
+		if (vx == 0) return;
 		if (nx > 0)
 			mario->SetAx(MARIO_DECEL_WALK_X);
 		else
