@@ -789,7 +789,6 @@ void CPlayScene::Load()
 
 	f.close();
 	
-	
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
 
@@ -798,10 +797,9 @@ void CPlayScene::Update(DWORD dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: Set a max camY
 	CGame* game = CGame::GetInstance();
+	CGameData* gameData = CGameData::GetInstance();
 
 	HUD::GetInstance()->SetPosition(game->GetBackBufferWidth()/2, game->GetBackBufferHeight());
-
-	game->ProcessTimer(dt);
 
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
@@ -811,18 +809,26 @@ void CPlayScene::Update(DWORD dt)
 	}
 
 	if (player == NULL || player->IsDeleted()) return;
+
+	if (player->GetState() == MARIO_STATE_DIE)
+	{
+		game->StartMarioPause();
+		player->Update(dt, &coObjects);
+		if (player_die_start == -1) player_die_start = GetTickCount64();
+		if (GetTickCount64() - player_die_start > PLAYER_DIE_TIMEOUT) {
+			game->StopMarioPause();
+			Reload();
+		}
+		return;
+	}
+
 	if (game->IsMarioStateChangedPause())
 	{
 		player->Update(dt, &coObjects);
 		return;
 	}
 
-	if (player->GetState() == MARIO_STATE_DIE)
-	{
-		player->Update(dt, &coObjects);
-		game->StartMarioPause();
-		return;
-	}
+	gameData->ProcessTimer(dt);
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
@@ -934,6 +940,13 @@ void CPlayScene::Update(DWORD dt)
 	}
 	
 	PurgeDeletedObjects();
+}
+
+void CPlayScene::Reload() {
+	player_die_start = -1;
+	Unload();
+	CGameData::GetInstance()->LoadSavePoint();
+	Load();
 }
 
 void CPlayScene::Render()

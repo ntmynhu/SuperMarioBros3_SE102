@@ -1,6 +1,7 @@
 ﻿#include <fstream>
 
 #include "Game.h"
+#include "GameData.h"
 #include "debug.h"
 #include "Utils.h"
 
@@ -546,6 +547,8 @@ void CGame::SwitchScene()
 		current_scene = next_scene;
 		LPSCENE s = scenes[next_scene];
 		this->SetKeyHandler(s->GetKeyEventHandler());
+		CGameData::GetInstance()->SetSceneId(current_scene);
+		CGameData::GetInstance()->SetSavePoint();
 		s->Load();
 	}
 }
@@ -599,39 +602,6 @@ bool CGame::IsInCam(float t, float l, float r, float b) {
 		l > camRight ||
 		b < camTop ||
 		t > camBottom);
-}
-
-void CGame::ProcessTimer(DWORD dt)
-{
-	currentTime -= dt;
-	if (currentTime < 0) currentTime = 0;
-}
-
-void CGame::UpdateLives(int value, float x, float y)
-{
-	this->marioLives += value;
-	if (value == 1) ScoreEffect* scoreEffect = new ScoreEffect(value, x, y);
-}
-
-void CGame::AddScore(int value, float x, float y, LPGAMEOBJECT enemy) // Xử lí tăng điểm khi enemy die liên tiếp
-{
-	if (enemy != NULL) {
-		if (GetTickCount64() - currentUpScoreTime < UP_SCORE_TIME)
-		{
-			value = upScore * 2;
-
-			upScore *= 2;
-			if (upScore == 1600) upScore = 1000;
-		}
-		else
-		{
-			upScore = 100;
-			currentUpScoreTime = GetTickCount64();
-		}
-	}
-
-	this->score += value;
-	ScoreEffect* scoreEffect = new ScoreEffect(value, x, y);
 }
 
 CGame::~CGame()

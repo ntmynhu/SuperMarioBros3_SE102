@@ -13,6 +13,8 @@
 #define CAMERA_MODE_SCROLL_X 1
 
 #define CAMERA_SCROLL_VX 0.035f
+
+#define PLAYER_DIE_TIMEOUT 4000
 class CPlayScene: public CScene
 {
 protected: 
@@ -23,6 +25,8 @@ protected:
 	// An object that aim to stop mario from moving out of x dir of screen, move along with camera
 	LPGAMEOBJECT stop_mario_r;
 	LPGAMEOBJECT stop_mario_l;
+
+	ULONGLONG player_die_start = -1;
 	int cam_mode;
 
 	vector<LPGAMEOBJECT> objects;
@@ -41,6 +45,7 @@ public:
 	CPlayScene(int id, LPCWSTR filePath, int sceneGroup);
 
 	virtual void Load();
+	virtual void Reload();
 	virtual void SoftLoad(); //Load scene but keep the old object list - only load asset
 	virtual void Update(DWORD dt);
 	virtual void Render();

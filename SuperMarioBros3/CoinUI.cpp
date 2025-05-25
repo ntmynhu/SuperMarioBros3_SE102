@@ -1,9 +1,10 @@
 #include "CoinUI.h"
 #include "Game.h"
+#include "GameData.h"
 
 void CoinUI::Render(float x, float y)
 {
-	CGame* game = CGame::GetInstance();
+	CGameData* game = CGameData::GetInstance();
 	int coinNumber = game->GetCoin();
 
 	int tensPlace = coinNumber / 10;

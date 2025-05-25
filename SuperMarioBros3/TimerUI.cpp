@@ -1,10 +1,11 @@
 #include "TimerUI.h"
 #include "Game.h"
 #include "debug.h"
+#include "GameData.h"
 
 void TimerUI::Render(float x, float y)
 {
-	CGame* game = CGame::GetInstance();
+	CGameData* game = CGameData::GetInstance();
 	int totalTime = (int)(game->GetGameCurrentTime() / 1000);
 
 	int hundredsPlace = totalTime / 100;
