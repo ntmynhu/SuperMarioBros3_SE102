@@ -10,8 +10,21 @@ CGameData* CGameData::GetInstance()
 
 void CGameData::ProcessTimer(DWORD dt)
 {
-	currentTime -= dt;
-	if (currentTime < 0) currentTime = 0;
+	if (timer_to_point_start == -1) 
+	{
+		currentTime -= dt;
+		if (currentTime < 0) currentTime = 0;
+	}
+	else if (GetTickCount64() - timer_to_point_start > 2000)
+	{
+		currentTime -= 3000;
+		if (currentTime <= 0) {
+			timer_to_point_start = -1;
+			currentTime = 0;
+			score += outPoint;
+			outPoint = 0;
+		}
+	}
 }
 
 void CGameData::UpdateLives(int value, float x, float y)
