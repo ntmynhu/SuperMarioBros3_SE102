@@ -1,7 +1,7 @@
 #include "Portal.h"
 #include "Game.h"
 #include "Textures.h"
-
+#include "EffectManager.h"
 CPortal::CPortal(float l, float t, float r, float b, int scene_id, float out_x, float out_y, int delay )
 {
 	this->scene_id = scene_id;
@@ -38,8 +38,22 @@ void CPortal::RenderBoundingBox()
 void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (switch_start != -1) {
 		if (GetTickCount64() - switch_start > delay) {
-			CGame::GetInstance()->InitiateSwitchScene(GetSceneId());
-			switch_start = -1;
+			if (effect_play == -1) {
+				FadeEffect* fade = new FadeEffect(0, 0, FADE_IN_STATE);
+				effect_play = 1;
+			}
+			if (GetTickCount64() - switch_start > delay + EFFECT_DELAY) {
+				if (posObj != NULL && !posObj->IsDeleted()) {
+					if (out_x >= 0 && out_y >= 0) {
+						posObj->SetPosition(out_x, out_y);
+					}
+				}
+
+				CGame::GetInstance()->InitiateSwitchScene(GetSceneId());
+				switch_start = -1;
+				effect_play = -1;
+				posObj = NULL;
+			}
 		}
 	}
 }
@@ -48,13 +62,12 @@ void CPortal::Render()
 	//RenderBoundingBox();
 }
 
-void CPortal::SwitchScene() {
-	if (delay == 0) {
-		CGame::GetInstance()->InitiateSwitchScene(GetSceneId());
-		return;
-	}
-	if (switch_start == -1)
+void CPortal::SwitchScene(LPGAMEOBJECT obj) {
+	if (switch_start == -1) {
+		posObj = obj;
 		switch_start = GetTickCount64();
+		effect_play = -1;
+	}
 }
 void CPortal::GetBoundingBox(float &l, float &t, float &r, float &b)
 {

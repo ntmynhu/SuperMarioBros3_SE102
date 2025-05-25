@@ -19,6 +19,7 @@ public:
 
 	void Draw(float x, float y, float a = 1);
 	void DrawStatic(float x, float y, float a = 1);
+	void DrawStaticFill(float offsetX = 0, float offsetY = 0, float a = 1);
 };
 
 typedef CSprite* LPSPRITE;

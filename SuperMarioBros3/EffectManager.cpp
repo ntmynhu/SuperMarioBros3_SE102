@@ -1,7 +1,7 @@
 #include "EffectManager.h"
 #include "debug.h"
 #include "Game.h"
-
+#include "HUD.h"
 EffectManager* EffectManager::__instance = NULL;
 
 void EffectManager::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -122,6 +122,43 @@ void TextEffect::Render()
 			}
 		}
 	}
+}
+
+void FadeEffect::Render()
+{
+	if (fadeState == 0)
+	{
+
+		if (GetTickCount64() - startTime > FADE_EFFECT_TIME) {
+			Delete();
+			return;
+
+		}
+	}
+
+	CSprites* s = CSprites::GetInstance();
+	float dt = GetTickCount64() - startTime;
+	switch (fadeState) {
+	case FADE_IN_STATE:
+		a += fadeSpeed * dt;
+		if (a >= 1.0f) {
+			a = 1.0f;
+			fadeState = 0;
+		}
+		break;
+
+	case FADE_OUT_STATE:
+		a -= fadeSpeed * dt;
+		if (a <= 0.0f) {
+			a = 0.0f;
+			//fadeState = 0;
+		}
+		break;
+	}
+	if (fadeState != 0)
+		startTime = GetTickCount64();
+	s->Get(ID_SPRITE_BLACK_FILL)->DrawStaticFill(0, 30, a);
+
 }
 
 void Image::Render()
