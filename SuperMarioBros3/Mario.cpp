@@ -27,6 +27,18 @@ float prevVx;
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	//DebugOutTitle(L"MARIO POS %f %f", x, y);
+	if (isEnding) {
+		if (isOnPlatform) {
+			if (vx == 0) x += MARIO_WALKING_SPEED * dt;
+
+			vx = MARIO_WALKING_SPEED;
+			ax = MARIO_ACCEL_WALK_X;
+		}
+		vy += ay * dt;
+		
+		CCollision::GetInstance()->Process(this, dt, coObjects);
+		return;
+	}
 	if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) {
 		
 		nx = 0;
@@ -39,6 +51,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	}
 
+	
 	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
@@ -187,7 +200,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CMario::OnNoCollision(DWORD dt)
 {
 	if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) return;
-
 	x += vx * dt;
 	y += vy * dt;
 	if (!isStickToPlatform)
@@ -206,7 +218,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			OnCollisionWithTunnel(e);
 		return;
 	}
-
+	
 	if (e->ny != 0 && (e->obj->IsBlocking() || e->obj->IsBlocking(this)))
 	{
 		vy = 0;
@@ -280,7 +292,8 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 	}
 
 	holdingObj = NULL;
-	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+	stickingObj = NULL;
+	p->SwitchScene();
 }
 
 void CMario::OnCollisionWithPlant(LPCOLLISIONEVENT e)
@@ -349,6 +362,12 @@ void CMario::OnCollisionWithEndingCard(LPCOLLISIONEVENT e)
 {
 	CEndingCard* card = dynamic_cast<CEndingCard*>(e->obj);
 	card->SetTrigger();
+	CGameData::GetInstance()->TimerToPoint();
+
+	InputLock();
+	
+	isEnding = true;
+	
 }
   
 void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
