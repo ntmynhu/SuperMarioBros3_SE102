@@ -101,3 +101,45 @@ void TailEffect::Render()
 
 	s->Get(id_sprite)->DrawStatic(targetX, targetY);
 }
+
+void TextEffect::Render()
+{
+	CSprites* s = CSprites::GetInstance();
+
+	float camX, camY;
+	CGame::GetInstance()->GetCamPos(camX, camY);
+
+	float targetX = x - camX;
+	float targetY = y - camY;
+
+	for (int i = 0; i < text.length(); i++)
+	{
+		int index = text[i] - 'a'; // Convert char to int
+
+		DebugOut(L"index: %d\n", index);
+
+		if (index >= 0) s->Get(ID_SPRITE_LETTER_A + index)->DrawStatic(targetX + i * LETTER_WIDTH, targetY);
+		else
+		{
+			if (index == -64)
+			{
+				s->Get(ID_SPRITE_EXCLAMATION)->DrawStatic(targetX + i * LETTER_WIDTH, targetY);
+			}
+		}
+	}
+}
+
+void Image::Render()
+{
+	CSprites* s = CSprites::GetInstance();
+
+	if (id_sprite == -1) return;
+
+	float camX, camY;
+	CGame::GetInstance()->GetCamPos(camX, camY);
+
+	float targetX = x - camX;
+	float targetY = y - camY;
+
+	s->Get(id_sprite)->DrawStatic(targetX, targetY);
+}

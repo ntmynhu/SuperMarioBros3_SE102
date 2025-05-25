@@ -1,4 +1,5 @@
 ﻿#include "EndingCard.h"
+#include "EffectManager.h"
 #include "debug.h"
 #include <random>
 #include "HUD.h"
@@ -72,6 +73,12 @@ void CCard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		else
 		{
+			TextEffect* textEffect = new TextEffect("course clear !", x - 60, 275);
+			TextEffect* textEffect2 = new TextEffect("you got a card", x - 76, 300);
+			Image* image = new Image(ID_SPRITE_CARD + card_id, x - 76 + LETTER_WIDTH * 16, 300);
+
+			if (!isDeleted) HUD::GetInstance()->AddCard(card_id);
+
 			Delete();
 		}
 	}
@@ -98,5 +105,4 @@ void CCard::StartMovingUp()
 	std::uniform_int_distribution<> dis(1, 3);    // phân phối đều từ 0 đến 99
 
 	card_id = dis(gen);
-	HUD::GetInstance()->AddCard(card_id);
 }
