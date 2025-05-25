@@ -10,6 +10,7 @@
 #include "Portal.h"
 #include "Coin.h"
 #include "Background.h"
+#include "Boomerang.h"
 
 #include "BoomerangBros.h"
 #include "Goomba.h"
@@ -290,7 +291,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CRedParakoopa(x, y, range);
 		break;
 	}
-	case OBJECT_TYPE_BOOMERANG_BRO: obj = new CBoomerangBros(x, y); break;
+	case OBJECT_TYPE_BOOMERANG_BRO:
+	{
+		obj = new CBoomerangBros(x, y);
+		CBoomerang* boomerang1 = new CBoomerang(x, y);
+		CBoomerang* boomerang2 = new CBoomerang(x, y);
+		((CBoomerangBros*)obj)->SetBoomerangs(boomerang1, boomerang2);
+		objects.push_back(boomerang1);
+		objects.push_back(boomerang2);
+		break;
+	}
 	case OBJECT_TYPE_BRICK:
 	{
 		obj = new CBrick(x, y);
