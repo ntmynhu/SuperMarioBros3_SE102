@@ -69,3 +69,18 @@ void CPlatformMoveFall::OnCollisionWithMario(LPCOLLISIONEVENT e) {
         hasMario = true;
     }
 }
+
+void CPlatformMoveFall::OnCollidedByMario(LPCOLLISIONEVENT e) {
+    if (mario == NULL) SetMario();
+    if (mario->GetState() == MARIO_STATE_DIE) return;
+    if (e->ny < 0 && !isFalling) {
+        isFalling = true;
+        hasMario = true;
+        vx = 0;
+        vy = PLATFORM_FALL_VY;
+    }
+    else if (e->nx < 0 && vx < 0) {
+        mario->SetIsStickToPlatform(this);
+        hasMario = true;
+    }
+}

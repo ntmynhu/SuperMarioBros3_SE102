@@ -20,6 +20,8 @@ protected:
     void OnCollisionWith(LPCOLLISIONEVENT e);
     void OnCollisionWithMario(LPCOLLISIONEVENT e);
 
+    
+
     bool isFalling = false;
     bool hasMario = false;
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -35,6 +37,7 @@ public:
         this->vx = Xdir * PLATFORM_MOVE_VX;
         this->vy = -Ydir * PLATFORM_MOVE_VY;
     };
+    void OnCollidedByMario(LPCOLLISIONEVENT e);
     void SetMario();
     void Render()
     {

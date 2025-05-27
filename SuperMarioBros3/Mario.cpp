@@ -20,7 +20,7 @@
 #include "WallMario.h"
 #include "PlatformKill.h"
 #include "EndingCard.h"
-
+#include "PlatformMoveFall.h"
 #include "GameData.h"
 
 float prevVx;
@@ -240,6 +240,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
+	else if (dynamic_cast<CPlatformMoveFall*>(e->obj))
+		OnCollisionWithMovingPlatform(e);
 	else if (dynamic_cast<CEnemy*>(e->obj))
 		OnCollisionWithEnemy(e);
 	else if (dynamic_cast<CPlant*>(e->obj))
@@ -356,6 +358,11 @@ void CMario::OnCollisionWithOneUpMushroom(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithPlatformKill(LPCOLLISIONEVENT e) {
 	SetState(MARIO_STATE_DIE);
+}
+
+void CMario::OnCollisionWithMovingPlatform(LPCOLLISIONEVENT e) {
+	CPlatformMoveFall* platform = dynamic_cast<CPlatformMoveFall*>(e->obj);
+	platform->OnCollidedByMario(e);
 }
 
 void CMario::OnCollisionWithEndingCard(LPCOLLISIONEVENT e)
