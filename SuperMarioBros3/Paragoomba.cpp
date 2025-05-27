@@ -69,6 +69,7 @@ void CParagoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (jumpCount < PARA_GOOMBA_SMALL_JUMP_LIMIT)
 			{
 				vy = -PARA_GOOMBA_SMALL_JUMP_SPEED_Y;
+				ay = GOOMBA_GRAVITY;
 				jumpCount++;
 			}
 			else
@@ -80,8 +81,7 @@ void CParagoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				walk_start = GetTickCount64(); //Start walking
 			}
 
-		}
-		else if (ay != GOOMBA_GRAVITY && isOnPlatform) { //Check direction once when first touch the platform after flying
+		} else if (ay != GOOMBA_GRAVITY && isOnPlatform) { //Check direction once when first touch the platform after flying
 			jumpCount = 0;
 			ay = GOOMBA_GRAVITY;
 			if (GetTickCount64() - chase_start < PARA_GOOMBA_CHASE_TIMEOUT)
