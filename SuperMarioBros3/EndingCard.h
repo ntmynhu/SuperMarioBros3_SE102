@@ -42,15 +42,9 @@ private:
 	ULONGLONG moving_start = -1;
 	int card_id = -1;
 
-	float startY;
-	float startX;
-
 public:
 	CCard(float x, float y) : CGameObject(x, y)
 	{
-		startX = x;
-		startY = y;
-
 	}
 
 	void Render();
