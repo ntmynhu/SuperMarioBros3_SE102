@@ -46,6 +46,9 @@ card.txt
 # Platform
 32	8	248	16	16	32	92101	92102	92103
 
+#Ending card
+102	400	168
+
 # MARIO
 0	144	228
 
