@@ -101,7 +101,7 @@ public:
     void OnTakeDamage(CMario* mario);
 
     int GetUpStateChangeTime() { return MARIO_BIG_TO_RACOON_DURATION; }
-
+    
     void StartFlying() { isFlying = true; flyStartTime = GetTickCount64(); }
     void StopFlying() { isFlying = false; }
     void TailAttack() { isTailAttacking = true; }

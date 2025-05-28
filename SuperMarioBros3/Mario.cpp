@@ -101,12 +101,19 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vx = 0;
 
 	if (stickingObj) {
-		float w_vx, w_vy;
-		stickingObj->GetSpeed(w_vx, w_vy);
-		if (w_vx < 0 && vx > w_vx) {
-			vx = w_vx;
-		} else if (w_vx > 0 && vx < w_vx) {
-			vx = w_vx;
+		float pl_vx, pl_vy;
+		stickingObj->GetSpeed(pl_vx, pl_vy);
+		float pl_left, pl_top, pl_right, pl_bottom;
+		stickingObj->GetBoundingBox(pl_left, pl_top, pl_right, pl_bottom);
+		 
+		if (pl_vx < 0 && vx > pl_vx) {
+			vx = pl_vx;
+		} else if (pl_vx > 0 && vx < pl_vx) {
+			vx = pl_vx;
+		}
+		if (pl_vy > 0 && vy > 0) {
+			float target_y = pl_top - currentForm->GetHeight() / 2;
+			vy = (target_y - y) / dt;
 		}
 	}
 
@@ -197,7 +204,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//}
 	//else
 	//{
-	DebugOutTitle(L"MarioVX %f MarioState %d\n", vx, state);
+	//DebugOutTitle(L"MarioVX %f MarioState %d\n", vx, state);
 	//}
 
 }

@@ -14,6 +14,7 @@ public:
 	virtual int GetDownStateChangeTime() {
 		return MARIO_DOWN_CHANGE_TIME;
 	}
+	virtual float GetHeight() = 0;
 	virtual int GetUpStateChangeTime() = 0;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom, CMario* mario) = 0;
 	virtual int GetLevel() const = 0;

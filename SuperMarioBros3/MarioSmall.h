@@ -81,4 +81,7 @@ public:
 	void GetHoldOffset(float& ox, float& oy) { ox = MARIO_SMALL_HOLD_OFFSET_X; oy = MARIO_SMALL_HOLD_OFFSET_Y; }
 	void OnTakeDamage(CMario* mario);
 	int GetKickAniId(CMario* mario);
+	float GetHeight() {
+		return MARIO_SMALL_BBOX_HEIGHT;
+	}
 };
