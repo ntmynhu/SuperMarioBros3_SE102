@@ -1,7 +1,7 @@
 #pragma once
 #include "FullPlatform.h"
 
-#define PLATFORM_MOVE_VX 0.037f
+#define PLATFORM_MOVE_VX 0.019f
 #define PLATFORM_MOVE_VY 0.1f
 
 #define PLATFORM_FALL_VY 0.02f
