@@ -75,9 +75,9 @@ void CCard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			if (moving_start != -1) {
 				moving_start = -1;
-				TextEffect* textEffect = new TextEffect("course clear !", x - 60, 275);
-				TextEffect* textEffect2 = new TextEffect("you got a card", x - 76, 300);
-				Image* image = new Image(ID_SPRITE_CARD + card_id, x - 76 + LETTER_WIDTH * 16, 300);
+				TextEffect* textEffect = new TextEffect("course clear !", x - 60, init_y - 75);
+				TextEffect* textEffect2 = new TextEffect("you got a card", x - 76, init_y - 50);
+				Image* image = new Image(ID_SPRITE_CARD + card_id, x - 76 + LETTER_WIDTH * 16, init_y - 50);
 			}
 			if (!isDeleted) HUD::GetInstance()->AddCard(card_id);
 
