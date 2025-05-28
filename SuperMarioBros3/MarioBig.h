@@ -78,5 +78,15 @@ public:
 	void OnTakeDamage(CMario* mario);
 	void OnSitRelease(int state, CMario* mario);
 	int GetKickAniId(CMario* mario);
+	float GetHeight() {
+		if (isSitting)
+		{
+			return MARIO_BIG_SITTING_BBOX_HEIGHT;
+		}
+		else
+		{
+			return MARIO_BIG_BBOX_HEIGHT;
+		}
+	}
 };
 

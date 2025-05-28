@@ -39,6 +39,9 @@ public:
     };
     void OnCollidedByMario(LPCOLLISIONEVENT e);
     void SetMario();
+    void GetTopBound(float& w_y) {
+        w_y = y - this->cellHeight / 2;
+    }
     void Render()
     {
         CFullPlatform::Render();
