@@ -5,6 +5,7 @@
 // 
 // The most popular type of object in Mario! 
 // 
+#define TUNNEL_ENTERABLE_OFFSET 7
 class CMario;
 class CTunnel : public CWall
 {
@@ -29,5 +30,7 @@ public:
 	int IsEnterable() { return isEnterable; }
 	int GetDirection() { return direction; }
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-
+	bool CheckEnterableRange(float o_x) {
+		return o_x >= x - TUNNEL_ENTERABLE_OFFSET && o_x <= x + TUNNEL_ENTERABLE_OFFSET;
+	}
 };

@@ -275,16 +275,18 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithTunnel(LPCOLLISIONEVENT e) {
 	CTunnel* tunnel = dynamic_cast<CTunnel*>(e->obj);
 	if (tunnel->IsEnterable()) {
-		if (state == MARIO_STATE_SIT && tunnel->GetDirection() == 1 && e->ny < 0) {
-			SetState(MARIO_STATE_DOWN_TUNNEL);
-			DebugOut(L"MARIO ENTERING HIDDEN MAP");
-			InputLock();
+		if (tunnel->CheckEnterableRange(x)) {
+			if (state == MARIO_STATE_SIT && tunnel->GetDirection() == 1 && e->ny < 0) {
+				SetState(MARIO_STATE_DOWN_TUNNEL);
+				DebugOut(L"MARIO ENTERING HIDDEN MAP");
+				InputLock();
+			}
+			else if (tunnel->GetDirection() == -1 && e->ny > 0) {
+				SetState(MARIO_STATE_UP_TUNNEL);
+				InputLock();
+			}
+			return;
 		}
-		else if (tunnel->GetDirection() == -1 && e->ny > 0) {
-			SetState(MARIO_STATE_UP_TUNNEL);
-			InputLock();
-		}
-		return;
 	}
 	else {
 		if (state == MARIO_STATE_DOWN_TUNNEL || state == MARIO_STATE_UP_TUNNEL) {
