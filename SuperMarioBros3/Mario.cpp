@@ -31,7 +31,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		
 		if (isOnPlatform) {
 			if (vx == 0) x += MARIO_WALKING_SPEED * dt;
-
 			vx = MARIO_WALKING_SPEED;
 			ax = MARIO_ACCEL_WALK_X;
 		}
