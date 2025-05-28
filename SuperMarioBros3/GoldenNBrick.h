@@ -3,7 +3,7 @@
 #include "Coin.h"
 #define ID_ANI_GOLDEN_BRICK 81102
 
-#define SPAWN_TIMEOUT 2000
+#define SPAWN_TIMEOUT 1500
 class CGoldenNBrick : public CQuestionBlock
 {
 protected:

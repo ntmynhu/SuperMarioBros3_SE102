@@ -64,7 +64,6 @@ void CGoldenNBrick :: Render() {
 void CGoldenNBrick::TriggerAction(LPCOLLISIONEVENT e) {
 	if (!isEmpty && !isBouncing) {
 		StartBouncing();
-		
 	}
 }
 void CGoldenNBrick::SpawnItem(){
