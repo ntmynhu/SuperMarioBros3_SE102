@@ -115,6 +115,8 @@ class CMario : public CGameObject
 	bool isKicking = false;
 	ULONGLONG kick_start = -1;
 
+	bool isHoldingJump = false;
+
 	void OnCollisionWithEnemy(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
@@ -214,6 +216,8 @@ public:
 	void SetNx(int nx) { this->nx = nx; }
 	int GetNx() { return nx; }
 	void SetPosition(float x, float y) { this->x = x; this->y = y; }
+
+	void SetHoldingJump(bool value) { isHoldingJump = value; }
 
 	void InputLock() { isInputLock = true; };
 	void InputUnlock() { isInputLock = false; };
