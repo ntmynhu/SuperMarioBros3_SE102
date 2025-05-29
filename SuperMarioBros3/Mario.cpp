@@ -396,7 +396,7 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 
 		if (isHoldingJump)
 		{
-			vy = -MARIO_FULL_POWER_SPEED_Y;
+			vy = -MARIO_JUMP_RUN_SPEED_Y;
 		}
 		else
 		{
