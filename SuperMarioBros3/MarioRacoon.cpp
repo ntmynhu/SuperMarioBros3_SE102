@@ -39,7 +39,6 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 			if (newVy > MAX_SLOW_FALL_SPEED)
 				newVy = MAX_SLOW_FALL_SPEED;
 			mario->SetVy(newVy);
-
 			mario->SetAy(SLOW_FALL_GRAVITY);
 			StartFloating();
 		}
@@ -51,6 +50,14 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 			float newVy = vy + SLOW_FALL_GRAVITY * dt;
 			if (newVy > MAX_SLOW_FALL_SPEED)
 				newVy = MAX_SLOW_FALL_SPEED;
+
+			if (vx > FLOATING_OFFSET_X)
+				mario->SetVx(vx + MARIO_ACCEL_WALK_X * dt);
+			else if (vx < -FLOATING_OFFSET_X)
+				mario->SetVx(vx - MARIO_ACCEL_WALK_X * dt);
+			else
+				mario->SetVx(0);
+
 			mario->SetVy(newVy);
 
 			mario->SetAy(SLOW_FALL_GRAVITY);
@@ -58,6 +65,13 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 
 		if (isFloating)
 		{
+			if (vx > FLOATING_OFFSET_X)
+				mario->SetVx(vx + MARIO_ACCEL_WALK_X * dt);
+			else if (vx < -FLOATING_OFFSET_X)
+				mario->SetVx(vx - MARIO_ACCEL_WALK_X * dt);
+			else
+				mario->SetVx(0);
+
 			//mario->SetVy(-MARIO_JUMP_SPEED_Y/3);
 			const float SLOW_FALL_GRAVITY = MARIO_GRAVITY * 0.001f;
 			const float MAX_SLOW_FALL_SPEED = 0.05f;
@@ -432,7 +446,7 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 		break;
 
 	case MARIO_STATE_IDLE:
-		if (vx == 0) return;
+		if (vx == 0 && isFloating) return;
 		if (nx > 0)
 			mario->SetAx(MARIO_DECEL_WALK_X);
 		else
