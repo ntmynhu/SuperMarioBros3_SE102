@@ -391,7 +391,17 @@ void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 	DebugOut(L"Collided! Enemy state %d\n", enemy->GetState());
 	if (e->ny < 0 && enemy->GetState() != ENEMY_STATE_DIE)
 	{
-		vy = -MARIO_JUMP_DEFLECT_SPEED;
+		int state = -1;
+		currentForm->SetState(state, this);
+
+		if (isHoldingJump)
+		{
+			vy = -MARIO_JUMP_RUN_SPEED_Y;
+		}
+		else
+		{
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
 
 		float e_x, e_y;
 		e->obj->GetPosition(e_x, e_y);

@@ -18,16 +18,16 @@
 #define MARIO_DECEL_WALK_X	-0.00015f
 #define MARIO_DECEL_RUN_X	-0.00015f
 
-#define MARIO_ACCEL_WALK_X	0.0004f
-#define MARIO_ACCEL_RUN_X	0.0006f
+#define MARIO_ACCEL_WALK_X	0.0002f
+#define MARIO_ACCEL_RUN_X	0.0003f
 
-#define MARIO_JUMP_SPEED_Y		0.375f
-#define MARIO_JUMP_RUN_SPEED_Y	0.40f
-#define MARIO_FULL_POWER_SPEED_Y	0.45f
+#define MARIO_JUMP_SPEED_Y		0.295f
+#define MARIO_JUMP_RUN_SPEED_Y	0.35f
+#define MARIO_FULL_POWER_SPEED_Y	0.375f
 
 #define MARIO_TUNNEL_SPEED_Y	0.05f
 
-#define MARIO_GRAVITY			0.00095f
+#define MARIO_GRAVITY			0.0006f
 
 #define MARIO_JUMP_DEFLECT_SPEED  MARIO_JUMP_SPEED_Y / 1.5f
 
@@ -114,6 +114,8 @@ class CMario : public CGameObject
 	bool isEnding = false;
 	bool isKicking = false;
 	ULONGLONG kick_start = -1;
+
+	bool isHoldingJump = false;
 
 	void OnCollisionWithEnemy(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -214,6 +216,8 @@ public:
 	void SetNx(int nx) { this->nx = nx; }
 	int GetNx() { return nx; }
 	void SetPosition(float x, float y) { this->x = x; this->y = y; }
+
+	void SetHoldingJump(bool value) { isHoldingJump = value; }
 
 	void InputLock() { isInputLock = true; };
 	void InputUnlock() { isInputLock = false; };

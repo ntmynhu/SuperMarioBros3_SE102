@@ -67,7 +67,7 @@ void CMarioSmall::SetState(int state, CMario* mario)
 	case MARIO_STATE_TURBO_A:
 		if (mario->IsOnPlatform())
 		{
-			mario->SetVy(-MARIO_JUMP_SPEED_Y / 1.25);
+			mario->SetVy(-MARIO_JUMP_SPEED_Y / 1.55);
 		}
 		break;
 
