@@ -514,12 +514,12 @@ void CGame::Load(LPCWSTR gameFile)
 
 void CGame::SwitchScene()
 {
-	if (next_scene < 0 || next_scene == current_scene) return; 
+	if (next_scene < 0) return; 
 	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
 
 	int currentGroup = scenes[current_scene]->GetSceneGroup();
 	//if current and next scene belong to a scene group e.g. in the same world
-	if (scenes[next_scene]->GetSceneGroup() == currentGroup && currentGroup > 0) {
+	if (scenes[next_scene]->GetSceneGroup() == currentGroup && currentGroup > 0 && next_scene != current_scene) {
 		scenes[current_scene]->SoftUnload();
 		CSprites::GetInstance()->Clear();
 		CAnimations::GetInstance()->Clear();
@@ -551,6 +551,8 @@ void CGame::SwitchScene()
 		CGameData::GetInstance()->SetSavePoint();
 		s->Load();
 	}
+
+	next_scene = -1;
 }
 
 void CGame::InitiateSwitchScene(int scene_id)

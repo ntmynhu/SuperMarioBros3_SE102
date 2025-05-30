@@ -36,4 +36,11 @@ public:
 			}
 		}
 	}
+	void ClearCard()
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			card_ids[i] = -1; // Initialize with -1 to indicate no card
+		}
+	}
 };

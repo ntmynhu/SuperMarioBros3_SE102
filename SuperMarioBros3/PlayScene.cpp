@@ -977,8 +977,16 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Reload() {
 	player_die_start = -1;
 	Unload();
-	CGameData::GetInstance()->LoadSavePoint();
-	Load();
+	int remainingLives = CGameData::GetInstance()->DecreaseLives();
+	if (remainingLives == -1) {
+		CGameData::GetInstance()->ResetData();
+		HUD::GetInstance()->ClearCard();
+		CGame::GetInstance()->InitiateSwitchScene(INIT_SCENE_ID);
+	}
+	else {
+		CGameData::GetInstance()->LoadSavePoint();
+		CGame::GetInstance()->InitiateSwitchScene(this->id);
+	}
 }
 
 void CPlayScene::Render()

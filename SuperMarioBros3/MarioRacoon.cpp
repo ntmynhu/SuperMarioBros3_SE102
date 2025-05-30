@@ -446,7 +446,7 @@ void CMarioRacoon::SetState(int state, CMario* mario)
 		break;
 
 	case MARIO_STATE_IDLE:
-		if (vx == 0 && isFloating) return;
+		if (vx == 0 || isFloating) return;
 		if (nx > 0)
 			mario->SetAx(MARIO_DECEL_WALK_X);
 		else

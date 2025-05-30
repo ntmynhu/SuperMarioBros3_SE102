@@ -33,5 +33,6 @@ public:
 	void Render();
 	static HUD* GetInstance();
 	void AddCard(int id);
+	void ClearCard();
 };
 

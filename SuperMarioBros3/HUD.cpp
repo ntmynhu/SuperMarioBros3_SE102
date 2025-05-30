@@ -37,6 +37,11 @@ void HUD::AddCard(int id)
 	cards->AddCard(id);
 }
 
+void HUD::ClearCard()
+{
+	cards->ClearCard();
+}
+
 void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 }

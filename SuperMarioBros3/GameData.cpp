@@ -33,6 +33,14 @@ void CGameData::UpdateLives(int value, float x, float y)
 	if (value == 1) ScoreEffect* scoreEffect = new ScoreEffect(value, x, y);
 }
 
+int CGameData::DecreaseLives()
+{
+	this->marioLives--;
+	saveMarioLives = marioLives;
+	int res = marioLives;
+	return res;
+}
+
 void CGameData::AddScore(int value, float x, float y, LPGAMEOBJECT enemy) // Xử lí tăng điểm khi enemy die liên tiếp
 {
 	if (enemy != NULL) {
@@ -70,4 +78,14 @@ void CGameData::LoadSavePoint() {
 	coinNumber = saveCoin;
 	mario_level = saveLevel;
 	currentTime = saveCurrentTime;
+}
+
+void CGameData::ResetData() {
+	sceneId = -1;
+	score = 0;
+	marioLives = INIT_LIFE;
+	coinNumber = 0;
+	mario_level = 1;
+	currentTime = 0;
+	SetSavePoint();
 }

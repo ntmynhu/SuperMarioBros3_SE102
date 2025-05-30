@@ -6,7 +6,7 @@ using namespace std;
 
 #define	GAME_TIME	300000
 #define UP_SCORE_TIME 1000
-
+#define INIT_LIFE 4
 class CGameData
 {
 	static CGameData* __instance;
@@ -37,6 +37,7 @@ public:
 		mario_level = level;
 	}
 
+	void ResetData();
 	void SetSceneId(int sceneId) { this->sceneId = sceneId; }
 	int GetSceneId() { return sceneId; }
 
@@ -55,6 +56,7 @@ public:
 
 	void UpdateLives(int value, float x, float y);
 	int GetLives() { return this->marioLives; }
+	int DecreaseLives();
 
 	void AddScore(int value, float x, float y, LPGAMEOBJECT enemy = NULL);
 	void AddNoEffectScore(int value) { score += value; }
