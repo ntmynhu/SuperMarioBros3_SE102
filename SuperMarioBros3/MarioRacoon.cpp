@@ -17,13 +17,13 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 		if (mario->GetState() == MARIO_STATE_JUMP)
 		{
 			// Handle flying
-			mario->SetVy(-MARIO_FLYING_SPEED);
+			mario->SetVy(-MARIO_FLYING_SPEED_Y);
 			mario->SetAy(MARIO_GRAVITY);
 		}
 		else if (mario->GetState() == MARIO_STATE_TURBO_A)
 		{
 			// Handle flying
-			mario->SetVy(-MARIO_FLYING_SPEED / 2);
+			mario->SetVy(-MARIO_FLYING_SPEED_Y / 2);
 			mario->SetAy(MARIO_GRAVITY);
 		}
 	}
