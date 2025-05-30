@@ -36,6 +36,11 @@ void CGoldenBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					item = NULL;
 			}
 		}
+		else {
+			if (item && item->IsDeleted()) {
+				item = NULL;
+			}
+		}
 		if (particle) {
 			if (!particle->IsDeleted())
 				particle->Deactivate();
