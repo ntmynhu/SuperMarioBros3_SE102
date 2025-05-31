@@ -94,7 +94,8 @@ void CGoldenBrick::TriggerAction(LPCOLLISIONEVENT e)
 		isEmpty = true;
 		CGameData::GetInstance()->AddNoEffectScore(10);
 		this->Delete();
-		item->Delete();
+		if (item)
+			item->Delete();
 		break;
 	case ID_ITEM_BLUE_BUTTON:
 		this->StartBouncing();

@@ -31,6 +31,13 @@ void CBlueButton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			isAppearing = false;
 		}
 	}
+
+	for (int i = 0; i < goldenBricks.size(); i++)
+	{
+		if (!goldenBricks[i] || goldenBricks[i]->IsDeleted()) {
+			goldenBricks[i] = NULL;
+		}
+	}
 }
 
 void CBlueButton::GetBoundingBox(float& l, float& t, float& r, float& b)
