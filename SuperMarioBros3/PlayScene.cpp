@@ -1028,8 +1028,8 @@ void CPlayScene::Unload()
 {
 	for (int i = 0; i < objects.size(); i++)
 		delete objects[i];
-
 	
+	goldenBricks.clear();
 	objects.clear();
 	((CSampleKeyHandler*)key_handler)->ClearKey();
 	player = NULL;
