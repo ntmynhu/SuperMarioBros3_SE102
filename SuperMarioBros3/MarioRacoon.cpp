@@ -66,9 +66,9 @@ void CMarioRacoon::Update(DWORD dt, CMario* mario, vector<LPGAMEOBJECT>* coObjec
 		if (isFloating)
 		{
 			if (vx > FLOATING_OFFSET_X)
-				mario->SetVx(vx + MARIO_ACCEL_WALK_X * dt);
+				mario->SetVx(vx + MARIO_ACCEL_WALK_X * 0.5 * dt);
 			else if (vx < -FLOATING_OFFSET_X)
-				mario->SetVx(vx - MARIO_ACCEL_WALK_X * dt);
+				mario->SetVx(vx - MARIO_ACCEL_WALK_X * 0.5 * dt);
 			else
 				mario->SetVx(0);
 
